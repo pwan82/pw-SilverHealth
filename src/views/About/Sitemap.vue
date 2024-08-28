@@ -1,3 +1,3 @@
 <template>
-    s
+  Sitemap.vue
 </template>

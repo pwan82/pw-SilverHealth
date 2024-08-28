@@ -1,28 +1,47 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Header from './components/sharedComponents/header/Header.vue';
+import Footer from './components/sharedComponents/Footer.vue';
+import HomeView from './views/Home/HomeView.vue';
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="layout-container">
+    <header>
+      <Header />
+    </header>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+    <main class="main-content">
+      <router-view></router-view>
+      <!-- <HomeView /> -->
+    </main>
 
-  <main>
-    <TheWelcome />
-  </main>
-
-  <footer>
-
-  </footer>
+    <footer>
+      <Footer />
+    </footer>
+  </div>
 </template>
 
 <style scoped>
-header {
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  height: 100vh;
+}
+
+header,
+footer {
+  width: 100%;
+}
+
+.main-content {
+  flex: 1 0 auto;
+  overflow-y: auto;
+}
+
+
+
+/* header {
   line-height: 1.5;
 }
 
@@ -30,8 +49,8 @@ header {
   display: block;
   margin: 0 auto 2rem;
 }
-
-@media (min-width: 1024px) {
+ */
+/* @media (min-width: 1024px) {
   header {
     display: flex;
     place-items: center;
@@ -47,5 +66,5 @@ header {
     place-items: flex-start;
     flex-wrap: wrap;
   }
-}
+} */
 </style>

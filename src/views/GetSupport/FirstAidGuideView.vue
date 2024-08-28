@@ -1,0 +1,3 @@
+<template>
+  FirstAidGuideView.vue
+</template>
