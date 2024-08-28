@@ -121,6 +121,7 @@ const handleRegister = () => {
 const validateEmail = (blur) => {
   const email = formData.value.email;
   errors.value.email = inputValidators.validateInputEmail(blur, email).message;
+  errors.value.email = inputValidators.validateExistingEmail(blur, email).message;
 };
 
 const validatePassword = (blur) => {

@@ -11,12 +11,12 @@ export const validateInputName = (blur, value) => {
   if (value.length < minLength) {
     return {
       isValid: false,
-      message: blur ? `Name must be at least ${minLength} characters` : null
+      message: blur ? `Name must be at least ${minLength} characters.` : null
     }
   } else if (value.length > maxLength) {
     return {
       isValid: false,
-      message: blur ? `Name must be no more than ${maxLength} characters` : null
+      message: blur ? `Name must be no more than ${maxLength} characters.` : null
     }
   } else {
     return { isValid: true, message: null }
@@ -36,6 +36,25 @@ export const validateInputEmail = (blur, value) => {
     return { isValid: false, message: blur ? 'Email cannot be empty.' : null }
   } else if (!emailRegex.test(value)) {
     return { isValid: false, message: blur ? 'Please enter a valid email address.' : null }
+  } else {
+    return { isValid: true, message: null }
+  }
+}
+
+import { useUserStore } from '@/stores/userStore'
+
+/**
+ * Validate if the email already exists
+ * @param {boolean} blur - Whether the validation is triggered on blur
+ * @param {string} email - The input email to validate
+ * @returns {Object} - Returns an object with the validation result and error message
+ */
+export const validateExistingEmail = (blur, email) => {
+  const userStore = useUserStore()
+  const existingUser = userStore.allMockUsers.find((user) => user.email === email)
+
+  if (existingUser) {
+    return { isValid: false, message: blur ? 'Email already exists.' : null }
   } else {
     return { isValid: true, message: null }
   }
