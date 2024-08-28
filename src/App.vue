@@ -15,6 +15,10 @@ import TheWelcome from './components/TheWelcome.vue'
   <main>
     <TheWelcome />
   </main>
+
+  <footer>
+
+  </footer>
 </template>
 
 <style scoped>
