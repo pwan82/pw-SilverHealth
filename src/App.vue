@@ -1,7 +1,24 @@
 <script setup>
-import Header from './components/sharedComponents/header/Header.vue';
-import Footer from './components/sharedComponents/Footer.vue';
-import HomeView from './views/Home/HomeView.vue';
+import { watch } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
+
+import Header from './components/sharedComponents/header/Header.vue'
+import Footer from './components/sharedComponents/Footer.vue'
+import HomeView from './views/Home/HomeView.vue'
+
+const userStore = useUserStore();
+const router = useRouter();
+
+watch(
+  () => userStore.currentUser,
+  (newUser) => {
+    if (!newUser) {
+      // If user logs out (newUser is null), navigate to the home page
+      router.push({ name: 'Home' });
+    }
+  }
+);
 </script>
 
 <template>
@@ -38,8 +55,6 @@ footer {
   flex: 1 0 auto;
   overflow-y: auto;
 }
-
-
 
 /* header {
   line-height: 1.5;

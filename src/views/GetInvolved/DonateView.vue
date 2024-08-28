@@ -1,3 +1,1 @@
-<template>
-  DonateView.vue
-</template>
+<template>DonateView.vue</template>

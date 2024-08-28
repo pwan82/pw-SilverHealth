@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AboutView from '../views/About/AboutView.vue'
-import LoginView from '../views/LoginView.vue'
-import store from '../store/store'
+import { useUserStore } from '@/stores/userStore'
+import { computed } from 'vue'
 
 const routes = [
   {
@@ -79,13 +78,23 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/LoginView.vue')
+    component: () => import('../views/Account/LoginView.vue')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/Account/RegisterView.vue')
   },
   {
     path: '/admin',
     name: 'AdminDashboard',
     component: () => import('../views/Admin/AdminDashboardView.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/access-denied',
+    name: 'AccessDenied',
+    component: () => import('../views/Error/AccessDeniedView.vue')
   }
 ]
 
@@ -94,12 +103,27 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some((record) => record.meta.requiresAuth && !store.state.isAuthenticated)) {
-//     next({ name: 'Login' })
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  const isLoggedIn = computed(() => userStore.isLoggedIn)
+  const currentUser = computed(() => userStore.currentUser)
+
+  if (
+    to.matched.some(
+      (record) =>
+        record.meta.requiresAdmin && (!isLoggedIn.value || currentUser.value.role != 'admin')
+    )
+  ) {
+    // Handle admin route
+    next({ name: 'AccessDenied' })
+  } else if (to.matched.some((record) => record.meta.requiresAuth && !isLoggedIn.value)) {
+    // Handle authentication
+    next({ name: 'Login' })
+  } else if (isLoggedIn.value && to.name == 'Login') {
+    next({ name: 'Home' })
+  } else {
+    next()
+  }
+})
 
 export default router

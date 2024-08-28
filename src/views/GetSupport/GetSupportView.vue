@@ -1,3 +1,1 @@
-<template>
-  GetSupportView.vue
-</template>
+<template>GetSupportView.vue</template>

@@ -1,3 +1,1 @@
-<template>
-  SearchView.vue
-</template>
+<template>SearchView.vue</template>

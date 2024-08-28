@@ -1,3 +1,1 @@
-<template>
-  BecomeVolunteerView.vue
-</template>
+<template>BecomeVolunteerView.vue</template>

@@ -1,3 +1,1 @@
-<template>
-  FirstAidGuideView.vue
-</template>
+<template>FirstAidGuideView.vue</template>

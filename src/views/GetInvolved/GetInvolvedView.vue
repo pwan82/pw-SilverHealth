@@ -1,3 +1,1 @@
-<template>
-  GetInvolvedView.vue
-</template>
+<template>GetInvolvedView.vue</template>

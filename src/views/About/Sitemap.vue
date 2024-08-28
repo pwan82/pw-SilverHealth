@@ -1,3 +1,1 @@
-<template>
-  Sitemap.vue
-</template>
+<template>Sitemap.vue</template>

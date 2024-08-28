@@ -1,25 +1,18 @@
 <script setup>
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/userStore';
+const router = useRouter()
+const userStore = useUserStore();
 
-const store = useStore();
-const router = useRouter();
+const isLoggedIn = computed(() => userStore.isLoggedIn);
+const currentUser = computed(() => userStore.currentUser);
 
-const isAuthenticated = false
-// Computed property to access authentication state from Vuex
-// const isAuthenticated = computed(() => store.state.isAuthenticated);
+// console.log(`isLoggedIn: ${isLoggedIn.value}`);
 
-// // Logout method that dispatches Vuex action and redirects to login page
-// const logout = () => {
-//     if (confirm("Are you sure to logout?")) {
-//         store.dispatch('logout').then(() => {
-//             router.push({ name: 'Login' })
-//         }).catch(error => {
-//             console.error('Logout failed:', error);
-//         })
-//         alert('You have successfully logged out!');
-//     }
-// };
+const handleLogout = () => {
+  userStore.logout();
+};
 </script>
 
 <template>
@@ -35,12 +28,12 @@ const isAuthenticated = false
           <router-link to="/about" class="nav-link" active-class="active">About</router-link>
         </li>
         <!-- Show login or logout based on authentication status -->
-        <li class="nav-item" v-if="!isAuthenticated">
+        <li class="nav-item" v-if="!isLoggedIn">
           <router-link to="/login" class="nav-link" active-class="active">Login</router-link>
         </li>
-        <!-- <li class="nav-item" v-if="isAuthenticated">
-          <button @click="logout" class="nav-link btn btn-link text-danger">Logout</button>
-        </li> -->
+        <li class="nav-item" v-if="isLoggedIn">
+          <button @click="handleLogout" class="nav-link btn btn-link text-danger">Logout</button>
+        </li>
       </ul>
     </header>
   </div>
@@ -48,38 +41,38 @@ const isAuthenticated = false
 
 <style scoped>
 .b-example-divider {
-    height: 3rem;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: solid rgba(0, 0, 0, 0.15);
-    border-width: 1px 0;
-    box-shadow:
-        inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
-        inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+  height: 3rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: solid rgba(0, 0, 0, 0.15);
+  border-width: 1px 0;
+  box-shadow:
+    inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
 }
 
 .form-control-dark {
-    color: #fff;
-    background-color: var(--bs-dark);
-    border-color: var(--bs-gray);
+  color: #fff;
+  background-color: var(--bs-dark);
+  border-color: var(--bs-gray);
 }
 
 .form-control-dark:focus {
-    color: #fff;
-    background-color: var(--bs-dark);
-    border-color: #fff;
-    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+  color: #fff;
+  background-color: var(--bs-dark);
+  border-color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
 }
 
 .bi {
-    vertical-align: -0.125em;
-    fill: currentColor;
+  vertical-align: -0.125em;
+  fill: currentColor;
 }
 
 .text-small {
-    font-size: 85%;
+  font-size: 85%;
 }
 
 .dropdown-toggle {
-    outline: 0;
+  outline: 0;
 }
 </style>

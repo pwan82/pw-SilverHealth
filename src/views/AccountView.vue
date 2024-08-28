@@ -1,3 +1,1 @@
-<template>
-  AccountView.vue
-</template>
+<template>AccountView.vue</template>
