@@ -7,6 +7,7 @@ import { useUserStore } from './stores/userStore'
 import router from './router'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import './assets/custom-button.css'
 
 import PrimeVue from 'primevue/config'
@@ -25,8 +26,8 @@ app.use(PrimeVue, {
   }
 })
 
-// app.component('DataTable', DataTable)
-// app.component('Column', Column)
+app.component('DataTable', DataTable)
+app.component('Column', Column)
 
 app.mount('#app')
 

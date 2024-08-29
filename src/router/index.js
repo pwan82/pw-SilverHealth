@@ -10,16 +10,40 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/aricle',
+    path: '/article',
     name: 'Article',
-    component: () => import('../views/About/AboutView.vue'),
+    component: () => import('../views/Article/ArticleView.vue'),
     meta: { requiresAuth: false }
   },
   {
-    path: '/events',
-    name: 'Event',
-    component: () => import('../views/About/AboutView.vue'),
+    path: '/news',
+    name: 'News',
+    component: () => import('../views/Article/NewsView.vue'),
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/event',
+    name: 'Event',
+    component: () => import('../views/CommunityEvent/AllCommunityEventsView.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/event/all-events',
+    name: 'AllEvents',
+    component: () => import('../views/CommunityEvent/AllCommunityEventsView.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/event/calendar',
+    name: 'MyEventCalendar',
+    component: () => import('../views/CommunityEvent/MyEventCalendarView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/event/registered',
+    name: 'MyRegistrations',
+    component: () => import('../views/CommunityEvent/MyRegistrationsView.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/get-support',
@@ -34,15 +58,45 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
+    path: '/get-support/find-services',
+    name: 'FindServices',
+    component: () => import('../views/GetSupport/FindServicesView.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/get-support/book-services',
+    name: 'BookServices',
+    component: () => import('../views/GetSupport/BookServicesView.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/get-support/book-by-phone',
+    name: 'BookByTelephone',
+    component: () => import('../views/GetSupport/BookByTelephoneView.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/get-support/my-bookings',
+    name: 'MyBookings',
+    component: () => import('../views/GetSupport/MyBookingsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/search',
     name: 'Search',
-    component: () => import('../views/SearchView.vue'),
+    component: () => import('../views/Search/SearchView.vue'),
     meta: { requiresAuth: false }
   },
   {
     path: '/account',
     name: 'MyAccount',
-    component: () => import('../views/AccountView.vue'),
+    component: () => import('../views/Account/AccountView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/account/settings',
+    name: 'Settings',
+    component: () => import('../views/Account/SettingsView.vue'),
     meta: { requiresAuth: true }
   },
   {
@@ -72,7 +126,19 @@ const routes = [
   {
     path: '/about/sitemap',
     name: 'Sitemap',
-    component: () => import('../views/About/Sitemap.vue'),
+    component: () => import('../views/About/SitemapView.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/about/contact-us',
+    name: 'Contact',
+    component: () => import('../views/About/ContactView.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/about/terms-and-policy',
+    name: 'Policy',
+    component: () => import('../views/About/PolicyView.vue'),
     meta: { requiresAuth: false }
   },
   {
@@ -89,6 +155,30 @@ const routes = [
     path: '/admin',
     name: 'AdminDashboard',
     component: () => import('../views/Admin/AdminDashboardView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/user-analytics',
+    name: 'AdminUserAnalytics',
+    component: () => import('../views/Admin/AdminUserAnalyticsView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/content-management',
+    name: 'AdminContentManagement',
+    component: () => import('../views/Admin/AdminContentManagementView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/booking-record',
+    name: 'AdminBookingRecord',
+    component: () => import('../views/Admin/AdminBookingRecordView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/bulk-email-management',
+    name: 'AdminBulkEmailManagementView',
+    component: () => import('../views/Admin/AdminBulkEmailManagementView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {

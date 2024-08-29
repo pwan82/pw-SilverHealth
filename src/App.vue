@@ -1,24 +1,23 @@
 <script setup>
-import { watch } from 'vue';
-import { useUserStore } from '@/stores/userStore';
-import { useRouter } from 'vue-router';
+import { watch } from 'vue'
+import { useUserStore } from '@/stores/userStore'
+import { useRouter } from 'vue-router'
 
 import Header from './components/sharedComponents/header/Header.vue'
 import Footer from './components/sharedComponents/Footer.vue'
-import HomeView from './views/Home/HomeView.vue'
 
-const userStore = useUserStore();
-const router = useRouter();
+const userStore = useUserStore()
+const router = useRouter()
 
 watch(
   () => userStore.currentUser,
   (newUser) => {
     if (!newUser) {
       // If user logs out (newUser is null), navigate to the home page
-      router.push({ name: 'Home' });
+      router.push({ name: 'Home' })
     }
   }
-);
+)
 </script>
 
 <template>

@@ -5,10 +5,19 @@ import mockUsers from '@/assets/json/mockUsers.json'
 export const useUserStore = defineStore('user', {
   state: () => ({
     currentUser: null,
-    allMockUsers: JSON.parse(localStorage.getItem('allMockUsers') || JSON.stringify(mockUsers)) // Ensure users are loaded from localStorage or mock data
+    // allMockUsers: JSON.parse(localStorage.getItem('allMockUsers') || JSON.stringify(mockUsers)) // Ensure users are loaded from localStorage or mock data
+    allMockUsers: Array.isArray(JSON.parse(localStorage.getItem('allMockUsers')))
+      ? JSON.parse(localStorage.getItem('allMockUsers'))
+      : mockUsers
   }),
   getters: {
-    isLoggedIn: (state) => !!state.currentUser // Check if a user is logged in
+    // Check if a user is logged in
+    isLoggedIn: (state) => !!state.currentUser,
+
+    // Check if the current user is an admin
+    isAdmin: (state) => {
+      return state.currentUser && state.currentUser.role === 'admin'
+    }
   },
   actions: {
     login(user) {

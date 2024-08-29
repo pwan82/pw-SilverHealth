@@ -1,1 +1,0 @@
-<template>AccountView.vue</template>

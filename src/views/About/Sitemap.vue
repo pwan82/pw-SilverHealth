@@ -1,1 +1,0 @@
-<template>Sitemap.vue</template>

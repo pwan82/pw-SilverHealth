@@ -4,15 +4,22 @@
       <div class="row mb-3 align-items-center">
         <!-- Button section -->
         <div class="col-md-6 d-flex flex-column flex-md-row align-items-start mb-3 mb-md-0 gap-4">
-          <FirstAidGuideButton class="w-100" style="max-width: 200px;" />
-          <DonateButton class="w-100" style="max-width: 200px;" />
+          <FirstAidGuideButton class="w-100" style="max-width: 200px" />
+          <DonateButton class="w-100" style="max-width: 200px" />
         </div>
 
         <!-- Subscribe section -->
         <div class="col-md-6 d-flex flex-column align-items-md-end align-items-start">
-          <span class="mb-2">Subscribe our newsletter</span>
+          <span class="mb-2"
+            >Subscribe to our newsletter. Get the latest elderly health knowledge.</span
+          >
           <div class="d-flex w-100 justify-content-md-end gap-2">
-            <input type="email" class="form-control flex-grow-1" placeholder="Email Address" style="max-width: 300px" />
+            <input
+              type="email"
+              class="form-control flex-grow-1"
+              placeholder="Email Address"
+              style="max-width: 300px"
+            />
             <button type="button" class="btn btn-dark">Subscribe</button>
           </div>
         </div>
@@ -68,9 +75,5 @@ import DonateButton from './buttons/DonateButton.vue'
 
 .list-inline-item a:hover {
   text-decoration: underline;
-}
-
-.non-selectable {
-  user-select: none;
 }
 </style>

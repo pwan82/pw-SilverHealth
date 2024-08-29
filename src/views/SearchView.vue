@@ -1,1 +1,0 @@
-<template>SearchView.vue</template>
