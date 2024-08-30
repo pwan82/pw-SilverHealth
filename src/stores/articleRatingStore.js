@@ -53,6 +53,14 @@ export const useRatingStore = defineStore('rating', {
       }
       // Save updated ratings to localStorage
       localStorage.setItem('allRatings', JSON.stringify(this.allRatings))
+    },
+    restoreRatings() {
+      const savedRatings = localStorage.getItem('allRatings')
+      if (savedRatings) {
+        this.allRatings = JSON.parse(savedRatings) // Restore ratings from localStorage
+      } else {
+        this.allRatings = mockRatings // Use mock data if no ratings found in localStorage
+      }
     }
   }
 })

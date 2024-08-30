@@ -69,13 +69,14 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import * as inputValidators from '@/utils/InputValidators.js'
 import { validateLogin } from '@/services/authService'
 
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 
 const formData = ref({
   username: '',
@@ -96,9 +97,11 @@ const handleLogin = async () => {
     try {
       const user = await validateLogin(formData.value.email.trim(), formData.value.password)
       if (user) {
+        const redirectTo = route.query.redirect || '/'
+
         userStore.login({ ...user, password: undefined }) // Exclude password from user info
         console.log(`Login successful! Email: ${user.email}, Role: ${user.role}`)
-        router.push({ name: 'Home' })
+        router.push(redirectTo)
       } else {
         console.log(
           `formData.value.email: ${formData.value.email}, formData.value.password: ${formData.value.password}`

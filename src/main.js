@@ -37,3 +37,4 @@ const userStore = useUserStore()
 userStore.restoreUser()
 
 const articleRatingStore = useRatingStore()
+articleRatingStore.restoreRatings()

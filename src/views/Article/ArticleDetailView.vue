@@ -10,24 +10,56 @@
             {{ formatDate(article.modificationTime) }}
           </p>
 
-          <!-- show averageRating -->
-          <div>
-            <Rating v-if="averageRating !== null" v-model="averageRating" disabled />
+          <!-- Show average rating -->
+          <!-- <div class="text-center">
+            <div v-if="averageRating !== null">
+              <p>Average Rating: {{ averageRating }}</p>
+              <Rating v-model="averageRating" disabled :stars="5" />
+            </div>
             <span v-else>No rating given</span>
+          </div> -->
+          <!-- Show average rating -->
+          <div class="d-flex justify-content-center align-items-center mb-3">
+            <span class="me-2 fw-bold">Rating:</span>
+            <span v-if="averageRating !== null" class="me-2 fw-bold">{{ averageRating }}/5</span>
+            <Rating v-if="averageRating !== null" v-model="averageRating" disabled :stars="5" />
+            <span v-else class="me-2 fw-bold">No rating given</span>
           </div>
 
-          <!-- render Markdown content -->
+          <!-- Render Markdown content -->
           <div v-html="renderedContent"></div>
 
-          <!-- If not logged in, show login button -->
-          <button class="btn btn-outline-primary" v-if="!isLoggedIn" @click="redirectToLogin">
-            Login to rate this article
-          </button>
+          <!-- Login prompt or rating input -->
+          <!-- <div class="text-center mt-4">
+            <button v-if="!isLoggedIn" class="btn btn-outline-primary" @click="redirectToLogin">
+              Login to rate this article
+            </button>
+            <div v-else>
+              <Rating v-model.number="userRating" :stars="5" :cancel="false" />
+              <button class="btn btn-primary mt-2" @click="submitRatingHandler">Submit</button>
+            </div>
+          </div> -->
 
-          <!-- If logged in, show rating component -->
-          <div v-else>
-            <Rating v-model="userRating" :stars="5" :cancel="false" />
-            <button @click="submitRatingHandler">Submit</button>
+          <!-- If not logged in, show login button -->
+          <div class="text-center mt-4">
+            <button v-if="!isLoggedIn" class="btn btn-outline-primary" @click="redirectToLogin">
+              Login to rate this article
+            </button>
+
+            <!-- Rating input card -->
+            <div v-else class="rating-card mt-3 d-flex flex-column align-items-center">
+              <p class="fw-bold">Please rate this article:</p>
+              <Rating v-model.number="userRating" :stars="5" :cancel="true" />
+              <p class="mt-2 text-muted" v-if="!userRatingSubmitted">not submitted</p>
+              <p class="mt-2 text-success" v-else>Rating submitted successfully</p>
+              <!-- <button class="btn btn-primary mt-3" @click="submitRatingHandler">Submit</button> -->
+
+              <button @click="submitRatingHandler" class="btn mt-2"
+                :class="{ 'btn-primary': userRating !== null, 'btn-secondary': userRating === null }"
+                :disabled="userRating === null">
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -49,21 +81,24 @@ const router = useRouter()
 const userStore = useUserStore()
 const ratingStore = useRatingStore()
 
-const articleId = route.params.articleId
+const articleId = Number(route.params.articleId)
 const article = ref(null)
 const isLoggedIn = computed(() => userStore.isLoggedIn)
-const userRating = ref(0)
+const userRating = ref(null)
+const userRatingSubmitted = ref(false) // Track if rating is submitted
 
+// Fetching rating data from the store
 const ratingData = computed(() => ratingStore.getRatingByArticleId(articleId))
-console.log(`ratingData: ${ratingData.value}`)
+
 const averageRating = computed(() => {
-  return ratingData.value ? ratingData.value.averageRating : null
+  return ratingData.value ? parseFloat(ratingData.value.averageRating).toFixed(1) : null
 })
 
-// Use MarkdownIt to parse the Markdowncontent
+// Parse the markdown content using MarkdownIt
 const md = new MarkdownIt()
 const renderedContent = computed(() => (article.value ? md.render(article.value.body) : ''))
 
+// Submit rating handler function
 const submitRatingHandler = () => {
   if (!isLoggedIn.value) {
     redirectToLogin()
@@ -71,17 +106,22 @@ const submitRatingHandler = () => {
   }
 
   const userId = userStore.currentUser.userId
-  ratingStore.submitRating(articleId, userId, userRating.value)
+  ratingStore.submitRating(articleId, userId, parseInt(userRating.value))
+  // alert('Your rating has been submitted successfully!')
+  userRatingSubmitted.value = true // Mark rating as submitted
 }
 
+// Redirect to the login page
 const redirectToLogin = () => {
-  router.push({ name: 'Login' })
+  router.push({ name: 'Login', query: { redirect: route.fullPath } })
 }
 
+// Format date helper function
 const formatDate = (timestamp) => {
   return timestamp === -1 ? 'Never modified' : new Date(timestamp).toLocaleDateString()
 }
 
+// Fetch article data on component mount
 const fetchArticleData = async () => {
   try {
     article.value = await fetchArticleById(articleId)
@@ -97,5 +137,15 @@ onMounted(fetchArticleData)
 <style scoped>
 .rating-container {
   margin: 20px 0;
+}
+
+
+.rating-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: center;
 }
 </style>
