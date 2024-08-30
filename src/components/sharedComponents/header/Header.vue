@@ -21,9 +21,10 @@ import NabBar from '@/components/sharedComponents/header/NabBar.vue'
 
       <div class="col-12 col-md-4 py-1 justify-content-center">
         <SearchBar />
-
       </div>
-      <div class="col-12 col-md-4 mt-2 mt-md-0 py-1 d-flex justify-content-md-end justify-content-center">
+      <div
+        class="col-12 col-md-4 mt-2 mt-md-0 py-1 d-flex justify-content-md-end justify-content-center"
+      >
         <FirstAidGuideButton />
       </div>
     </div>
@@ -84,14 +85,13 @@ import NabBar from '@/components/sharedComponents/header/NabBar.vue'
   outline: 0;
 }
 
-.navbar-nav .nav-link.active>.nav-link {
+.navbar-nav .nav-link.active > .nav-link {
   font-weight: bold;
   color: #007bff !important;
   background-color: #e9ecef;
 }
 
 @media (max-width: 767px) {
-
   /* .row {
     text-align: center;
   }
@@ -102,7 +102,7 @@ import NabBar from '@/components/sharedComponents/header/NabBar.vue'
     flex-direction: column;
     align-items: center;
   } */
-  
+
   /* .first-aid-button {
     width: 100%;
   } */

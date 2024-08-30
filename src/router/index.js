@@ -11,9 +11,14 @@ const routes = [
   },
   {
     path: '/article',
-    name: 'Article',
-    component: () => import('../views/Article/ArticleView.vue'),
+    name: 'ArticleList',
+    component: () => import('../views/Article/ArticleListView.vue'),
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/article/:articleId',
+    name: 'ArticleDetail',
+    component: () => import('../views/Article/ArticleDetailView.vue')
   },
   {
     path: '/news',

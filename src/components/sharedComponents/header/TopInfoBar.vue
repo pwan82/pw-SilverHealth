@@ -28,10 +28,12 @@ const handleLogout = () => {
       <div class="col-12 col-md-6 text-center text-md-end">
         <p v-if="isLoggedIn">
           <span>🌞 Hi, {{ currentUser.username || 'Guest' }}</span>
-          <span class=" mx-2 non-selectable">|</span>
+          <span class="mx-2 non-selectable">|</span>
           <router-link to="/account/settings" class="text-decoration-none">Settings</router-link>
           <span class="mx-2 non-selectable">|</span>
-          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer">Log out</span>
+          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer"
+            >Log out</span
+          >
         </p>
         <p v-else>
           <router-link to="/login" class="text-decoration-none">Login</router-link>

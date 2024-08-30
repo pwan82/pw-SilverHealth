@@ -1,1 +1,0 @@
-<template>Article list</template>

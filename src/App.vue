@@ -45,10 +45,10 @@ watch(
   height: 100vh;
 }
 
-header,
+/* header,
 footer {
   width: 100%;
-}
+} */
 
 .main-content {
   flex: 1 0 auto;

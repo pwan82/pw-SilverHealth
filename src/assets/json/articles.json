@@ -4,7 +4,8 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "body": "some random thing",
+    "title": "Title 001",
+    "body": "# Some random thing\n\nThis is a **bold** statement.\n\n- List item 1\n- List item 2\n\n![Alt text](image-url.png)\n\n[Link to something](https://example.com)",
     "requireAuth": false
   }
 ]
