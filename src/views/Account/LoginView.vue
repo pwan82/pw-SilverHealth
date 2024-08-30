@@ -11,47 +11,29 @@
           <div class="row mb-3">
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
-              <label for="email" class="form-label mt-3" style="font-weight: bold">Email</label>
-              <input
-                type="text "
-                class="form-control"
-                id="email"
-                @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)"
-                v-model="formData.email"
-                placeholder="Enter email"
-              />
+              <label for="email" class="form-label mt-3 fw-bold">Email</label>
+              <input type="text " class="form-control" id="email" @blur="() => validateEmail(true)"
+                @input="() => validateEmail(false)" v-model="formData.email" placeholder="Enter email" />
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Password Input -->
-              <label for="password" class="form-label mt-3" style="font-weight: bold"
-                >Password</label
-              >
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                @blur="() => validatePassword(true)"
-                @input="() => validatePassword(false)"
-                v-model="formData.password"
-                placeholder="Enter password"
-              />
+              <label for="password" class="form-label mt-3  fw-bold">Password</label>
+              <input type="password" class="form-control" id="password" @blur="() => validatePassword(true)"
+                @input="() => validatePassword(false)" v-model="formData.password" placeholder="Enter password" />
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
 
               <!-- Login and Register Button -->
               <div class="mt-3 d-grid gap-2">
                 <button type="submit" class="btn btn-primary button-text">Log in</button>
-                <router-link :to="{ name: 'Register' }" class="btn btn-outline-primary button-text"
-                  >Sign up</router-link
-                >
+                <router-link :to="{ name: 'Register' }" class="btn btn-outline-primary button-text">Sign
+                  up</router-link>
               </div>
 
               <!-- Login with Google Button -->
               <!-- <hr class="border-1 border-secondary " /> -->
               <div class="position-relative my-4">
                 <div
-                  class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background"
-                >
+                  class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background">
                   Or
                 </div>
                 <hr class="border-1 border-secondary mt-3" />
@@ -134,9 +116,6 @@ const validatePassword = (blur) => {
   border-radius: 10px;
 }
 
-.bold-text {
-  font-weight: bold;
-}
 
 .divider-background {
   background-color: #f0f0f0;

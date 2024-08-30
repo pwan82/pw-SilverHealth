@@ -16,14 +16,9 @@ const handleSearch = () => {
 </script>
 
 <template>
-  <div class="search-bar d-flex align-items-center">
-    <input
-      type="text"
-      v-model="searchQuery"
-      class="form-control-lg me-2"
-      placeholder="Search what you want"
-      @keyup.enter="handleSearch"
-    />
+  <div class="search-bar d-flex align-items-center justify-content-center">
+    <input type="text" v-model="searchQuery" class="form-control-lg me-2 w-100" placeholder="Search what you want"
+      @keyup.enter="handleSearch" />
     <button @click="handleSearch" class="btn btn-lg btn-primary">
       <i class="bi bi-search"></i>
     </button>

@@ -12,16 +12,18 @@ import NabBar from '@/components/sharedComponents/header/NabBar.vue'
     <TopInfoBar />
 
     <!-- Logo, Search Bar, and FirstAid Guide Button -->
-    <div class="container d-flex justify-content-between align-items-center py-4">
-      <router-link to="/" class="logo">
-        <img :src="logo" alt="SilverHealth Logo" class="logo-img" />
-      </router-link>
+    <div class="row align-items-center mx-2 py-4">
+      <div class="col-12 col-md-4 py-1 text-center text-md-start">
+        <router-link to="/" class="logo">
+          <img :src="logo" alt="SilverHealth Logo" class="logo-img" />
+        </router-link>
+      </div>
 
-      <!-- Search Bar -->
-      <SearchBar />
+      <div class="col-12 col-md-4 py-1 justify-content-center">
+        <SearchBar />
 
-      <!-- FirstAid Guide Button -->
-      <div class="first-aid-guide">
+      </div>
+      <div class="col-12 col-md-4 mt-2 mt-md-0 py-1 d-flex justify-content-md-end justify-content-center">
         <FirstAidGuideButton />
       </div>
     </div>
@@ -38,10 +40,13 @@ import NabBar from '@/components/sharedComponents/header/NabBar.vue'
   max-width: 100%;
 }
 
-.search-bar {
-  flex-grow: 1;
-  max-width: 300px;
-}
+/* .first-aid-button{
+  justify-content: end;
+} */
+
+/* .search-bar {
+  justify-content: center;
+} */
 
 .b-example-divider {
   height: 3rem;
@@ -79,9 +84,27 @@ import NabBar from '@/components/sharedComponents/header/NabBar.vue'
   outline: 0;
 }
 
-.navbar-nav .nav-link.active > .nav-link {
+.navbar-nav .nav-link.active>.nav-link {
   font-weight: bold;
   color: #007bff !important;
   background-color: #e9ecef;
+}
+
+@media (max-width: 767px) {
+
+  /* .row {
+    text-align: center;
+  }
+
+  .col-12 {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  } */
+  
+  /* .first-aid-button {
+    width: 100%;
+  } */
 }
 </style>

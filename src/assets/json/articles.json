@@ -1,0 +1,10 @@
+[
+  {
+    "articleId": 1,
+    "author": "SilverHealth Team",
+    "publicationTime": 1704027600000,
+    "modificationTime": -1,
+    "body": "some random thing",
+    "requireAuth": false
+  }
+]
