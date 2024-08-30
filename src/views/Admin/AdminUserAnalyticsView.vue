@@ -3,7 +3,7 @@
     <h1 class="text-center">Admin User Analytics</h1>
     <p class="text-center">Manage all registered users.</p>
 
-    <table class="table table-striped table-bordered mt-4">
+    <!-- <table class="table table-striped table-bordered mt-4">
       <thead>
         <tr>
           <th>User ID</th>
@@ -39,7 +39,7 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
 
     <DataTable :value="allUsers" class="p-datatable-striped">
       <Column field="userId" header="User ID" sortable></Column>
@@ -102,3 +102,4 @@ const formatLastLoginTime = (user) => {
   width: 100%;
 } */
 </style>
+.

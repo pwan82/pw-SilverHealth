@@ -64,9 +64,9 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/get-support/book-services',
-    name: 'BookServices',
-    component: () => import('../views/GetSupport/BookServicesView.vue'),
+    path: '/get-support/book-online',
+    name: 'BookOnline',
+    component: () => import('../views/GetSupport/BookOnlineView.vue'),
     meta: { requiresAuth: false }
   },
   {
@@ -196,13 +196,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   const isLoggedIn = computed(() => userStore.isLoggedIn)
-  const currentUser = computed(() => userStore.currentUser)
+  const isAdmin = computed(() => userStore.isAdmin)
 
   if (
-    to.matched.some(
-      (record) =>
-        record.meta.requiresAdmin && (!isLoggedIn.value || currentUser.value.role != 'admin')
-    )
+    to.matched.some((record) => record.meta.requiresAdmin && (!isLoggedIn.value || !isAdmin.value))
   ) {
     // Handle admin route
     next({ name: 'AccessDenied' })

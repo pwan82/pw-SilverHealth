@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
 
 import Header from './components/sharedComponents/header/Header.vue'
-import Footer from './components/sharedComponents/Footer.vue'
+import Footer from './components/sharedComponents/footer/Footer.vue'
 
 const userStore = useUserStore()
 const router = useRouter()

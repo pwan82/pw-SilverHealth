@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-background">
+  <div class="container bg-light footer-container">
     <div class="container py-4">
       <div class="row mb-3 align-items-center">
         <!-- Button section -->
@@ -57,13 +57,12 @@
 </template>
 
 <script setup>
-import FirstAidGuideButton from './buttons/FirstAidGuideButton.vue'
-import DonateButton from './buttons/DonateButton.vue'
+import FirstAidGuideButton from '@/components/sharedComponents/buttons/FirstAidGuideButton.vue'
+import DonateButton from '@/components/sharedComponents/buttons/DonateButton.vue'
 </script>
 
 <style scoped>
-.footer-background {
-  background-color: #f8f9fa;
+.footer-container {
   border-top: 1px solid #dee2e6;
   width: 100%;
   padding-top: 10px;

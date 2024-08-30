@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', {
 
     // Check if the current user is an admin
     isAdmin: (state) => {
-      return state.currentUser && state.currentUser.role === 'admin'
+      return state.currentUser.role === 'admin'
     }
   },
   actions: {
