@@ -1,11 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import DOMPurify from 'dompurify'
 
 const router = useRouter()
 const searchQuery = ref('')
 
+const sanitizeInput = (input) => DOMPurify.sanitize(input)
+
 const handleSearch = () => {
+  searchQuery.value = sanitizeInput(searchQuery.value)
   if (searchQuery.value.trim()) {
     router.push({
       name: 'Search',

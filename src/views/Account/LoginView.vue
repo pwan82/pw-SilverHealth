@@ -73,24 +73,27 @@ import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import * as inputValidators from '@/utils/InputValidators.js'
 import { validateLogin } from '@/services/authService'
+import DOMPurify from 'dompurify'
 
 const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
 const formData = ref({
-  username: '',
   email: '',
   password: ''
 })
 
 const errors = ref({
-  username: null,
   email: null,
   password: null
 })
 
+const sanitizeInput = (input) => DOMPurify.sanitize(input)
 const handleLogin = async () => {
+  formData.value.email = sanitizeInput(formData.value.email)
+  formData.value.password = sanitizeInput(formData.value.password)
+
   validateEmail(true)
   validatePassword(true)
   if (!errors.value.email && !errors.value.password) {
