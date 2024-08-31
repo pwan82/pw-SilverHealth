@@ -114,3 +114,33 @@ export const validateInputConfirmPassword = (blur, password, confirmPassword) =>
     return { isValid: true, message: null }
   }
 }
+
+/**
+ * Validate birthday input
+ * @param {boolean} blur - Whether the validation is triggered on blur
+ * @param {string} value - The input value (date in YYYY-MM-DD format)
+ * @returns {Object} - Returns the validation result and error message
+ */
+export const validateInputBirthday = (blur, value) => {
+  if (!value) {
+    return { isValid: false, message: blur ? 'Birthday is required.' : null }
+  }
+
+  const birthday = new Date(value)
+  const today = new Date()
+
+  // Calculate age in milliseconds
+  const ageInMilliseconds = today - birthday
+
+  // Convert milliseconds to years
+  const age = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)
+
+  if (age < 13) {
+    return {
+      isValid: false,
+      message: blur ? 'Registration is only permitted for those over the age of 13.' : null
+    }
+  } else {
+    return { isValid: true, message: null }
+  }
+}

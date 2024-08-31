@@ -90,6 +90,7 @@
                 placeholder="Select your birthday"
                 @blur="() => validateBirthday(true)"
                 @input="() => validateBirthday(false)"
+                :max="maxDate"
               />
               <div v-if="errors.birthday" class="text-danger">{{ errors.birthday }}</div>
 
@@ -110,6 +111,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import * as inputValidators from '@/utils/InputValidators.js' // Import validation functions
 import { useUserStore } from '@/stores/userStore'
+import DOMPurify from 'dompurify' // Import DOMPurify for sanitizing input
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -139,7 +141,24 @@ const errors = ref({
   birthday: null
 })
 
+// Helper function to sanitize inputs using DOMPurify
+const sanitizeInput = (input) => DOMPurify.sanitize(input)
+
+// Calculate the max date allowed for birthday (13 years ago from today)
+const today = new Date()
+const maxDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate())
+  .toISOString()
+  .split('T')[0]
+
 const handleRegister = () => {
+  // Sanitize input data
+  formData.value.email = sanitizeInput(formData.value.email)
+  formData.value.username = sanitizeInput(formData.value.username)
+  formData.value.password = sanitizeInput(formData.value.password)
+  formData.value.confirmPassword = sanitizeInput(formData.value.confirmPassword)
+  formData.value.gender = sanitizeInput(formData.value.gender)
+  formData.value.birthday = sanitizeInput(formData.value.birthday)
+
   validateEmail(true)
   validateUsername(true)
   validatePassword(true)
@@ -197,11 +216,8 @@ const validateGender = (blur) => {
 }
 
 const validateBirthday = (blur) => {
-  if (!formData.value.birthday) {
-    errors.value.birthday = blur ? 'Birthday is required' : null
-  } else {
-    errors.value.birthday = null
-  }
+  const birthday = formData.value.birthday
+  errors.value.birthday = inputValidators.validateInputBirthday(blur, birthday).message
 }
 </script>
 

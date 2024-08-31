@@ -197,7 +197,7 @@ const navigateTo = (path) => {
 const activeParent = computed(() => {
   if (['Home'].includes(route.name)) {
     return 'home'
-  } else if (['Article', 'News'].includes(route.name)) {
+  } else if (['Article', 'ArticleList', 'News'].includes(route.name)) {
     return 'info'
   } else if (['Event', 'AllEvents', 'MyEventCalendar', 'MyRegistrations'].includes(route.name)) {
     return 'events'
