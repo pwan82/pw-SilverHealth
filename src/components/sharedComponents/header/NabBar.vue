@@ -163,6 +163,54 @@
             </li>
           </ul>
         </li>
+
+        <!-- Admin Dropdown -->
+        <li
+          v-if="isLoggedIn && isAdmin"
+          class="nav-item dropdown"
+          :class="{ active: activeParent === 'admin' }"
+          @mouseover="showDropdown('adminDropdown')"
+          @mouseleave="hideDropdown('adminDropdown')"
+        >
+          <router-link
+            to="/admin"
+            class="nav-link dropdown-toggle"
+            id="adminDropdown"
+            role="button"
+            aria-expanded="false"
+            @click.prevent="navigateTo('/admin')"
+          >
+            Admin
+          </router-link>
+          <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+            <li>
+              <router-link to="/admin/user-analytics" class="dropdown-item" active-class="active"
+                >User Analytics</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                to="/admin/content-management"
+                class="dropdown-item"
+                active-class="active"
+                >Content Management</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/admin/booking-record" class="dropdown-item" active-class="active"
+                >Booking Record</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                to="/admin/bulk-email-management"
+                class="dropdown-item"
+                active-class="active"
+                >Bulk Email Management</router-link
+              >
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
   </nav>
@@ -171,9 +219,15 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
 
 const router = useRouter()
 const route = useRoute()
+
+const userStore = useUserStore()
+
+const isLoggedIn = computed(() => userStore.isLoggedIn)
+const isAdmin = computed(() => userStore.isAdmin)
 
 // Show the dropdown menu
 const showDropdown = (dropdownId) => {
@@ -214,6 +268,16 @@ const activeParent = computed(() => {
     return 'support'
   } else if (['GetInvolved', 'BecomeVolunteer', 'Donate'].includes(route.name)) {
     return 'involved'
+  } else if (
+    [
+      'AdminDashboard',
+      'AdminUserAnalytics',
+      'AdminContentManagement',
+      'AdminBookingRecord',
+      'AdminBulkEmailManagementView'
+    ].includes(route.name)
+  ) {
+    return 'admin'
   }
   return ''
 })

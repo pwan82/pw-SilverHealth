@@ -49,14 +49,14 @@ import { useUserStore } from '@/stores/userStore'
  * @param {string} email - The input email to validate
  * @returns {Object} - Returns an object with the validation result and error message
  */
-export const validateExistingEmail = (blur, email) => {
+export const validateNewEmail = (blur, email) => {
   const userStore = useUserStore()
   const existingUser = userStore.allMockUsers.find((user) => user.email === email)
 
   if (existingUser) {
     return { isValid: false, message: blur ? 'Email already exists.' : null }
   } else {
-    return { isValid: true, message: null }
+    return validateInputEmail(blur, email)
   }
 }
 

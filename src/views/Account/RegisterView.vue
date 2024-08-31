@@ -12,7 +12,7 @@
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email *</label>
               <input
-                type="email"
+                type="text"
                 class="form-control"
                 id="email"
                 v-model="formData.email"
@@ -71,7 +71,6 @@
               <select
                 class="form-select"
                 @blur="() => validateGender(true)"
-                @input="() => validateGender(false)"
                 v-model="formData.gender"
               >
                 <option value="male">Male</option>
@@ -90,8 +89,8 @@
                 placeholder="Select your birthday"
                 @blur="() => validateBirthday(true)"
                 @input="() => validateBirthday(false)"
-                :max="maxDate"
               />
+              <!-- :max="maxDate" -->
               <div v-if="errors.birthday" class="text-danger">{{ errors.birthday }}</div>
 
               <!-- Register Button -->
@@ -183,8 +182,7 @@ const handleRegister = () => {
 
 const validateEmail = (blur) => {
   const email = formData.value.email
-  errors.value.email = inputValidators.validateInputEmail(blur, email).message
-  errors.value.email = inputValidators.validateExistingEmail(blur, email).message
+  errors.value.email = inputValidators.validateNewEmail(blur, email).message
 }
 
 const validatePassword = (blur) => {
