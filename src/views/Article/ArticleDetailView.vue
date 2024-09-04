@@ -11,14 +11,6 @@
           </p>
 
           <!-- Show average rating -->
-          <!-- <div class="text-center">
-            <div v-if="averageRating !== null">
-              <p>Average Rating: {{ averageRating }}</p>
-              <Rating v-model="averageRating" disabled :stars="5" />
-            </div>
-            <span v-else>No rating given</span>
-          </div> -->
-          <!-- Show average rating -->
           <div class="d-flex justify-content-center align-items-center mb-3">
             <span class="me-2 fw-bold">Rating:</span>
             <span v-if="averageRating !== null" class="me-2 fw-bold">{{ averageRating }}/5</span>
@@ -28,17 +20,6 @@
 
           <!-- Render Markdown content -->
           <div v-html="renderedContent"></div>
-
-          <!-- Login prompt or rating input -->
-          <!-- <div class="text-center mt-4">
-            <button v-if="!isLoggedIn" class="btn btn-outline-primary" @click="redirectToLogin">
-              Login to rate this article
-            </button>
-            <div v-else>
-              <Rating v-model.number="userRating" :stars="5" :cancel="false" />
-              <button class="btn btn-primary mt-2" @click="submitRatingHandler">Submit</button>
-            </div>
-          </div> -->
 
           <!-- If not logged in, show login button -->
           <div class="text-center mt-4">
@@ -54,15 +35,10 @@
               <p class="mt-2 text-success" v-else>Rating submitted successfully</p>
               <!-- <button class="btn btn-primary mt-3" @click="submitRatingHandler">Submit</button> -->
 
-              <button
-                @click="submitRatingHandler"
-                class="btn mt-2"
-                :class="{
-                  'btn-primary': userRating !== null,
-                  'btn-secondary': userRating === null
-                }"
-                :disabled="userRating === null"
-              >
+              <button @click="submitRatingHandler" class="btn mt-2" :class="{
+                'btn-primary': userRating !== null,
+                'btn-secondary': userRating === null
+              }" :disabled="userRating === null">
                 Submit
               </button>
             </div>
@@ -77,7 +53,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import MarkdownIt from 'markdown-it'
-import { fetchArticleById } from '@/services/ArticleService'
+import { fetchArticleById } from '@/services/articleService'
 import { useUserStore } from '@/stores/userStore'
 import { useRatingStore } from '@/stores/articleRatingStore'
 import Rating from 'primevue/rating'
@@ -131,6 +107,9 @@ const formatDate = (timestamp) => {
 const fetchArticleData = async () => {
   try {
     article.value = await fetchArticleById(articleId)
+    if (!article.value) {
+      router.push({ name: 'ArticleNotFound' })
+    }
   } catch (error) {
     console.error('Error fetching article:', error)
   }

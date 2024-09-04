@@ -190,6 +190,16 @@ const routes = [
     path: '/access-denied',
     name: 'AccessDenied',
     component: () => import('../views/Error/AccessDeniedView.vue')
+  },
+  {
+    path: '/:pathMatch(.*)',
+    name: 'PageNotFound',
+    component: () => import('../views/Error/NotFoundView.vue')
+  },
+  {
+    path: '/article-not-found',
+    name: 'ArticleNotFound',
+    component: () => import('../views/Error/ArticleNotFoundView.vue')
   }
 ]
 

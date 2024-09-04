@@ -18,7 +18,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { fetchAllArticles } from '@/services/ArticleService'
+import { fetchAllArticles } from '@/services/articleService'
 
 const articles = ref([])
 
@@ -30,7 +30,6 @@ const fetchArticles = async () => {
   }
 }
 
-// 格式化日期
 const formatDate = (timestamp) => {
   return new Date(timestamp).toLocaleDateString()
 }
