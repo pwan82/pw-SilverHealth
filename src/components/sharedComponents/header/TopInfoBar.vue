@@ -1,21 +1,43 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
+import { auth } from '@/firebase/init'
+import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth'
 
 const router = useRouter()
-const userStore = useUserStore()
+const authStore = useAuthStore()
 
-const isLoggedIn = computed(() => userStore.isLoggedIn)
-const currentUser = computed(() => userStore.currentUser)
+// const currentUser = computed(() => authStore.currentUser)
 
 const handleLogout = () => {
   if (confirm('Are you sure to logout?')) {
-    userStore.logout()
+    authStore.logout()
     alert('You have successfully logged out!')
     router.push({ name: 'Home' })
   }
 }
+
+// const auth = getAuth()
+const currentUser = ref(null)
+const currentRole = ref(null)
+const currentEmail = ref(null)
+
+onMounted(() => {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser.value = user
+      await authStore.login()
+      currentRole.value = authStore.role
+      currentEmail.value = authStore.email
+    } else {
+      authStore.clearUser()
+      currentUser.value = null
+      currentRole.value = null
+      currentEmail.value = null
+    }
+  })
+})
 </script>
 
 <template>
@@ -26,14 +48,12 @@ const handleLogout = () => {
       </div>
 
       <div class="col-12 col-md-6 text-center text-md-end">
-        <p v-if="isLoggedIn">
-          <span>🌞 Hi, {{ currentUser.username || 'Guest' }}</span>
+        <p v-if="currentUser">
+          <span>🌞 Hi, {{ currentUser.email || 'Guest' }} ({{ currentRole }})</span>
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/account/settings" class="text-decoration-none">Settings</router-link>
           <span class="mx-2 non-selectable">|</span>
-          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer"
-            >Log out</span
-          >
+          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer">Log out</span>
         </p>
         <p v-else>
           <router-link to="/login" class="text-decoration-none">Login</router-link>

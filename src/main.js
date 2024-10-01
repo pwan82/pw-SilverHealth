@@ -3,7 +3,6 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
-import { useUserStore } from './stores/userStore'
 import { useRatingStore } from './stores/articleRatingStore'
 import router from './router'
 
@@ -33,8 +32,8 @@ app.component('Column', Column)
 app.mount('#app')
 
 // Restore user state from localStorage
-const userStore = useUserStore()
-userStore.restoreUser()
+// const authStore = useAuthStore()
+// userStore.restoreUser()
 
 const articleRatingStore = useRatingStore()
 articleRatingStore.restoreRatings()

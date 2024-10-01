@@ -24,10 +24,10 @@ importers:
         specifier: ^4.21.0
         version: 4.21.0
       firebase:
-        specifier: ^10.14.0
+        specifier: ^10.13.1
         version: 10.14.0
       firebase-admin:
-        specifier: ^12.6.0
+        specifier: ^12.5.0
         version: 12.6.0
       firebase-functions:
         specifier: ^6.0.1
@@ -46,10 +46,7 @@ importers:
         version: 3.4.38
       vue-router:
         specifier: ^4.4.3
-        version: 4.4.3(vue@3.4.38)
-      vuex:
-        specifier: ^4.0.2
-        version: 4.0.2(vue@3.4.38)
+        version: 4.4.5(vue@3.4.38)
     devDependencies:
       '@rushstack/eslint-patch':
         specifier: ^1.8.0
@@ -927,6 +924,9 @@ packages:
 
   '@vue/devtools-api@6.6.3':
     resolution: {integrity: sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==}
+
+  '@vue/devtools-api@6.6.4':
+    resolution: {integrity: sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==}
 
   '@vue/devtools-core@7.3.8':
     resolution: {integrity: sha512-mEwsR7GMklWuPOBH/++DiJe0GWqQ0syDtWP0HhU8m9tebs5zQtujMXrgu+cgBAKquJAWnBz0PwNzBgBD2P+M9A==}
@@ -2315,8 +2315,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  vue-router@4.4.3:
-    resolution: {integrity: sha512-sv6wmNKx2j3aqJQDMxLFzs/u/mjA9Z5LCgy6BE0f7yFWMjrPLnS/sPNn8ARY/FXw6byV18EFutn5lTO6+UsV5A==}
+  vue-router@4.4.5:
+    resolution: {integrity: sha512-4fKZygS8cH1yCyuabAXGUAsyi1b2/o/OKgu/RUb+znIYOxPRxdkytJEx+0wGcpBE1pX6vUgh5jwWOKRGvuA/7Q==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -2327,11 +2327,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  vuex@4.0.2:
-    resolution: {integrity: sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q==}
-    peerDependencies:
-      vue: ^3.0.2
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -3398,6 +3393,8 @@ snapshots:
       '@vue/shared': 3.4.38
 
   '@vue/devtools-api@6.6.3': {}
+
+  '@vue/devtools-api@6.6.4': {}
 
   '@vue/devtools-core@7.3.8(vite@5.4.1(@types/node@22.7.4))(vue@3.4.38)':
     dependencies:
@@ -4958,9 +4955,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vue-router@4.4.3(vue@3.4.38):
+  vue-router@4.4.5(vue@3.4.38):
     dependencies:
-      '@vue/devtools-api': 6.6.3
+      '@vue/devtools-api': 6.6.4
       vue: 3.4.38
 
   vue@3.4.38:
@@ -4970,11 +4967,6 @@ snapshots:
       '@vue/runtime-dom': 3.4.38
       '@vue/server-renderer': 3.4.38(vue@3.4.38)
       '@vue/shared': 3.4.38
-
-  vuex@4.0.2(vue@3.4.38):
-    dependencies:
-      '@vue/devtools-api': 6.6.3
-      vue: 3.4.38
 
   webidl-conversions@3.0.1:
     optional: true

@@ -35,13 +35,11 @@ export const validateInputEmail = (blur, value) => {
   if (!value.trim()) {
     return { isValid: false, message: blur ? 'Email cannot be empty.' : null }
   } else if (!emailRegex.test(value)) {
-    return { isValid: false, message: blur ? 'Please enter a valid email address.' : null }
+    return { isValid: false, message: blur ? 'The email address is not valid.' : null }
   } else {
     return { isValid: true, message: null }
   }
 }
-
-import { useUserStore } from '@/stores/userStore'
 
 /**
  * Validate if the email already exists
@@ -50,14 +48,15 @@ import { useUserStore } from '@/stores/userStore'
  * @returns {Object} - Returns an object with the validation result and error message
  */
 export const validateNewEmail = (blur, email) => {
-  const userStore = useUserStore()
-  const existingUser = userStore.allMockUsers.find((user) => user.email === email)
+  // const authStore = useAuthStore()
+  // const existingUser = authStore.allMockUsers.find((user) => user.email === email)
 
-  if (existingUser) {
-    return { isValid: false, message: blur ? 'Email already exists.' : null }
-  } else {
-    return validateInputEmail(blur, email)
-  }
+  // if (existingUser) {
+  //   return { isValid: false, message: blur ? 'Email already exists.' : null }
+  // } else {
+  //   return validateInputEmail(blur, email)
+  // }
+  return validateInputEmail(blur, email)
 }
 
 /**

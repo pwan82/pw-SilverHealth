@@ -12,44 +12,28 @@
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email</label>
-              <input
-                type="text "
-                class="form-control"
-                id="email"
-                @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)"
-                v-model="formData.email"
-                placeholder="Enter email"
-              />
+              <input type="text " class="form-control" id="email" @blur="() => validateEmail(true)"
+                @input="() => validateEmail(false)" v-model="formData.email" placeholder="Enter email" />
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Password Input -->
               <label for="password" class="form-label mt-3 fw-bold">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                @blur="() => validatePassword(true)"
-                @input="() => validatePassword(false)"
-                v-model="formData.password"
-                placeholder="Enter password"
-              />
+              <input type="password" class="form-control" id="password" @blur="() => validatePassword(true)"
+                @input="() => validatePassword(false)" v-model="formData.password" placeholder="Enter password" />
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
 
               <!-- Login and Register Button -->
               <div class="mt-3 d-grid gap-2">
                 <button type="submit" class="btn btn-primary button-text">Log in</button>
-                <router-link :to="{ name: 'Register' }" class="btn btn-outline-primary button-text"
-                  >Sign up</router-link
-                >
+                <router-link :to="{ name: 'Register' }" class="btn btn-outline-primary button-text">Sign
+                  up</router-link>
               </div>
 
               <!-- Login with Google Button -->
               <!-- <hr class="border-1 border-secondary " /> -->
               <div class="position-relative my-4">
                 <div
-                  class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background"
-                >
+                  class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background">
                   Or
                 </div>
                 <hr class="border-1 border-secondary mt-3" />
@@ -70,12 +54,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
-import * as inputValidators from '@/utils/InputValidators.js'
-import { validateLogin } from '@/services/authService'
+import { auth } from '@/firebase/init'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { useAuthStore } from '@/stores/authStore'
+import * as inputValidators from '@/utils/inputValidators.js'
 import DOMPurify from 'dompurify'
 
-const userStore = useUserStore()
+const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -91,26 +76,25 @@ const errors = ref({
 
 const sanitizeInput = (input) => DOMPurify.sanitize(input)
 const handleLogin = async () => {
-  formData.value.email = sanitizeInput(formData.value.email)
-  formData.value.password = sanitizeInput(formData.value.password)
+  let filteredEmail = sanitizeInput(formData.value.email).trim()
+  let filteredPassword = sanitizeInput(formData.value.password)
 
   validateEmail(true)
   validatePassword(true)
   if (!errors.value.email && !errors.value.password) {
     try {
-      const user = await validateLogin(formData.value.email.trim(), formData.value.password)
-      if (user) {
-        const redirectTo = route.query.redirect || '/'
+      signInWithEmailAndPassword(auth, filteredEmail, filteredPassword)
+        .then(async (data) => {
+          console.log('Firebase Login Successful!', data.user)
+          await authStore.login()
 
-        userStore.login({ ...user, password: undefined }) // Exclude password from user info
-        console.log(`Login successful! Email: ${user.email}, Role: ${user.role}`)
-        router.push(redirectTo)
-      } else {
-        console.log(
-          `formData.value.email: ${formData.value.email}, formData.value.password: ${formData.value.password}`
-        )
-        alert('Incorrect email or password!')
-      }
+          // redirect to previous page or home page
+          const redirectTo = route.query.redirect || '/'
+          router.push(redirectTo)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     } catch (error) {
       console.error('Error during login:', error)
     }

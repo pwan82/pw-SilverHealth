@@ -70,10 +70,10 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
 
-const userStore = useUserStore()
-const allUsers = computed(() => userStore.allMockUsers)
+const authStore = useAuthStore()
+const allUsers = computed(() => authStore.allMockUsers)
 
 const formatAddress = (user) => {
   const { streetAddress, building, suburb, state, postcode } = user.address

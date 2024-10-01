@@ -54,18 +54,18 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import MarkdownIt from 'markdown-it'
 import { fetchArticleById } from '@/services/articleService'
-import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
 import { useRatingStore } from '@/stores/articleRatingStore'
 import Rating from 'primevue/rating'
 
 const route = useRoute()
 const router = useRouter()
-const userStore = useUserStore()
+const authStore = useAuthStore()
 const ratingStore = useRatingStore()
 
 const articleId = Number(route.params.articleId)
 const article = ref(null)
-const isLoggedIn = computed(() => userStore.isLoggedIn)
+const isLoggedIn = computed(() => authStore.isLoggedIn)
 const userRating = ref(null)
 const userRatingSubmitted = ref(false) // Track if rating is submitted
 
@@ -87,7 +87,7 @@ const submitRatingHandler = () => {
     return
   }
 
-  const userId = userStore.currentUser.userId
+  const userId = authStore.currentUser.userId
   ratingStore.submitRating(articleId, userId, parseInt(userRating.value))
   // alert('Your rating has been submitted successfully!')
   userRatingSubmitted.value = true // Mark rating as submitted

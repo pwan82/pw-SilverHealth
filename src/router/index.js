@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
+import { auth } from '@/firebase/init'
+import { useAuthStore } from '@/stores/authStore'
 import { computed } from 'vue'
 
 const routes = [
@@ -208,20 +209,26 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const userStore = useUserStore()
-  const isLoggedIn = computed(() => userStore.isLoggedIn)
-  const isAdmin = computed(() => userStore.isAdmin)
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
 
-  if (
-    to.matched.some((record) => record.meta.requiresAdmin && (!isLoggedIn.value || !isAdmin.value))
-  ) {
-    // Handle admin route
-    next({ name: 'AccessDenied' })
-  } else if (to.matched.some((record) => record.meta.requiresAuth && !isLoggedIn.value)) {
-    // Handle authentication
-    next({ name: 'Login' })
-  } else if (isLoggedIn.value && to.name == 'Login') {
+  // Use cached status first, then check with Firebase
+  const isLoggedIn = computed(() => authStore.isLoggedIn)
+  const isAdmin = computed(() => authStore.isAdmin)
+
+    if (to.matched.some(record => record.meta.requiresAuth || record.meta.requiresAdmin)) {
+    // If login state is not cached, check Firebase auth state
+    await authStore.checkAuthState()
+
+    if (to.matched.some(record => record.meta.requiresAdmin && (!isLoggedIn.value || !isAdmin.value))) {
+      next({ name: 'AccessDenied' })
+    } else if (to.matched.some(record => record.meta.requiresAuth && !isLoggedIn.value)) {
+      next({ name: 'Login' })
+    } else {
+      next()
+    }
+  } else if (isLoggedIn.value && (to.name == 'Login' || to.name == 'register')) {
+    // If the user is logged in and tries to access the login or register page, redirect to Home
     next({ name: 'Home' })
   } else {
     next()
