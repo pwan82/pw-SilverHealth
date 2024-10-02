@@ -14,7 +14,10 @@ const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 // const cors = require('cors')({ origin: true })
 
-admin.initializeApp()
+// Initialize Firebase Admin only if it hasn't been initialized already
+if (admin.apps.length === 0) {
+  admin.initializeApp()
+}
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -78,3 +81,6 @@ exports.onAdminUserChanged = functions.firestore
       }
     }
   })
+
+const { addOrUpdateUserInfo } = require('./userFunctions')
+exports.addOrUpdateUserInfo = addOrUpdateUserInfo

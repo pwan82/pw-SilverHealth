@@ -67,6 +67,7 @@ export const validateNewEmail = (blur, email) => {
  */
 export const validateInputPassword = (blur, value) => {
   const minLength = 8
+  const maxLength = 30
   const hasUppercase = /[A-Z]/.test(value)
   const hasLowercase = /[a-z]/.test(value)
   const hasNumber = /\d/.test(value)
@@ -75,7 +76,12 @@ export const validateInputPassword = (blur, value) => {
   if (value.length < minLength) {
     return {
       isValid: false,
-      message: blur ? `Password must be at least ${minLength} characters long.` : null
+      message: blur ? `Password length is at least ${minLength} characters.` : null
+    }
+  } else if (value.length > maxLength) {
+    return {
+      isValid: false,
+      message: blur ? `Password length is up to ${maxLength} characters.` : null
     }
   } else if (!hasUppercase) {
     return {

@@ -71,6 +71,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '@/firebase/init.js'  // Firestore initialization
 import * as inputValidators from '@/utils/inputValidators.js'
@@ -143,17 +144,25 @@ const handleRegister = () => {
         const user = userCredential.user
         console.log('User registered successfully!', user.uid)
 
-        // Store user information in Firestore (users collection)
-        const userDocRef = doc(db, 'users', user.uid)
-        await setDoc(userDocRef, {
-          email: formData.value.email,
-          username: formData.value.username,
-          gender: formData.value.gender,
-          birthday: formData.value.birthday,
-          address: formData.value.address
-        })
+        // Call the Cloud Function to store user information in Firestore
+        const functions = getFunctions();
+        const addOrUpdateUserInfo = httpsCallable(functions, 'addOrUpdateUserInfo');
 
-        router.push('/')
+        try {
+          await addOrUpdateUserInfo({
+            email: formData.value.email,
+            username: formData.value.username,
+            gender: formData.value.gender,
+            birthday: formData.value.birthday,
+            address: formData.value.address // Address must be an object {streetAddress, building, suburb, state, postcode}
+          });
+
+          console.log('User information stored successfully in Firestore.');
+          router.push('/'); // Redirect after successful registration and data storage
+        } catch (error) {
+          console.error('Error storing user information:', error.message);
+          // Handle any errors related to Cloud Function execution
+        }
       })
       .catch((error) => {
         // Capture Firebase errors and display them in the form
