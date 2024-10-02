@@ -24,10 +24,14 @@
 
               <!-- Login and Register Button -->
               <div class="mt-3 d-grid gap-2">
-                <button type="submit" class="btn btn-primary button-text">Log in</button>
-                <router-link :to="{ name: 'Register' }" class="btn btn-outline-primary button-text">Sign
-                  up</router-link>
+                <button type="submit" class="btn btn-primary button-text">Log In</button>
+                <router-link :to="{ name: 'Signup' }" class="btn btn-outline-primary button-text">Sign
+                  Up</router-link>
+
+                <router-link :to="{ name: 'ForgotPassword' }" class="btn btn-link mt-2">Forgot password?</router-link>
               </div>
+
+
 
               <!-- Login with Google Button -->
               <!-- <div class="position-relative my-4">

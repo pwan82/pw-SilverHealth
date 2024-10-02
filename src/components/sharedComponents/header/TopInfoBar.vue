@@ -1,9 +1,9 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { auth } from '@/firebase/init'
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -58,7 +58,7 @@ onMounted(() => {
         <p v-else>
           <router-link to="/login" class="text-decoration-none">Log In</router-link>
           <span class="mx-2 non-selectable">|</span>
-          <router-link to="/register" class="text-decoration-none">Sign Up</router-link>
+          <router-link to="/signup" class="text-decoration-none">Sign Up</router-link>
         </p>
       </div>
     </div>

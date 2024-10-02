@@ -153,9 +153,14 @@ const routes = [
     component: () => import('../views/Account/LoginView.vue')
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: () => import('../views/Account/RegisterView.vue')
+    path: '/signup',
+    name: 'Signup',
+    component: () => import('../views/Account/SignupView.vue')
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('../views/Account/ForgotPasswordView.vue')
   },
   {
     path: '/admin',
@@ -216,13 +221,17 @@ router.beforeEach(async (to, from, next) => {
   const isLoggedIn = computed(() => authStore.isLoggedIn)
   const isAdmin = computed(() => authStore.isAdmin)
 
-    if (to.matched.some(record => record.meta.requiresAuth || record.meta.requiresAdmin)) {
+  if (to.matched.some((record) => record.meta.requiresAuth || record.meta.requiresAdmin)) {
     // If login state is not cached, check Firebase auth state
     await authStore.checkAuthState()
 
-    if (to.matched.some(record => record.meta.requiresAdmin && (!isLoggedIn.value || !isAdmin.value))) {
+    if (
+      to.matched.some(
+        (record) => record.meta.requiresAdmin && (!isLoggedIn.value || !isAdmin.value)
+      )
+    ) {
       next({ name: 'AccessDenied' })
-    } else if (to.matched.some(record => record.meta.requiresAuth && !isLoggedIn.value)) {
+    } else if (to.matched.some((record) => record.meta.requiresAuth && !isLoggedIn.value)) {
       next({ name: 'Login' })
     } else {
       next()
