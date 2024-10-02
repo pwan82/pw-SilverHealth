@@ -2,9 +2,10 @@
   <div class="container mt-5 mb-5">
     <div class="row align-items-center">
       <div class="col-md-8 offset-md-2">
-        <h1 class="text-center">Register</h1>
+        <h1 class="text-center">Sign Up</h1>
         <p class="text-center">
-          Join SilverHealth today. Fill in the details to create an account.
+          Join SilverHealth today.<br />
+          Fill in the details to create an account.
         </p>
         <form @submit.prevent="handleRegister">
           <div class="row mb-3">

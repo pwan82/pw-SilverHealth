@@ -56,7 +56,9 @@ onMounted(() => {
           <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer">Log out</span>
         </p>
         <p v-else>
-          <router-link to="/login" class="text-decoration-none">Login</router-link>
+          <router-link to="/login" class="text-decoration-none">Log In</router-link>
+          <span class="mx-2 non-selectable">|</span>
+          <router-link to="/register" class="text-decoration-none">Sign Up</router-link>
         </p>
       </div>
     </div>
