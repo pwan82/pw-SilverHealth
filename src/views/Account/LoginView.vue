@@ -8,7 +8,7 @@
           Please log in before visiting restricted pages.
         </p>
         <form @submit.prevent="handleLogin">
-          <div class="row mb-3">
+          <div class="row">
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email</label>
@@ -27,28 +27,33 @@
                 <button type="submit" class="btn btn-primary button-text">Log In</button>
                 <router-link :to="{ name: 'Signup' }" class="btn btn-outline-primary button-text">Sign
                   Up</router-link>
-
-                <router-link :to="{ name: 'ForgotPassword' }" class="btn btn-link mt-2">Forgot password?</router-link>
-              </div>
-
-
-
-              <!-- Login with Google Button -->
-              <!-- <div class="position-relative my-4">
-                <div
-                  class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background">
-                  Or
+                <div class="mt-1 text-center">
+                  <router-link :to="{ name: 'ForgotPassword' }" class="text-muted">
+                    Forgot password?
+                  </router-link>
                 </div>
-                <hr class="border-1 border-secondary mt-3" />
               </div>
-              <div class="mt-3 d-grid gap-2">
-                <button @click="handleLoginWithGoogle" class="btn btn-outline-dark custom-button">
-                  <i class="bi bi-google"></i><span class="button-text">Login with Google</span>
-                </button>
-              </div> -->
+
             </div>
           </div>
         </form>
+        <div class="row mb-3">
+          <div class="col-sm-6 offset-sm-3">
+            <!-- Login with Google Button -->
+            <div class="position-relative my-4">
+              <div
+                class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background">
+                Or
+              </div>
+              <hr class="border-1 border-secondary mt-3" />
+            </div>
+            <div class="mt-3 d-grid gap-2">
+              <button @click="handleLoginWithGoogle" class="btn btn-outline-dark custom-button">
+                <i class="bi bi-google"></i><span class="button-text">Login with Google</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -57,8 +62,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { auth } from '@/firebase/init'
+import { auth, db } from '@/firebase/init'
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { getDoc, doc } from 'firebase/firestore'
+import { getFunctions, httpsCallable } from 'firebase/functions'
 import { useAuthStore } from '@/stores/authStore'
 import * as inputValidators from '@/utils/inputValidators.js'
 import DOMPurify from 'dompurify'
@@ -132,8 +139,43 @@ const handleLoginWithGoogle = async () => {
   const provider = new GoogleAuthProvider()
 
   try {
+    // Sign in the user with Google
     const result = await signInWithPopup(auth, provider)
-    console.log('Google Sign-In Successful!', result.user)
+    const user = result.user
+    console.log('Google Sign-In Successful!', user)
+
+    const userId = user.uid
+    const userDocRef = doc(db, 'users', userId)
+
+    // Check if the user document already exists in Firestore
+    const userDoc = await getDoc(userDocRef)
+
+    // If the user does not exist in Firestore, call the addOrUpdateUserInfo Cloud Function
+    if (!userDoc.exists()) {
+      const functions = getFunctions()
+      const addOrUpdateUserInfo = httpsCallable(functions, 'addOrUpdateUserInfo')
+
+      try {
+        // Call the addOrUpdateUserInfo Cloud Function to add the user
+        await addOrUpdateUserInfo({
+          email: user.email,
+          username: user.displayName || '',
+          gender: '',
+          birthday: '',
+          address: {
+            streetAddress: '',
+            building: '',
+            suburb: '',
+            state: '',
+            postcode: ''
+          }
+        })
+
+        console.log('New user created in Firestore using addOrUpdateUserInfo.')
+      } catch (error) {
+        console.error('Error calling addOrUpdateUserInfo:', error.message)
+      }
+    }
 
     await authStore.login()
 

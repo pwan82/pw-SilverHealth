@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { auth } from '@/firebase/init'
+import { auth, db } from '@/firebase/init'
 import { signOut, onAuthStateChanged } from 'firebase/auth'
+import { doc, getDoc } from 'firebase/firestore'
 
 export const useAuthStore = defineStore('user', {
   state: () => ({
@@ -8,7 +9,8 @@ export const useAuthStore = defineStore('user', {
     role: null,
     email: null,
     isLoggedIn: false,
-    isAdmin: false
+    isAdmin: false,
+    userInfo: null // Full user info from Firestore
   }),
   actions: {
     async checkAuthState() {
@@ -39,6 +41,7 @@ export const useAuthStore = defineStore('user', {
         const userRole = idTokenResult.claims.role || 'user' // Default role to 'user' if not defined
 
         this.setUser(user.uid, userRole, user.email)
+        this.fetchUserData(user.uid)
         console.log(`Uid: ${user.uid}, User Role: ${userRole}, Email: ${user.email}`)
       } else {
         console.error('You have not logged in!')
@@ -55,6 +58,19 @@ export const useAuthStore = defineStore('user', {
           console.error('Logout failed:', error)
         })
     },
+    async fetchUserData(userId) {
+      // Fetch the user document from Firestore
+      const userDocRef = doc(db, 'users', userId)
+      const userDoc = await getDoc(userDocRef)
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data()
+        this.userInfo = userData // Store user information from Firestore
+        console.log('Fetched user data from Firestore:', userData)
+      } else {
+        console.log('No user data found in Firestore for this user.')
+      }
+    },
     setUser(userId, role, email) {
       this.userId = userId
       this.role = role
@@ -67,6 +83,7 @@ export const useAuthStore = defineStore('user', {
       this.userId = null
       this.role = null
       this.email = null
+      this.userInfo = null
 
       this.isLoggedIn = false
       this.isAdmin = false

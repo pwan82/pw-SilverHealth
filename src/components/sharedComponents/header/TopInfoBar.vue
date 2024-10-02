@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { auth } from '@/firebase/init'
@@ -22,6 +22,7 @@ const handleLogout = () => {
 const currentUser = ref(null)
 const currentRole = ref(null)
 const currentEmail = ref(null)
+const currentUserInfo = computed(() => authStore.userInfo)
 
 onMounted(() => {
   onAuthStateChanged(auth, async (user) => {
@@ -49,7 +50,7 @@ onMounted(() => {
 
       <div class="col-12 col-md-6 text-center text-md-end">
         <p v-if="currentUser">
-          <span>🌞 Hi, {{ currentUser.email || 'Guest' }} ({{ currentRole }})</span>
+          <span>🌞 Hi, {{ currentUserInfo.username || 'Guest' }} ({{ currentRole }})</span>
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/account/settings" class="text-decoration-none">Settings</router-link>
           <span class="mx-2 non-selectable">|</span>
