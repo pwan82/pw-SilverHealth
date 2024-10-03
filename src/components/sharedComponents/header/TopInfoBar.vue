@@ -50,7 +50,7 @@ onMounted(() => {
 
       <div class="col-12 col-md-6 text-center text-md-end">
         <p v-if="currentUser">
-          <span>🌞 Hi, {{ currentUserInfo.username || 'Guest' }} ({{ currentRole }})</span>
+          <span>🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'Guest' }} ({{ currentRole }})</span>
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/account/settings" class="text-decoration-none">Settings</router-link>
           <span class="mx-2 non-selectable">|</span>

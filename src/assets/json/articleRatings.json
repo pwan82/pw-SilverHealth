@@ -3,16 +3,34 @@
     "articleId": 1,
     "averageRating": 3.0,
     "ratingRecords": [
-      { "userId": 1, "rating": 5 },
-      { "userId": 2, "rating": 1 }
+      {
+        "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
+        "publicationTime": 1706929500000,
+        "rating": 5,
+        "comment": "very good article"
+      },
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1706849640000,
+        "rating": 1
+      }
     ]
   },
   {
     "articleId": 2,
     "averageRating": 4.0,
     "ratingRecords": [
-      { "userId": 1, "rating": 5 },
-      { "userId": 3, "rating": 3 }
+      {
+        "userId": "oJxOhKyaHkSXPtEKlA1UA5GWmPQ2",
+        "publicationTime": 1706951642000,
+        "rating": 5
+      },
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1710205214000,
+        "rating": 3,
+        "comment": "High quality content."
+      }
     ]
   }
 ]

@@ -7,6 +7,12 @@
           <p class="text-center">Add / edit articles and events.</p>
         </div>
       </div>
+
+      <uploadArticlesAndRatings />
     </div>
   </div>
 </template>
+
+<script setup>
+import uploadArticlesAndRatings from '@/components/temp/UploadArticlesAndRatings.vue';
+</script>
