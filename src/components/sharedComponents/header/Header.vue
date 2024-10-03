@@ -3,7 +3,7 @@ import logo from '@/assets/logo.webp'
 import FirstAidGuideButton from '@/components/sharedComponents/buttons/FirstAidGuideButton.vue'
 import TopInfoBar from '@/components/sharedComponents/header/TopInfoBar.vue'
 import SearchBar from '@/components/sharedComponents/header/SearchBar.vue'
-import NabBar from '@/components/sharedComponents/header/NabBar.vue'
+import NabBar from '@/components/sharedComponents/header/NavBar.vue'
 </script>
 
 <template>
