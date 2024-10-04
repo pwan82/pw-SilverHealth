@@ -4,13 +4,13 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "category": ["Fitness"],
+    "category": ["fitness"],
     "title": "The Importance of Physical Activity for Seniors",
     "body": "Staying active is essential for maintaining good health, especially for older adults. Regular physical activity can help improve strength, balance, and overall well-being. It also reduces the risk of chronic diseases, such as heart disease, diabetes, and osteoporosis.\n\n**Why Exercise Matters**\n\n- Helps maintain independence by improving mobility and flexibility.\n- Reduces the risk of falls by enhancing balance and coordination.\n- Supports mental health by reducing symptoms of anxiety and depression.\n\nFor seniors, it's important to find enjoyable activities that fit into their daily routine. Walking, swimming, or participating in gentle yoga can all be beneficial.\n\n[Learn more about staying active as a senior](https://example.com)",
     "requireAuth": false,
     "isVisible": true,
     "averageRating": 3.67,
-    "ratingRecords": [
+    "ratings": [
       {
         "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
         "publicationTime": 1707946213254,
@@ -35,13 +35,13 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "category": ["Nutrition", "Food"],
+    "category": ["nutrition", "food"],
     "title": "Healthy Eating Habits for Seniors",
     "body": "Nutrition plays a key role in maintaining health as we age. Older adults need to focus on a balanced diet that includes a variety of nutrients to support overall health and energy levels.\n\n**Key Dietary Recommendations**\n\n- Include a variety of fruits and vegetables in every meal.\n- Choose whole grains over refined grains to maintain energy levels.\n- Opt for lean proteins, such as fish, chicken, and legumes, to support muscle mass.\n- Stay hydrated by drinking water throughout the day.\n\nAdopting these healthy eating habits can help seniors feel their best and maintain a healthy weight.\n\n[Discover more about senior nutrition](https://example.com)",
     "requireAuth": false,
     "isVisible": true,
     "averageRating": 2.0,
-    "ratingRecords": [
+    "ratings": [
       {
         "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
         "publicationTime": 1709141364787,
@@ -71,13 +71,13 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "category": ["Mental Health"],
+    "category": ["mental health"],
     "title": "Mental Wellness for the Elderly",
     "body": "Maintaining mental wellness is crucial for older adults to enjoy a high quality of life. Mental health affects how we think, feel, and act, and it plays a vital role in our overall well-being.\n\n**Tips for Promoting Mental Wellness**\n\n- Stay socially active by connecting with family and friends.\n- Engage in activities that challenge the brain, such as puzzles or reading.\n- Practice mindfulness and relaxation techniques to reduce stress.\n- Seek professional help if experiencing symptoms of depression or anxiety.\n\nTaking care of mental health is as important as physical health, and there are many ways to promote mental wellness at any age.\n\n[Read more on mental health for seniors](https://example.com)",
     "requireAuth": false,
     "isVisible": true,
     "averageRating": 4.5,
-    "ratingRecords": [
+    "ratings": [
       {
         "userId": "oJxOhKyaHkSXPtEKlA1UA5GWmPQ2",
         "publicationTime": 1705082508685,
@@ -97,13 +97,13 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "category": ["Nutrition", "Hydration"],
+    "category": ["nutrition", "hydration"],
     "title": "The Benefits of Staying Hydrated",
     "body": "As we age, our sense of thirst diminishes, making it easy to become dehydrated. Proper hydration is essential for seniors to maintain overall health and bodily functions.\n\n**Why Hydration is Vital**\n\n- Helps regulate body temperature and maintain healthy skin.\n- Supports digestion and prevents constipation.\n- Improves cognitive function and energy levels.\n- Reduces the risk of urinary tract infections.\n\nEncouraging regular water intake and including water-rich foods like fruits and vegetables can help seniors stay well-hydrated.\n\n[Learn about hydration tips for seniors](https://example.com)",
     "requireAuth": false,
     "isVisible": true,
     "averageRating": 4.0,
-    "ratingRecords": [
+    "ratings": [
       {
         "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
         "publicationTime": 1705199846236,
@@ -117,13 +117,13 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "category": ["Safety and Prevention", "Fall Prevention"],
+    "category": ["safety and prevention", "fall prevention"],
     "title": "Preventing Falls in Older Adults",
     "body": "Falls are a leading cause of injury among seniors, but many falls are preventable with the right precautions and awareness.\n\n**Fall Prevention Tips**\n\n- Keep living spaces free of clutter and ensure good lighting.\n- Install grab bars in bathrooms and use non-slip mats.\n- Wear supportive footwear with non-slip soles.\n- Engage in balance and strength exercises to maintain stability.\n\nBy making small changes to the home environment and lifestyle, seniors can significantly reduce their risk of falls.\n\n[Find out more about fall prevention](https://example.com)",
     "requireAuth": false,
     "isVisible": true,
     "averageRating": 3.5,
-    "ratingRecords": [
+    "ratings": [
       {
         "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
         "publicationTime": 1708845174559,
@@ -143,13 +143,13 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "category": ["Chronic Conditions", "chronic pain"],
+    "category": ["chronic conditions", "chronic pain"],
     "title": "Understanding Chronic Pain in Seniors",
     "body": "Chronic pain is a common issue among older adults and can impact daily activities and quality of life. Understanding and managing chronic pain is essential for maintaining independence and well-being.\n\n**Strategies for Managing Chronic Pain**\n\n- Work with a healthcare provider to create a personalized pain management plan.\n- Use non-pharmaceutical options like physical therapy, massage, or acupuncture.\n- Stay active with low-impact exercises such as swimming or walking.\n- Practice relaxation techniques, such as deep breathing or meditation.\n\nEffective management of chronic pain can help seniors live more comfortably and stay engaged in daily life.\n\n[Explore more about managing chronic pain](https://example.com)",
     "requireAuth": false,
     "isVisible": true,
     "averageRating": 2.5,
-    "ratingRecords": [
+    "ratings": [
       {
         "userId": "qKSmGU4GVGRWNsmPJRgjDu9UwdD3",
         "publicationTime": 1709502275210,
@@ -168,13 +168,13 @@
     "author": "SilverHealth Team",
     "publicationTime": 1704027600000,
     "modificationTime": -1,
-    "category": ["News"],
+    "category": ["news"],
     "title": "SilverHealth Launches New Initiative to Support Elderly Wellness",
     "body": "SilverHealth is excited to announce the launch of a new initiative aimed at promoting wellness among seniors.\n\n### Key Highlights:\n\n- **Free Wellness Webinars**: Starting next month, seniors can join weekly webinars on topics ranging from mental health to physical fitness.\n- **Expanded Resource Hub**: We have added new guides on nutrition, hydration, and preventing falls at home.\n- **Community Support**: Our community forum now includes specialized groups for discussing chronic conditions and sharing personal stories.\n\nWe are committed to supporting the elderly population through education, resources, and community building. Stay tuned for more updates!",
     "requireAuth": false,
     "isVisible": true,
     "averageRating": 3.0,
-    "ratingRecords": [
+    "ratings": [
       {
         "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
         "publicationTime": 1701255193942,

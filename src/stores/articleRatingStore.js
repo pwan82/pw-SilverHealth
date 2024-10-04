@@ -1,7 +1,9 @@
 // stores/ratingStore.js
 
 import { defineStore } from 'pinia'
-import mockRatings from '@/assets/json/articleRatings.json'
+// import mockRatings from '@/assets/json/articleRatings.json'
+
+const mockRatings = ''
 
 export const useRatingStore = defineStore('rating', {
   state: () => ({

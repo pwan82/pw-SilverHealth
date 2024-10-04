@@ -1,0 +1,54 @@
+[
+  {
+    "articleId": 8,
+    "author": "Secret Team",
+    "publicationTime": 1704028600000,
+    "modificationTime": -1,
+    "category": ["news"],
+    "title": "Secret Newsletter that Needs Logged In",
+    "body": "SilverHealth is excited to announce the launch of a new initiative aimed at promoting wellness among seniors.\n\n### Key Highlights:\n\n- **Free Wellness Webinars**: Starting next month, seniors can join weekly webinars on topics ranging from mental health to physical fitness.\n- **Expanded Resource Hub**: We have added new guides on nutrition, hydration, and preventing falls at home.\n- **Community Support**: Our community forum now includes specialized groups for discussing chronic conditions and sharing personal stories.\n\nWe are committed to supporting the elderly population through education, resources, and community building. Stay tuned for more updates!",
+    "requireAuth": true,
+    "isVisible": true,
+    "averageRating": 3.0,
+    "ratings": [
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1701255193942,
+        "rating": 1,
+        "comment": "Hidden contents"
+      },
+      {
+        "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
+        "publicationTime": 1703797485767,
+        "rating": 5,
+        "comment": "Cannot be seen by un-logged-in users"
+      }
+    ]
+  },
+  {
+    "articleId": 9,
+    "author": "Secret Team",
+    "publicationTime": 1704028600000,
+    "modificationTime": -1,
+    "category": ["mental health"],
+    "title": "Article Only Available to Admin",
+    "body": "SilverHealth is excited to announce the launch of a new initiative aimed at promoting wellness among seniors.\n\n### Key Highlights:\n\n- **Free Wellness Webinars**: Starting next month, seniors can join weekly webinars on topics ranging from mental health to physical fitness.\n- **Expanded Resource Hub**: We have added new guides on nutrition, hydration, and preventing falls at home.\n- **Community Support**: Our community forum now includes specialized groups for discussing chronic conditions and sharing personal stories.\n\nWe are committed to supporting the elderly population through education, resources, and community building. Stay tuned for more updates!",
+    "requireAuth": false,
+    "isVisible": false,
+    "averageRating": 3.0,
+    "ratings": [
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1701255193942,
+        "rating": 1,
+        "comment": "Hidden contents"
+      },
+      {
+        "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
+        "publicationTime": 1703797485767,
+        "rating": 5,
+        "comment": "Cannot be seen by normal users"
+      }
+    ]
+  }
+]

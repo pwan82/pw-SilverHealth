@@ -84,3 +84,8 @@ exports.onAdminUserChanged = functions.firestore
 
 const { addOrUpdateUserInfo } = require('./userFunctions')
 exports.addOrUpdateUserInfo = addOrUpdateUserInfo
+
+const { getArticles, getArticleById, getArticleRatings } = require('./articleFunctions')
+exports.getArticles = getArticles
+exports.getArticleById = getArticleById
+exports.getArticleRatings = getArticleRatings
