@@ -14,6 +14,10 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/Column'
+import Rating from 'primevue/rating'
+import Button from 'primevue/button'
+import InputText from 'primevue/inputtext'
+import Select from 'primevue/select'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -28,6 +32,10 @@ app.use(PrimeVue, {
 
 app.component('DataTable', DataTable)
 app.component('Column', Column)
+app.component('Rating', Rating)
+app.component('Button', Button)
+app.component('InputText', InputText)
+app.component('Select', Select)
 
 app.mount('#app')
 

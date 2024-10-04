@@ -56,7 +56,6 @@ import MarkdownIt from 'markdown-it'
 import { fetchArticleById } from '@/services/articleService'
 import { useAuthStore } from '@/stores/authStore'
 import { useRatingStore } from '@/stores/articleRatingStore'
-import Rating from 'primevue/rating'
 
 const route = useRoute()
 const router = useRouter()
