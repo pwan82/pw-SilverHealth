@@ -30,31 +30,70 @@ exports.getArticles = onRequest(async (req, res) => {
     const categories = req.query.category // This will return either a string or an array
 
     try {
+      let articlesList = []
+
+      // Check if user is admin once
+      let isAdmin = false
+      const authCheck = await checkUserRole(req, 'admin')
+      if (authCheck.status === 200) {
+        isAdmin = true
+      }
+
+      if (categories) {
+        // Convert single category to an array for uniform processing
+        const categoryArray = Array.isArray(categories) ? categories : [categories.toLowerCase()]
+
+        // Perform individual queries for each category and merge the results
+        for (const cat of categoryArray) {
+          let categoryQuery = db
+            .collection('articles')
+            .where('category', 'array-contains', cat.toLowerCase())
+            .orderBy('publicationTime')
+            .limit(Number(limit))
+
+          const articlesSnapshot = await categoryQuery.get()
+
+          articlesSnapshot.forEach((doc) => {
+            const data = doc.data()
+            const articleCategories = data.category.map((cat) => cat.toLowerCase()) // Ensure all categories are lowercase for comparison
+
+            // Check if article's categories contain all the queried categories
+            if (categoryArray.every((cat) => articleCategories.includes(cat))) {
+              if (data.isVisible === true || isAdmin) {
+                // Ensure the article is added only once
+                if (!articlesList.find((article) => article.articleId === data.articleId)) {
+                  articlesList.push({
+                    articleId: data.articleId,
+                    author: data.author,
+                    publicationTime: data.publicationTime,
+                    modificationTime: data.modificationTime,
+                    category: data.category,
+                    title: data.title,
+                    requireAuth: data.requireAuth,
+                    averageRating: data.averageRating
+                  })
+                }
+              }
+            }
+          })
+        }
+
+        console.log(`Returning ${articlesList.length} articles with category filter`)
+        return res.status(200).json(articlesList) // Return articles with category filter
+      }
+
+      // If no categories filter, fetch all articles with pagination
       let articlesQuery = db
         .collection('articles')
         .orderBy('publicationTime')
         .limit(Number(limit))
         .offset(Number(offset))
 
-      if (categories) {
-        // Convert single category to an array for uniform processing
-        const categoryArray = Array.isArray(categories) ? categories : [categories]
-
-        // Ensure all categories are included in the article's category field
-        categoryArray.forEach((cat) => {
-          articlesQuery = articlesQuery.where('category', 'array-contains', cat.toLowerCase())
-        })
-      }
-
       const articlesSnapshot = await articlesQuery.get()
-      const articlesList = []
 
-      for (const doc of articlesSnapshot.docs) {
+      articlesSnapshot.forEach((doc) => {
         const data = doc.data()
-
-        // Check visibility of the article and user role
-        if (data.isVisible === true) {
-          // If the article is visible, add it to the list
+        if (data.isVisible === true || isAdmin) {
           articlesList.push({
             articleId: data.articleId,
             author: data.author,
@@ -65,31 +104,13 @@ exports.getArticles = onRequest(async (req, res) => {
             requireAuth: data.requireAuth,
             averageRating: data.averageRating
           })
-        } else {
-          // If the article is not visible, check for admin access
-          const authCheck = await checkUserRole(req, 'admin')
-          if (authCheck.status === 200) {
-            // If the user is an admin, include the article
-            articlesList.push({
-              articleId: data.articleId,
-              author: data.author,
-              publicationTime: data.publicationTime,
-              modificationTime: data.modificationTime,
-              category: data.category,
-              title: data.title,
-              requireAuth: data.requireAuth,
-              averageRating: data.averageRating
-            })
-          } else {
-            console.log(`Article ${data.articleId} is not visible to non-admin users.`)
-          }
         }
-      }
+      })
 
-      console.log(`Returning ${articlesList.length} articles`)
-
-      res.status(200).json(articlesList)
+      console.log(`Returning ${articlesList.length} articles without category filter`)
+      res.status(200).json(articlesList) // Return articles without category filter
     } catch (error) {
+      console.error(`Error fetching articles: ${error}`)
       res.status(500).send('Error fetching articles')
     }
   })
