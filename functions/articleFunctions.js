@@ -341,7 +341,7 @@ exports.publishArticleRating = onRequest((req, res) => {
         userId: userId,
         rating: rating,
         comment: comment,
-        publicationTime: admin.firestore.FieldValue.serverTimestamp()
+        publicationTime: Date.now()
       }
 
       // Check if the user has already rated this article
