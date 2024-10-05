@@ -121,22 +121,7 @@
     "title": "Preventing Falls in Older Adults",
     "body": "Falls are a leading cause of injury among seniors, but many falls are preventable with the right precautions and awareness.\n\n**Fall Prevention Tips**\n\n- Keep living spaces free of clutter and ensure good lighting.\n- Install grab bars in bathrooms and use non-slip mats.\n- Wear supportive footwear with non-slip soles.\n- Engage in balance and strength exercises to maintain stability.\n\nBy making small changes to the home environment and lifestyle, seniors can significantly reduce their risk of falls.\n\n[Find out more about fall prevention](https://example.com)",
     "requireAuth": false,
-    "isVisible": true,
-    "averageRating": 3.5,
-    "ratings": [
-      {
-        "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
-        "publicationTime": 1708845174559,
-        "rating": 4,
-        "comment": "Very informative"
-      },
-      {
-        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
-        "publicationTime": 1702288143610,
-        "rating": 3,
-        "comment": "Could be better"
-      }
-    ]
+    "isVisible": true
   },
   {
     "articleId": 6,
