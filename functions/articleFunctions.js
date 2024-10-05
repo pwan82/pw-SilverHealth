@@ -47,8 +47,8 @@ exports.getArticles = onRequest(async (req, res) => {
         for (const cat of categoryArray) {
           let categoryQuery = db
             .collection('articles')
-            .where('category', 'array-contains', cat.toLowerCase())
-            .orderBy('publicationTime')
+            .where('category', 'array-contains', cat)
+            .orderBy('publicationTime', 'desc')
             .limit(Number(limit))
 
           const articlesSnapshot = await categoryQuery.get()
@@ -85,7 +85,7 @@ exports.getArticles = onRequest(async (req, res) => {
       // If no categories filter, fetch all articles with pagination
       let articlesQuery = db
         .collection('articles')
-        .orderBy('publicationTime')
+        .orderBy('publicationTime', 'desc')
         .limit(Number(limit))
         .offset(Number(offset))
 
