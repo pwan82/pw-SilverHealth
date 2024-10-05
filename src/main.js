@@ -20,6 +20,7 @@ import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
 import DatePicker from 'primevue/datepicker'
 import Divider from 'primevue/divider'
+import Chip from 'primevue/chip'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -40,6 +41,7 @@ app.component('InputText', InputText)
 app.component('Select', Select)
 app.component('DatePicker', DatePicker)
 app.component('Divider', Divider)
+app.component('Chip', Chip)
 
 app.mount('#app')
 

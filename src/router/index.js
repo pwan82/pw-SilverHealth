@@ -214,7 +214,8 @@ const routes = [
     component: ErrorView,
     props: {
       title: 'Article Not Found',
-      message: 'The article you are looking for does not exist.'
+      message:
+        'The article you are looking for does not exist, or you do not have permission to view it.'
     }
   },
   {

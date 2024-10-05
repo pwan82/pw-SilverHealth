@@ -2,19 +2,40 @@
   <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col-md-10 offset-md-1">
-        <div v-if="article">
+        <!-- Loading indicator -->
+        <div v-if="loading" class="text-center my-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Article content -->
+        <div v-else-if="article">
+          <!-- Title -->
           <h1 class="text-center">{{ article.title }}</h1>
-          <p class="text-center">Author: {{ article.author }}</p>
+
+          <!-- Misc info -->
           <p class="text-center">
-            Published: {{ formatDate(article.publicationTime) }} | Last modified:
-            {{ formatDate(article.modificationTime) }}
+            <span>Author: {{ article.author }}</span>
+            <span class="mx-2 non-selectable">|</span>
+
+            <span>Published: {{ formatDate(article.publicationTime) }}</span>
+            <span class="mx-2 non-selectable">|</span>
+            <span>Last modified: {{ formatDate(article.modificationTime) }}
+            </span>
           </p>
+
+          <!-- Categories display -->
+          <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+            <Chip v-for="category in article.category" :key="category" :label="category" />
+          </div>
 
           <!-- Show average rating -->
           <div class="d-flex justify-content-center align-items-center mb-3">
             <span class="me-2 fw-bold">Rating:</span>
-            <span v-if="averageRating !== null" class="me-2 fw-bold">{{ averageRating }}/5</span>
-            <Rating v-if="averageRating !== null" v-model="averageRating" disabled :stars="5" />
+            <span v-if="averageRating(article)" class="me-2 fw-bold">{{ averageRating(article).toFixed(1)
+              }}/5</span>
+            <Rating v-if="averageRating(article)" v-model="article.averageRating" disabled :stars="5" />
             <span v-else class="me-2 fw-bold">No rating given</span>
           </div>
 
@@ -33,17 +54,10 @@
               <Rating v-model.number="userRating" :stars="5" :cancel="true" />
               <p class="mt-2 text-muted" v-if="!userRatingSubmitted">not submitted</p>
               <p class="mt-2 text-success" v-else>Rating submitted successfully</p>
-              <!-- <button class="btn btn-primary mt-3" @click="submitRatingHandler">Submit</button> -->
-
-              <button
-                @click="submitRatingHandler"
-                class="btn mt-2"
-                :class="{
-                  'btn-primary': userRating !== null,
-                  'btn-secondary': userRating === null
-                }"
-                :disabled="userRating === null"
-              >
+              <button @click="submitRatingHandler" class="btn mt-2" :class="{
+                'btn-primary': userRating !== null,
+                'btn-secondary': userRating === null
+              }" :disabled="userRating === null">
                 Submit
               </button>
             </div>
@@ -55,12 +69,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import MarkdownIt from 'markdown-it'
-import { fetchArticleById } from '@/services/articleService'
+import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { useRatingStore } from '@/stores/articleRatingStore'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '@/firebase/init'
 
 const route = useRoute()
 const router = useRouter()
@@ -71,14 +87,12 @@ const articleId = Number(route.params.articleId)
 const article = ref(null)
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 const userRating = ref(null)
-const userRatingSubmitted = ref(false) // Track if rating is submitted
+const userRatingSubmitted = ref(false)
+const loading = ref(true)
 
-// Fetching rating data from the store
-const ratingData = computed(() => ratingStore.getRatingByArticleId(articleId))
-
-const averageRating = computed(() => {
-  return ratingData.value ? parseFloat(ratingData.value.averageRating).toFixed(1) : null
-})
+const averageRating = (article) => {
+  return article.averageRating ? article.averageRating : null
+}
 
 // Parse the markdown content using MarkdownIt
 const md = new MarkdownIt()
@@ -93,8 +107,7 @@ const submitRatingHandler = () => {
 
   const userId = authStore.currentUser.userId
   ratingStore.submitRating(articleId, userId, parseInt(userRating.value))
-  // alert('Your rating has been submitted successfully!')
-  userRatingSubmitted.value = true // Mark rating as submitted
+  userRatingSubmitted.value = true
 }
 
 // Redirect to the login page
@@ -107,20 +120,55 @@ const formatDate = (timestamp) => {
   return timestamp === -1 ? 'Never modified' : new Date(timestamp).toLocaleDateString()
 }
 
-// Fetch article data on component mount
-const fetchArticleData = async () => {
+// Fetch article data from API
+const fetchArticleData = async (token) => {
   try {
-    article.value = await fetchArticleById(articleId)
-    if (!article.value) {
-      router.push({ name: 'ArticleNotFound' })
-    }
+    loading.value = true  // Set loading to true before fetching data
+
+    // Setting up the Axios interceptor
+    axios.interceptors.request.use(
+      (config) => {
+        if (token) {
+          config.headers['Authorization'] = `Bearer ${token}`
+        }
+        return config
+      },
+      (error) => {
+        console.error(`Error setting up the Axios interceptor ${error}`)
+        return Promise.reject(error)
+      }
+    )
+
+    const response = await axios.get(
+      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleById/${articleId}`
+    )
+    article.value = response.data
   } catch (error) {
     console.error('Error fetching article:', error)
+    router.push({ name: 'ArticleNotFound' })
+  } finally {
+    loading.value = false  // Set loading to false after fetching data, regardless of success or failure
   }
 }
 
-// Retrieve data during initial loading
-onMounted(fetchArticleData)
+// Set up auth state listener
+let unsubscribe
+onMounted(() => {
+  unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // Get the current user's Firebase token
+      const token = await user.getIdToken()
+      fetchArticleData(token)
+    } else {
+      fetchArticleData(null)
+    }
+  })
+})
+
+// Clean up auth state listener
+onUnmounted(() => {
+  if (unsubscribe) unsubscribe()
+})
 </script>
 
 <style scoped>

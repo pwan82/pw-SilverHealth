@@ -129,7 +129,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
 import axios from 'axios'
 
@@ -210,22 +211,18 @@ const averageRating = (ratingData) => {
   return ratingData.averageRating ? parseFloat(ratingData.averageRating) : null
 }
 
-const fetchArticles = async () => {
+const fetchArticles = async (token) => {
   try {
     // Set loading to true before fetching data
     loading.value = true
-
-    // Get the current user's Firebase token
-    const user = auth.currentUser
-    const token = user ? await user.getIdToken() : null
 
     // Setting up the Axios interceptor, adding the Authorization header
     axios.interceptors.request.use(
       (config) => {
         if (token) {
-          console.log(`getIdToken ${token}`)
+          // console.log(`getIdToken ${token}`)
           config.headers['Authorization'] = `Bearer ${token}`
-          console.log(`config.headers ${config.headers}`)
+          // console.log(`config.headers ${config.headers}`)
         }
         return config
       },
@@ -271,7 +268,24 @@ watch(selectedSearchColumn, (newValue) => {
   }
 })
 
-onMounted(fetchArticles)
+// Set up auth state listener
+let unsubscribe
+onMounted(() => {
+  unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // Get the current user's Firebase token
+      const token = await user.getIdToken()
+      fetchArticles(token)
+    } else {
+      fetchArticles(null)
+    }
+  })
+})
+
+// Clean up auth state listener
+onUnmounted(() => {
+  if (unsubscribe) unsubscribe()
+})
 </script>
 
 <style>
