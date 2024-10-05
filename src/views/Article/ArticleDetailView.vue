@@ -62,6 +62,37 @@
               </button>
             </div>
           </div>
+
+          <!-- Ratings and Comments Section -->
+          <h4 class="mt-5">Ratings and Comments</h4>
+          <div v-if="hasComments" class="">
+            <DataTable :value="ratings" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+              sortMode="multiple" :loading="ratingsLoading"
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink  RowsPerPageDropdown"
+              removableSort>
+              <Column field="rating" header="Rating" sortable>
+                <template #body="slotProps">
+                  <Rating v-model="slotProps.data.rating" :cancel="false" disabled />
+                </template>
+              </Column>
+              <Column field="comment" header="Comment">
+                <template #body="slotProps">
+                  <span v-if="slotProps.data.comment && slotProps.data.comment.trim()">{{ slotProps.data.comment
+                    }}</span>
+                  <span v-else class="text-muted fst-italic">No comment provided</span>
+                </template>
+              </Column>
+              <Column field="publicationTime" header="Publication Time" sortable>
+                <template #body="slotProps">
+                  {{ formatDate(slotProps.data.publicationTime) }}
+                </template>
+              </Column>
+            </DataTable>
+          </div>
+
+          <div v-else class="text-start py-2">
+            <p class="text-muted">No comments yet. Be the first to comment!</p>
+          </div>
         </div>
       </div>
     </div>
@@ -89,6 +120,10 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 const userRating = ref(null)
 const userRatingSubmitted = ref(false)
 const loading = ref(true)
+const ratingsLoading = ref(true)
+const ratings = ref([])
+
+const hasComments = computed(() => ratings.value.length > 0)
 
 const averageRating = (article) => {
   return article.averageRating ? article.averageRating : null
@@ -151,16 +186,40 @@ const fetchArticleData = async (token) => {
   }
 }
 
+// Fetch ratings and comments
+const fetchRatings = async (token) => {
+  try {
+    ratingsLoading.value = true
+    const config = {
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+    }
+    const response = await axios.get(
+      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleRatings/${articleId}`,
+      config
+    )
+    ratings.value = response.data.map(rating => ({
+      ...rating,
+      publicationTime: new Date(rating.publicationTime)
+    }))
+  } catch (error) {
+    console.error('Error fetching ratings:', error)
+    ratings.value = []
+  } finally {
+    ratingsLoading.value = false
+  }
+}
+
 // Set up auth state listener
 let unsubscribe
 onMounted(() => {
   unsubscribe = onAuthStateChanged(auth, async (user) => {
     if (user) {
-      // Get the current user's Firebase token
       const token = await user.getIdToken()
       fetchArticleData(token)
+      fetchRatings(token)
     } else {
       fetchArticleData(null)
+      fetchRatings(null)
     }
   })
 })
