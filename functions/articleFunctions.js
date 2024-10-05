@@ -4,24 +4,7 @@ const cors = require('cors')({ origin: true }) // Enable CORS with any origin
 
 const db = admin.firestore()
 
-// Helper function: Check if user is authenticated and has specific role
-const checkUserRole = async (req, expectedRole) => {
-  const token = req.headers.authorization && req.headers.authorization.split('Bearer ')[1]
-  if (!token) {
-    return { status: 401, message: 'Unauthorized' }
-  }
-  console.log(`req.headers.authorization ${req.headers.authorization}`)
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(token)
-    const role = decodedToken.role
-    if (expectedRole && role !== expectedRole) {
-      return { status: 403, message: 'Forbidden' }
-    }
-    return { status: 200, userId: decodedToken.uid }
-  } catch (error) {
-    return { status: 401, message: 'Unauthorized' }
-  }
-}
+const { checkUserRole } = require('./authFunctions')
 
 // GET / - Fetch article list with pagination and category filter
 exports.getArticles = onRequest(async (req, res) => {
@@ -34,6 +17,7 @@ exports.getArticles = onRequest(async (req, res) => {
 
       // Check if user is admin once
       let isAdmin = false
+      console.log(`getArticles: req.headers.authorization: ${req.headers.authorization}`)
       const authCheck = await checkUserRole(req, 'admin')
       if (authCheck.status === 200) {
         isAdmin = true

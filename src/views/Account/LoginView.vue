@@ -12,28 +12,42 @@
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email</label>
-              <input type="text " class="form-control" id="email" @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)" v-model="formData.email" placeholder="Enter email" />
+              <input
+                type="text "
+                class="form-control"
+                id="email"
+                @blur="() => validateEmail(true)"
+                @input="() => validateEmail(false)"
+                v-model="formData.email"
+                placeholder="Enter email"
+              />
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Password Input -->
               <label for="password" class="form-label mt-3 fw-bold">Password</label>
-              <input type="password" class="form-control" id="password" @blur="() => validatePassword(true)"
-                @input="() => validatePassword(false)" v-model="formData.password" placeholder="Enter password" />
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                @blur="() => validatePassword(true)"
+                @input="() => validatePassword(false)"
+                v-model="formData.password"
+                placeholder="Enter password"
+              />
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
 
               <!-- Login and Register Button -->
               <div class="mt-3 d-grid gap-2">
                 <button type="submit" class="btn btn-primary button-text">Log In</button>
-                <router-link :to="{ name: 'Signup' }" class="btn btn-outline-primary button-text">Sign
-                  Up</router-link>
+                <router-link :to="{ name: 'Signup' }" class="btn btn-outline-primary button-text"
+                  >Sign Up</router-link
+                >
                 <div class="mt-1 text-center">
                   <router-link :to="{ name: 'ForgotPassword' }" class="text-muted">
                     Forgot password?
                   </router-link>
                 </div>
               </div>
-
             </div>
           </div>
         </form>
@@ -42,7 +56,8 @@
             <!-- Login with Google Button -->
             <div class="position-relative my-4">
               <div
-                class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background">
+                class="position-absolute top-0 start-50 translate-middle bg-white px-3 text-center divider-background"
+              >
                 Or
               </div>
               <hr class="border-1 border-secondary mt-3" />

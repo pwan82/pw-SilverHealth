@@ -14,5 +14,5 @@
 </template>
 
 <script setup>
-import uploadArticlesAndRatings from '@/components/temp/UploadArticlesAndRatings.vue';
+import uploadArticlesAndRatings from '@/components/temp/UploadArticlesAndRatings.vue'
 </script>

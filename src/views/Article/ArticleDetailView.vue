@@ -35,10 +35,15 @@
               <p class="mt-2 text-success" v-else>Rating submitted successfully</p>
               <!-- <button class="btn btn-primary mt-3" @click="submitRatingHandler">Submit</button> -->
 
-              <button @click="submitRatingHandler" class="btn mt-2" :class="{
-                'btn-primary': userRating !== null,
-                'btn-secondary': userRating === null
-              }" :disabled="userRating === null">
+              <button
+                @click="submitRatingHandler"
+                class="btn mt-2"
+                :class="{
+                  'btn-primary': userRating !== null,
+                  'btn-secondary': userRating === null
+                }"
+                :disabled="userRating === null"
+              >
                 Submit
               </button>
             </div>

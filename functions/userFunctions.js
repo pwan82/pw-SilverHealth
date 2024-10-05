@@ -9,7 +9,7 @@ const {
 } = require('./validators') // Import validation functions
 
 // Cloud Function to add or update user information with validation
-const addOrUpdateUserInfo = functions.https.onCall(async (data, context) => {
+exports.addOrUpdateUserInfo = functions.https.onCall(async (data, context) => {
   // Check if the user is authenticated
   if (!context.auth) {
     throw new functions.https.HttpsError(
@@ -88,7 +88,3 @@ const addOrUpdateUserInfo = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError('unknown', 'Failed to add or update user information')
   }
 })
-
-module.exports = {
-  addOrUpdateUserInfo
-}

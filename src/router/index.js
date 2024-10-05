@@ -236,7 +236,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next()
     }
-  } else if (isLoggedIn.value && (to.name == 'Login' || to.name == 'register')) {
+  } else if (isLoggedIn.value && (to.name == 'Login' || to.name == 'Signup')) {
     // If the user is logged in and tries to access the login or register page, redirect to Home
     next({ name: 'Home' })
   } else {
