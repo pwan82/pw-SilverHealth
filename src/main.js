@@ -18,6 +18,7 @@ import Rating from 'primevue/rating'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Select from 'primevue/select'
+import DatePicker from 'primevue/datepicker'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -36,6 +37,7 @@ app.component('Rating', Rating)
 app.component('Button', Button)
 app.component('InputText', InputText)
 app.component('Select', Select)
+app.component('DatePicker', DatePicker)
 
 app.mount('#app')
 
