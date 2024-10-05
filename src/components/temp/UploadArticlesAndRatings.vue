@@ -28,7 +28,7 @@ const uploadData = async () => {
       // Loop through each article in the current file
       for (const article of file.data) {
         // Add each article as a new document in the 'articles' collection
-        const articleRef = await addDoc(collection(db, 'articles'), {
+        const articleData = {
           articleId: article.articleId,
           author: article.author,
           publicationTime: article.publicationTime,
@@ -38,8 +38,14 @@ const uploadData = async () => {
           body: article.body,
           requireAuth: article.requireAuth,
           isVisible: article.isVisible,
-          averageRating: article.averageRating
-        })
+        }
+
+        // Conditionally add averageRating if it exists
+        if (article.averageRating !== undefined) {
+          articleData.averageRating = article.averageRating
+        }
+
+        const articleRef = await addDoc(collection(db, 'articles'), articleData)
 
         console.log(`Article added from ${file.name} with ID: ${articleRef.id}`)
 
