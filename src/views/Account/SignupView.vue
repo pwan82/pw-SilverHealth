@@ -8,72 +8,41 @@
           Fill in the details to create an account.
         </p>
         <form @submit.prevent="handleRegister">
-          <div class="row mb-3">
+          <div class="row">
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email *</label>
-              <input
-                type="text"
-                class="form-control"
-                id="email"
-                v-model="formData.email"
-                @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)"
-                placeholder="Enter email"
-              />
+              <input type="text" class="form-control" id="email" v-model="formData.email"
+                @blur="() => validateEmail(true)" @input="() => validateEmail(false)" placeholder="Enter email" />
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Username Input -->
               <label for="username" class="form-label mt-3 fw-bold">Username *</label>
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                v-model="formData.username"
-                @blur="() => validateUsername(true)"
-                @input="() => validateUsername(false)"
-                placeholder="Enter username"
-                maxlength="30"
-              />
+              <input type="text" class="form-control" id="username" v-model="formData.username"
+                @blur="() => validateUsername(true)" @input="() => validateUsername(false)" placeholder="Enter username"
+                maxlength="30" />
               <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
 
               <!-- Password Input -->
               <label for="password" class="form-label mt-3 fw-bold">Password *</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                v-model="formData.password"
-                @blur="() => validatePassword(true)"
-                @input="() => validatePassword(false)"
-                placeholder="Enter password"
-              />
+              <input type="password" class="form-control" id="password" v-model="formData.password"
+                @blur="() => validatePassword(true)" @input="() => validatePassword(false)"
+                placeholder="Enter password" />
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
 
               <!-- Confirm Password Input -->
-              <label for="confirmPassword" class="form-label mt-3 fw-bold"
-                >Confirm Password *</label
-              >
-              <input
-                type="password"
-                class="form-control"
-                id="confirmPassword"
-                v-model="formData.confirmPassword"
-                @blur="() => validateConfirmPassword(true)"
-                @input="() => validateConfirmPassword(false)"
-                placeholder="Confirm password"
-              />
+              <label for="confirmPassword" class="form-label mt-3 fw-bold">Confirm Password *</label>
+              <input type="password" class="form-control" id="confirmPassword" v-model="formData.confirmPassword"
+                @blur="() => validateConfirmPassword(true)" @input="() => validateConfirmPassword(false)"
+                placeholder="Confirm password" />
               <div v-if="errors.confirmPassword" class="text-danger">
                 {{ errors.confirmPassword }}
               </div>
 
               <!-- Gender Selection -->
               <label for="gender" class="form-label mt-3 fw-bold">Gender *</label>
-              <select
-                class="form-select"
-                @blur="() => validateGender(true)"
-                v-model="formData.gender"
-              >
+              <select class="form-select" @blur="() => validateGender(true)" v-model="formData.gender">
+                <option value="" disabled selected>Select your gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="non-binary">Non-binary</option>
@@ -81,16 +50,14 @@
               </select>
               <div v-if="errors.gender" class="text-danger">{{ errors.gender }}</div>
 
+
               <!-- Birthday Input -->
-              <label for="birthday" class="form-label mt-3 fw-bold">Birthday *</label>
-              <input
-                type="date"
-                class="form-control"
-                v-model="formData.birthday"
-                placeholder="Select your birthday"
-                @blur="() => validateBirthday(true)"
-                @input="() => validateBirthday(false)"
-              />
+              <label for="birthday" class="form-label mt-3">
+                <div class="fw-bold">Birthday *</div>
+                <div>You should be older than 13 to sign up.</div>
+              </label>
+              <input type="date" class="form-control" v-model="formData.birthday" placeholder="Select your birthday"
+                @blur="() => validateBirthday(true)" @input="() => validateBirthday(false)" />
               <!-- :max="maxDate" -->
               <div v-if="errors.birthday" class="text-danger">{{ errors.birthday }}</div>
 
@@ -101,6 +68,22 @@
             </div>
           </div>
         </form>
+
+        <div class="row mb-3">
+          <div class="col-sm-6 offset-sm-3">
+            <!-- Login with Google Button -->
+            <div class="position-relative my-4">
+              <Divider align="center">
+                <b>Already have an account?</b>
+              </Divider>
+            </div>
+            <div class="mt-3 d-grid gap-2">
+              <router-link :to="{ name: 'Login' }" class="btn btn-outline-primary button-text">
+                Back to Login
+              </router-link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
