@@ -6,10 +6,10 @@ const db = admin.firestore()
 
 const { checkUserRole } = require('./authFunctions')
 
-// GET / - Fetch article list with pagination and category filter
+// GET ?limit={limit}&offset={offset}&category={category1}&category={category2} - Fetch article list with pagination and category filter
 exports.getArticles = onRequest(async (req, res) => {
   return cors(req, res, async () => {
-    const { limit = 10, offset = 0 } = req.query
+    const { limit = 0, offset = 0 } = req.query
     const categories = req.query.category // This will return either a string or an array
 
     try {
@@ -177,7 +177,7 @@ exports.getArticleRatings = onRequest(async (req, res) => {
     console.log(`Full URL received: ${req.url}`)
     const articleId = req.url.split('/')[1].split('?')[0]
 
-    const { limit = 10, offset = 0 } = req.query
+    const { limit = 0, offset = 0 } = req.query
 
     console.log(
       `Received request for ratings of articleId: ${articleId} with limit ${limit} and offset ${offset}`
