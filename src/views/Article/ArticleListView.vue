@@ -220,7 +220,7 @@ const fetchArticles = async (token) => {
     axios.interceptors.request.use(
       (config) => {
         if (token) {
-          // console.log(`getIdToken ${token}`)
+          console.log(`getIdToken Bearer ${token}`)
           config.headers['Authorization'] = `Bearer ${token}`
           // console.log(`config.headers ${config.headers}`)
         }

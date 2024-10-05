@@ -27,17 +27,25 @@ if (admin.apps.length === 0) {
 //   response.send("Hello from Firebase!");
 // });
 
+//authFunctions
 const { assignUserRole, onAdminUserChanged } = require('./authFunctions')
-
 // Set custom claims for the user (default role is 'user')
 exports.assignUserRole = assignUserRole
 // Triggered when there is a change in the adminUsers collection
 exports.onAdminUserChanged = onAdminUserChanged
 
+// userFunctions
 const { addOrUpdateUserInfo } = require('./userFunctions')
 exports.addOrUpdateUserInfo = addOrUpdateUserInfo
 
-const { getArticles, getArticleById, getArticleRatings } = require('./articleFunctions')
+// articleFunctions
+const {
+  getArticles,
+  getArticleById,
+  getArticleRatings,
+  publishArticleRating
+} = require('./articleFunctions')
 exports.getArticles = getArticles
 exports.getArticleById = getArticleById
 exports.getArticleRatings = getArticleRatings
+exports.publishArticleRating = publishArticleRating

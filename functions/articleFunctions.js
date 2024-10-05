@@ -254,3 +254,147 @@ exports.getArticleRatings = onRequest(async (req, res) => {
     }
   })
 })
+
+// Helper function: Calculate average rating
+const calculateAverageRating = async (articleDocRef) => {
+  const ratingsSnapshot = await articleDocRef.collection('ratings').get()
+  let totalRating = 0
+  let count = 0
+
+  ratingsSnapshot.forEach((doc) => {
+    const ratingData = doc.data()
+    if (ratingData.rating) {
+      totalRating += ratingData.rating
+      count++
+    }
+  })
+
+  const averageRating = count > 0 ? totalRating / count : 0
+  return parseFloat(averageRating.toFixed(2)) // Round to 2 decimal places
+}
+
+// POST /{articleId} - Publish rating and comment for a specific article
+exports.publishArticleRating = onRequest((req, res) => {
+  return cors(req, res, async () => {
+    if (req.method !== 'POST') {
+      return res.status(405).send('Method Not Allowed')
+    }
+
+    const articleId = req.path.split('/')[1]
+    console.log(`Received request to publish rating for articleId: ${articleId}`)
+
+    console.log(req.headers.authorization)
+
+    // Check user authentication
+    const authCheck = await checkUserRole(req, null)
+    if (authCheck.status !== 200) {
+      console.error(`Authorization failed for articleId ${articleId}: ${authCheck.message}`)
+      return res.status(authCheck.status).send(authCheck.message)
+    }
+
+    const userId = authCheck.userId
+
+    if (!articleId) {
+      return res.status(400).send('Missing articleId in path')
+    }
+
+    const { rating, comment } = req.body
+
+    if (typeof rating !== 'number' || rating < 1 || rating > 5) {
+      return res.status(400).send('Invalid rating. Must be a number between 1 and 5.')
+    }
+
+    if (typeof comment !== 'string') {
+      return res.status(400).send('Invalid comment. Must be a string.')
+    }
+
+    try {
+      // Find the article document by its articleId field
+      const articlesRef = db.collection('articles')
+      const articleQuery = await articlesRef
+        .where('articleId', '==', Number(articleId))
+        .select('isVisible')
+        .limit(1)
+        .get()
+
+      if (articleQuery.empty) {
+        console.error(`Article with articleId ${articleId} not found`)
+        return res.status(404).send('Article not found')
+      }
+
+      const articleDoc = articleQuery.docs[0]
+      const articleData = articleDoc.data()
+
+      // If the article is not visible, check for admin role
+      if (!articleData.isVisible) {
+        const adminCheck = await checkUserRole(req, 'admin')
+        if (adminCheck.status !== 200) {
+          console.error(
+            `Admin authorization failed for articleId ${articleId}: ${adminCheck.message}`
+          )
+          return res.status(adminCheck.status).send(adminCheck.message)
+        }
+      }
+
+      // Prepare the rating document
+      const ratingData = {
+        userId: userId,
+        rating: rating,
+        comment: comment,
+        publicationTime: admin.firestore.FieldValue.serverTimestamp()
+      }
+
+      // Check if the user has already rated this article
+      const existingRatingQuery = await articleDoc.ref
+        .collection('ratings')
+        .where('userId', '==', userId)
+        .limit(1)
+        .get()
+
+      let ratingRef
+      let isUpdate = false
+      let ratingChanged = false
+      let newAverageRating = null
+
+      if (!existingRatingQuery.empty) {
+        // Update existing rating
+        const existingRatingDoc = existingRatingQuery.docs[0]
+        const existingRatingData = existingRatingDoc.data()
+        ratingRef = existingRatingDoc.ref
+
+        // Check if the rating has changed
+        ratingChanged = existingRatingData.rating !== rating
+
+        await ratingRef.update(ratingData)
+        isUpdate = true
+      } else {
+        // Create new rating
+        ratingRef = await articleDoc.ref.collection('ratings').add(ratingData)
+        ratingChanged = true // New rating always changes the average
+      }
+
+      // Only recalculate and update average rating if the rating has changed
+      if (ratingChanged) {
+        newAverageRating = await calculateAverageRating(articleDoc.ref)
+        await articleDoc.ref.update({ averageRating: newAverageRating })
+        console.log(`Updated average rating for articleId ${articleId} to ${newAverageRating}`)
+      } else {
+        // If rating didn't change, fetch the current average rating
+        const updatedArticleDoc = await articleDoc.ref.get()
+        newAverageRating = updatedArticleDoc.data().averageRating
+      }
+
+      console.log(
+        `Successfully ${isUpdate ? 'updated' : 'published'} rating for articleId ${articleId} by user ${userId}`
+      )
+
+      res.status(200).json({
+        message: `Rating ${isUpdate ? 'updated' : 'published'} successfully`,
+        averageRating: newAverageRating
+      })
+    } catch (error) {
+      console.error(`Error publishing rating for articleId ${articleId}:`, error)
+      res.status(500).send('Error publishing rating')
+    }
+  })
+})
