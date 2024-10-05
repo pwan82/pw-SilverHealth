@@ -3,6 +3,8 @@ import { auth } from '@/firebase/init'
 import { useAuthStore } from '@/stores/authStore'
 import { computed } from 'vue'
 
+import ErrorView from '@/views/Error/ErrorView.vue'
+
 const routes = [
   {
     path: '/',
@@ -193,19 +195,36 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/access-denied',
-    name: 'AccessDenied',
-    component: () => import('../views/Error/AccessDeniedView.vue')
+    path: '/error',
+    name: 'Error',
+    component: ErrorView
   },
   {
-    path: '/:pathMatch(.*)',
-    name: 'PageNotFound',
-    component: () => import('../views/Error/NotFoundView.vue')
+    path: '/access-denied',
+    name: 'AccessDenied',
+    component: ErrorView,
+    props: {
+      title: 'Access Denied',
+      message: 'You do not have permission to access this page.'
+    }
   },
   {
     path: '/article-not-found',
     name: 'ArticleNotFound',
-    component: () => import('../views/Error/ArticleNotFoundView.vue')
+    component: ErrorView,
+    props: {
+      title: 'Article Not Found',
+      message: 'The article you are looking for does not exist.'
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'PageNotFound',
+    component: ErrorView,
+    props: {
+      title: 'Page Not Found',
+      message: 'Please re-check the url.'
+    }
   }
 ]
 
