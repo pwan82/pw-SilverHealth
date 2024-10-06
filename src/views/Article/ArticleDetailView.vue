@@ -42,29 +42,45 @@
           <!-- Render Markdown content -->
           <div v-html="renderedContent"></div>
 
-          <!-- If not logged in, show login button -->
-          <div class="text-center mt-4">
-            <button v-if="!isLoggedIn" class="btn btn-outline-primary" @click="redirectToLogin">
-              Login to rate this article
-            </button>
-
-            <!-- Rating input card -->
-            <div v-else class="rating-card mt-3 d-flex flex-column align-items-center">
-              <p class="fw-bold">Please rate this article:</p>
-              <Rating v-model.number="userRating" :stars="5" :cancel="true" />
-              <p class="mt-2 text-muted" v-if="!userRatingSubmitted">not submitted</p>
-              <p class="mt-2 text-success" v-else>Rating submitted successfully</p>
-              <button @click="submitRatingHandler" class="btn mt-2" :class="{
-                'btn-primary': userRating !== null,
-                'btn-secondary': userRating === null
-              }" :disabled="userRating === null">
-                Submit
+          <!-- Rating and Comment Submission -->
+          <div class="d-flex justify-content-center mt-5 mb-5">
+            <div class="text-center" style="width: 100%; max-width: 30rem;">
+              <button v-if="!isLoggedIn" class="btn btn-outline-primary" @click="redirectToLogin">
+                Login to leave a comment
               </button>
+              <Card v-else style="max-width: 30rem; overflow: hidden">
+                <template #title>Please rate this article</template>
+                <template #content>
+                  <div class="mt-2 d-flex flex-column align-items-center">
+                    <Rating v-model.number="userRating" :stars="5" :cancel="true" :disabled="isSubmitting" />
+                    <textarea v-model="userComment" class="form-control mt-3" rows="3"
+                      placeholder="Leave your comment (optional)" :disabled="isSubmitting"></textarea>
+                    <p class="mt-2 text-muted" v-if="!submissionMessage">not submitted</p>
+                    <p class="mt-2" :class="{ 'text-success': submissionSuccess, 'text-danger': !submissionSuccess }"
+                      v-else>
+                      {{ submissionMessage }}
+                    </p>
+                  </div>
+                </template>
+                <template #footer>
+                  <button @click="submitRatingAndComment" class="btn" :class="{
+                    'btn-primary': userRating !== null,
+                    'btn-secondary': userRating === null
+                  }" :disabled="userRating === null || isSubmitting">
+                    <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
+                      aria-hidden="true"></span>
+                    {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+                  </button>
+                </template>
+              </Card>
             </div>
           </div>
 
           <!-- Ratings and Comments Section -->
-          <h4 class="mt-5">Ratings and Comments</h4>
+          <Divider align="left">
+            <h4>Ratings and Comments</h4>
+          </Divider>
+          <!-- <h4 class="mt-5">Ratings and Comments</h4> -->
           <div v-if="hasComments" class="">
             <DataTable :value="ratings" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
               sortMode="multiple" :loading="ratingsLoading"
@@ -90,7 +106,7 @@
             </DataTable>
           </div>
 
-          <div v-else class="text-start py-2">
+          <div v-else class="text-start">
             <p class="text-muted">No comments yet. Be the first to comment!</p>
           </div>
         </div>
@@ -105,23 +121,24 @@ import { useRoute, useRouter } from 'vue-router'
 import MarkdownIt from 'markdown-it'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
-import { useRatingStore } from '@/stores/articleRatingStore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-const ratingStore = useRatingStore()
 
 const articleId = Number(route.params.articleId)
 const article = ref(null)
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 const userRating = ref(null)
-const userRatingSubmitted = ref(false)
+const userComment = ref('')
 const loading = ref(true)
 const ratingsLoading = ref(true)
 const ratings = ref([])
+const isSubmitting = ref(false)
+const submissionMessage = ref('')
+const submissionSuccess = ref(false)
 
 const hasComments = computed(() => ratings.value.length > 0)
 
@@ -132,18 +149,6 @@ const averageRating = (article) => {
 // Parse the markdown content using MarkdownIt
 const md = new MarkdownIt()
 const renderedContent = computed(() => (article.value ? md.render(article.value.body) : ''))
-
-// Submit rating handler function
-const submitRatingHandler = () => {
-  if (!isLoggedIn.value) {
-    redirectToLogin()
-    return
-  }
-
-  const userId = authStore.currentUser.userId
-  ratingStore.submitRating(articleId, userId, parseInt(userRating.value))
-  userRatingSubmitted.value = true
-}
 
 // Redirect to the login page
 const redirectToLogin = () => {
@@ -209,6 +214,44 @@ const fetchRatings = async (token) => {
   }
 }
 
+// Submit rating and comment
+const submitRatingAndComment = async () => {
+  if (!isLoggedIn.value) {
+    redirectToLogin()
+    return
+  }
+
+  isSubmitting.value = true
+
+  try {
+    const token = await auth.currentUser.getIdToken()
+    const config = {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }
+    const data = {
+      rating: userRating.value,
+      comment: userComment.value
+    }
+    await axios.post(
+      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/publishArticleRating/${articleId}`,
+      data,
+      config
+    )
+    submissionMessage.value = 'Submitted successfully!'
+    submissionSuccess.value = true
+    userRating.value = null
+    userComment.value = ''
+    // Refresh ratings after submission
+    fetchRatings(token)
+  } catch (error) {
+    console.error('Error submitting rating and comment:', error)
+    submissionMessage.value = 'Failed to submit your rating and comment. Please try again.'
+    submissionSuccess.value = false
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
 // Set up auth state listener
 let unsubscribe
 onMounted(() => {
@@ -239,7 +282,7 @@ onUnmounted(() => {
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 5px;
-  max-width: 300px;
+  max-width: 400px;
   margin: 0 auto;
   text-align: center;
 }
