@@ -157,7 +157,11 @@ const redirectToLogin = () => {
 
 // Format date helper function
 const formatDate = (timestamp) => {
-  return timestamp === -1 ? 'Never modified' : new Date(timestamp).toLocaleDateString()
+  return timestamp === -1 ? 'Never modified' : new Date(timestamp).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
 }
 
 // Fetch article data from API
