@@ -31,14 +31,8 @@ const routes = [
   },
   {
     path: '/event',
-    name: 'Event',
-    component: () => import('../views/CommunityEvent/AllCommunityEventsView.vue'),
-    meta: { requiresAuth: false }
-  },
-  {
-    path: '/event/all-events',
-    name: 'AllEvents',
-    component: () => import('../views/CommunityEvent/AllCommunityEventsView.vue'),
+    name: 'EventList',
+    component: () => import('../views/CommunityEvent/EventListView.vue'),
     meta: { requiresAuth: false }
   },
   {
@@ -49,8 +43,8 @@ const routes = [
   },
   {
     path: '/event/registered',
-    name: 'MyRegistrations',
-    component: () => import('../views/CommunityEvent/MyRegistrationsView.vue'),
+    name: 'MyRegisteredEvents',
+    component: () => import('../views/CommunityEvent/MyRegisteredEventsView.vue'),
     meta: { requiresAuth: true }
   },
   {
@@ -71,24 +65,24 @@ const routes = [
     component: () => import('../views/GetSupport/FindServicesView.vue'),
     meta: { requiresAuth: false }
   },
-  {
-    path: '/get-support/book-online',
-    name: 'BookOnline',
-    component: () => import('../views/GetSupport/BookOnlineView.vue'),
-    meta: { requiresAuth: false }
-  },
+  // {
+  //   path: '/get-support/book-online',
+  //   name: 'BookOnline',
+  //   component: () => import('../views/GetSupport/BookOnlineView.vue'),
+  //   meta: { requiresAuth: false }
+  // },
   {
     path: '/get-support/book-by-phone',
     name: 'BookByTelephone',
     component: () => import('../views/GetSupport/BookByTelephoneView.vue'),
     meta: { requiresAuth: false }
   },
-  {
-    path: '/get-support/my-bookings',
-    name: 'MyBookings',
-    component: () => import('../views/GetSupport/MyBookingsView.vue'),
-    meta: { requiresAuth: true }
-  },
+  // {
+  //   path: '/get-support/my-bookings',
+  //   name: 'MyBookings',
+  //   component: () => import('../views/GetSupport/MyBookingsView.vue'),
+  //   meta: { requiresAuth: true }
+  // },
   {
     path: '/search',
     name: 'Search',

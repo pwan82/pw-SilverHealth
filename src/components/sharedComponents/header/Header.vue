@@ -11,7 +11,7 @@ import NabBar from '@/components/sharedComponents/header/NavBar.vue'
     <!-- Top Bar with Welcome Message -->
     <TopInfoBar />
 
-    <!-- Logo, Search Bar, and FirstAid Guide Button -->
+    <!-- Logo, Search Bar, and First Aid Guide Button -->
     <div class="row align-items-center mx-2 py-4">
       <div class="col-12 col-md-4 py-1 text-center text-md-start">
         <router-link to="/" class="logo">
