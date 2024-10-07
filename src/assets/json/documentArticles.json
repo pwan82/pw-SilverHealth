@@ -11,7 +11,7 @@
     "isVisible": true,
     "showInList": false,
     "showMetadata": true,
-    "showCategories": true,
+    "showCategory": true,
     "isRatable": false
   }
 ]
