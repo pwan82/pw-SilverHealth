@@ -44,7 +44,7 @@
             </li>
             <li>
               <router-link to="/event/registered" class="dropdown-item" active-class="active">My
-                Registrations</router-link>
+                Registered Events</router-link>
             </li>
           </ul>
         </li>

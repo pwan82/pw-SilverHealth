@@ -76,8 +76,8 @@ const uploadData = async () => {
           showInList: article.showInList !== undefined ? article.showInList : true,
           // Add showMetadata if it exists, default to true
           showMetadata: article.showMetadata !== undefined ? article.showMetadata : true,
-          // Add showTags if it exists, default to true
-          showTags: article.showTags !== undefined ? article.showTags : true,
+          // Add showCategories if it exists, default to true
+          showCategories: article.showCategories !== undefined ? article.showCategories : true,
           // Add isRatable if it exists, default to true
           isRatable: article.isRatable !== undefined ? article.isRatable : true,
         }

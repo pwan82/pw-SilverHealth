@@ -43,7 +43,7 @@ exports.getArticles = onRequest(async (req, res) => {
 
             // Check if article's categories contain all the queried categories
             if (categoryArray.every((cat) => articleCategories.includes(cat))) {
-              if (data.isVisible === true || isAdmin) {
+              if ((data.isVisible === true || isAdmin) && (data.showInList !== false || isAdmin)) {
                 // Ensure the article is added only once
                 if (!articlesList.find((article) => article.articleId === data.articleId)) {
                   articlesList.push({
@@ -77,7 +77,7 @@ exports.getArticles = onRequest(async (req, res) => {
 
       articlesSnapshot.forEach((doc) => {
         const data = doc.data()
-        if (data.isVisible === true || isAdmin) {
+        if ((data.isVisible === true || isAdmin) && (data.showInList !== false || isAdmin)) {
           articlesList.push({
             articleId: data.articleId,
             author: data.author,
