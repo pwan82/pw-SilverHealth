@@ -95,12 +95,12 @@ const routes = [
     component: () => import('../views/Account/AccountView.vue'),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/account/settings',
-    name: 'Settings',
-    component: () => import('../views/Account/SettingsView.vue'),
-    meta: { requiresAuth: true }
-  },
+  // {
+  //   path: '/account/settings',
+  //   name: 'Settings',
+  //   component: () => import('../views/Account/SettingsView.vue'),
+  //   meta: { requiresAuth: true }
+  // },
   {
     path: '/get-involved',
     name: 'GetInvolved',

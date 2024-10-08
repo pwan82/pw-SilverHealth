@@ -1,18 +1,7 @@
 <template>
-  <div class="terms-and-policy">
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-8 offset-md-2">
-          <h1 class="text-center">Terms and Policy</h1>
-          <p class="text-center">Some privacy policies here.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ArticleDetailView :articleId="3" />
 </template>
 
 <script setup>
-// No script needed for now
+import ArticleDetailView from '@/views/Article/ArticleDetailView.vue'
 </script>
-
-<style></style>

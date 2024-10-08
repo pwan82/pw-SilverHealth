@@ -39,7 +39,7 @@
             <Rating v-if="averageRating(article)" v-model="article.averageRating" disabled :stars="5" />
             <span v-else class="me-2 fw-bold">No rating given</span>
           </div>
-
+          <Divider />
           <!-- Render Markdown content -->
           <div v-html="renderedContent"></div>
 
@@ -140,7 +140,7 @@ const props = defineProps({
 })
 
 // const articleId = Number(route.params.articleId)
-const articleId = props.articleId ?? Number(route.params.articleId)
+const articleId = props.articleId ?? route.params.articleId
 
 const article = ref(null)
 const isLoggedIn = computed(() => authStore.isLoggedIn)
