@@ -14,7 +14,7 @@ const handleLogout = () => {
   if (confirm('Are you sure to logout?')) {
     authStore.logout()
     alert('You have successfully logged out!')
-    router.push({ name: 'Home' })
+    // router.push({ name: 'Home' })
   }
 }
 
