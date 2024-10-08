@@ -6,19 +6,23 @@ const admin = require('firebase-admin')
 exports.checkUserRole = async (req, expectedRole) => {
   const token = req.headers.authorization && req.headers.authorization.split('Bearer ')[1]
   if (!token) {
-    return { status: 401, message: 'Unauthorized' }
+    return { status: 401, message: 'Unauthorized', isLoggedIn: false, isAdmin: false }
   }
   console.log(`checkUserRole: req.headers.authorization: ${req.headers.authorization}`)
   try {
     const decodedToken = await admin.auth().verifyIdToken(token)
     console.log(`checkUserRole: decodedToken: ${decodedToken}`)
     const role = decodedToken.role
+
+    let isLoggedIn = role ? true : false
+    let isAdmin = role === 'admin'
+
     if (expectedRole && role !== expectedRole) {
-      return { status: 403, message: 'Forbidden' }
+      return { status: 403, message: 'Forbidden', isLoggedIn: isLoggedIn, isAdmin: isAdmin }
     }
-    return { status: 200, userId: decodedToken.uid }
+    return { status: 200, userId: decodedToken.uid, isLoggedIn: isLoggedIn, isAdmin: isAdmin }
   } catch (error) {
-    return { status: 401, message: 'Unauthorized' }
+    return { status: 401, message: 'Unauthorized', isLoggedIn: false, isAdmin: false }
   }
 }
 

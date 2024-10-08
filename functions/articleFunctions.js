@@ -38,23 +38,26 @@ exports.getArticles = onRequest(async (req, res) => {
           const articlesSnapshot = await categoryQuery.get()
 
           articlesSnapshot.forEach((doc) => {
-            const data = doc.data()
-            const articleCategories = data.category.map((cat) => cat.toLowerCase()) // Ensure all categories are lowercase for comparison
+            const articleData = doc.data()
+            const articleCategories = articleData.category.map((cat) => cat.toLowerCase()) // Ensure all categories are lowercase for comparison
 
             // Check if article's categories contain all the queried categories
             if (categoryArray.every((cat) => articleCategories.includes(cat))) {
-              if ((data.isVisible === true || isAdmin) && (data.showInList !== false || isAdmin)) {
+              if (
+                (articleData.isVisible === true || isAdmin) &&
+                (articleData.showInList !== false || isAdmin)
+              ) {
                 // Ensure the article is added only once
-                if (!articlesList.find((article) => article.articleId === data.articleId)) {
+                if (!articlesList.find((article) => article.articleId === articleData.articleId)) {
                   articlesList.push({
-                    articleId: data.articleId,
-                    author: data.author,
-                    publicationTime: data.publicationTime,
-                    modificationTime: data.modificationTime,
-                    category: data.category,
-                    title: data.title,
-                    requireAuth: data.requireAuth,
-                    averageRating: data.averageRating
+                    articleId: articleData.articleId,
+                    author: articleData.author,
+                    publicationTime: articleData.publicationTime,
+                    modificationTime: articleData.modificationTime,
+                    category: articleData.category,
+                    title: articleData.title,
+                    requireAuth: articleData.requireAuth,
+                    averageRating: articleData.averageRating
                   })
                 }
               }
@@ -76,17 +79,20 @@ exports.getArticles = onRequest(async (req, res) => {
       const articlesSnapshot = await articlesQuery.get()
 
       articlesSnapshot.forEach((doc) => {
-        const data = doc.data()
-        if ((data.isVisible === true || isAdmin) && (data.showInList !== false || isAdmin)) {
+        const articleData = doc.data()
+        if (
+          (articleData.isVisible === true || isAdmin) &&
+          (articleData.showInList !== false || isAdmin)
+        ) {
           articlesList.push({
-            articleId: data.articleId,
-            author: data.author,
-            publicationTime: data.publicationTime,
-            modificationTime: data.modificationTime,
-            category: data.category,
-            title: data.title,
-            requireAuth: data.requireAuth,
-            averageRating: data.averageRating
+            articleId: articleData.articleId,
+            author: articleData.author,
+            publicationTime: articleData.publicationTime,
+            modificationTime: articleData.modificationTime,
+            category: articleData.category,
+            title: articleData.title,
+            requireAuth: articleData.requireAuth,
+            averageRating: articleData.averageRating
           })
         }
       })
@@ -137,7 +143,7 @@ exports.getArticleById = onRequest(async (req, res) => {
         const authCheck = await checkUserRole(req, 'admin')
         console.log(`Authorization check result: ${authCheck.status}`)
 
-        if (authCheck.status !== 200) {
+        if (!authCheck.isAdmin) {
           console.error(`Authorization failed for articleId ${articleId}: ${authCheck.message}`)
           return res.status(authCheck.status).send(authCheck.message)
         }
@@ -146,7 +152,7 @@ exports.getArticleById = onRequest(async (req, res) => {
       // If the article requires authentication, check for logged-in user
       if (articleData.requireAuth) {
         const authCheck = await checkUserRole(req, null)
-        if (authCheck.status !== 200) {
+        if (!authCheck.isLoggedIn) {
           console.warn(`Unauthorized access attempt for articleId ${articleId}`)
           return res.status(401).send('Unauthorized')
         }

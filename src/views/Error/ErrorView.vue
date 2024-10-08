@@ -5,11 +5,9 @@
         <div class="col-md-8 offset-md-2">
           <h1 class="text-center text-primary">{{ title }}</h1>
           <p class="text-center">{{ message }}</p>
-          <div
-            class="text-center mt-4 d-flex flex-column flex-md-row align-items-center justify-content-center"
-          >
+          <div class="text-center mt-4 d-flex flex-column flex-md-row align-items-center justify-content-center">
             <button @click="goBack" class="btn btn-outline-primary mb-2 mb-md-0 me-md-2">
-              Go Back
+              {{ goBackButtonText }}
             </button>
             <button @click="goHome" class="btn btn-primary ms-md-2">Go to Homepage</button>
           </div>
@@ -22,6 +20,7 @@
 <script setup>
 import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const props = defineProps({
   title: {
@@ -34,10 +33,14 @@ const props = defineProps({
   }
 })
 
-const router = useRouter()
+const goBackButtonText = props.title === 'Article Not Found' ? 'Go Back to Article List' : 'Go Back'
 
 const goBack = () => {
-  router.back()
+  if (props.title === 'Article Not Found') {
+    router.push('/article')
+  } else {
+    router.go(-1)
+  }
 }
 
 const goHome = () => {
