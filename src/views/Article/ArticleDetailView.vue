@@ -15,7 +15,7 @@
           <h1 class="text-center">{{ article.title }}</h1>
 
           <!-- Misc info -->
-          <p class="text-center">
+          <p v-if="article.showMetadata" class="text-center">
             <span>Author: {{ article.author }}</span>
             <span class="mx-2 non-selectable">|</span>
 
@@ -26,12 +26,13 @@
           </p>
 
           <!-- Categories display -->
-          <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+          <div v-if="article.showCategory && article.category"
+            class="d-flex justify-content-center flex-wrap gap-2 mb-3">
             <Chip v-for="category in article.category" :key="category" :label="category" />
           </div>
 
           <!-- Show average rating -->
-          <div class="d-flex justify-content-center align-items-center mb-3">
+          <div v-if="article.isRatable" class="d-flex justify-content-center align-items-center mb-3">
             <span class="me-2 fw-bold">Rating:</span>
             <span v-if="averageRating(article)" class="me-2 fw-bold">{{ averageRating(article).toFixed(1)
               }}/5</span>
@@ -43,7 +44,7 @@
           <div v-html="renderedContent"></div>
 
           <!-- Rating and Comment Submission -->
-          <div class="d-flex justify-content-center mt-5 mb-5">
+          <div v-if="article.isRatable" class="d-flex justify-content-center mt-5 mb-5">
             <div class="text-center" style="width: 100%; max-width: 30rem;">
               <button v-if="!isLoggedIn" class="btn btn-outline-primary" @click="redirectToLogin">
                 Login to leave a comment
@@ -77,38 +78,41 @@
           </div>
 
           <!-- Ratings and Comments Section -->
-          <Divider align="left">
-            <h4>Ratings and Comments</h4>
-          </Divider>
-          <!-- <h4 class="mt-5">Ratings and Comments</h4> -->
-          <div v-if="hasComments" class="">
-            <DataTable :value="ratings" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
-              sortMode="multiple" :loading="ratingsLoading"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink  RowsPerPageDropdown"
-              removableSort>
-              <Column field="rating" header="Rating" sortable>
-                <template #body="slotProps">
-                  <Rating v-model="slotProps.data.rating" :cancel="false" disabled />
-                </template>
-              </Column>
-              <Column field="comment" header="Comment">
-                <template #body="slotProps">
-                  <span v-if="slotProps.data.comment && slotProps.data.comment.trim()">{{ slotProps.data.comment
-                    }}</span>
-                  <span v-else class="text-muted fst-italic">No comment provided</span>
-                </template>
-              </Column>
-              <Column field="publicationTime" header="Publication Time" sortable>
-                <template #body="slotProps">
-                  {{ formatDate(slotProps.data.publicationTime) }}
-                </template>
-              </Column>
-            </DataTable>
+          <div v-if="article.isRatable">
+            <Divider align="left">
+              <h4>Ratings and Comments</h4>
+            </Divider>
+            <!-- <h4 class="mt-5">Ratings and Comments</h4> -->
+            <div v-if="hasComments" class="">
+              <DataTable :value="ratings" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+                sortMode="multiple" :loading="ratingsLoading"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink  RowsPerPageDropdown"
+                removableSort>
+                <Column field="rating" header="Rating" sortable>
+                  <template #body="slotProps">
+                    <Rating v-model="slotProps.data.rating" :cancel="false" disabled />
+                  </template>
+                </Column>
+                <Column field="comment" header="Comment">
+                  <template #body="slotProps">
+                    <span v-if="slotProps.data.comment && slotProps.data.comment.trim()">{{ slotProps.data.comment
+                      }}</span>
+                    <span v-else class="text-muted fst-italic">No comment provided</span>
+                  </template>
+                </Column>
+                <Column field="publicationTime" header="Publication Time" sortable>
+                  <template #body="slotProps">
+                    {{ formatDate(slotProps.data.publicationTime) }}
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+
+            <div v-else class="text-start">
+              <p class="text-muted">No comments yet. Be the first to comment!</p>
+            </div>
           </div>
 
-          <div v-else class="text-start">
-            <p class="text-muted">No comments yet. Be the first to comment!</p>
-          </div>
         </div>
       </div>
     </div>
@@ -128,7 +132,16 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-const articleId = Number(route.params.articleId)
+const props = defineProps({
+  articleId: {
+    type: Number,
+    default: null
+  }
+})
+
+// const articleId = Number(route.params.articleId)
+const articleId = props.articleId ?? Number(route.params.articleId)
+
 const article = ref(null)
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 const userRating = ref(null)
@@ -229,25 +242,27 @@ const submitRatingAndComment = async () => {
   isSubmitting.value = true
 
   try {
-    const token = await auth.currentUser.getIdToken()
-    const config = {
-      headers: { 'Authorization': `Bearer ${token}` }
+    if (article.value.isRatable) {
+      const token = await auth.currentUser.getIdToken()
+      const config = {
+        headers: { 'Authorization': `Bearer ${token}` }
+      }
+      const data = {
+        rating: userRating.value,
+        comment: userComment.value
+      }
+      await axios.post(
+        `https://us-central1-silverhealth-87f2a.cloudfunctions.net/publishArticleRating/${articleId}`,
+        data,
+        config
+      )
+      submissionMessage.value = 'Submitted successfully!'
+      submissionSuccess.value = true
+      userRating.value = null
+      userComment.value = ''
+      // Refresh ratings after submission
+      fetchRatings(token)
     }
-    const data = {
-      rating: userRating.value,
-      comment: userComment.value
-    }
-    await axios.post(
-      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/publishArticleRating/${articleId}`,
-      data,
-      config
-    )
-    submissionMessage.value = 'Submitted successfully!'
-    submissionSuccess.value = true
-    userRating.value = null
-    userComment.value = ''
-    // Refresh ratings after submission
-    fetchRatings(token)
   } catch (error) {
     console.error('Error submitting rating and comment:', error)
     submissionMessage.value = 'Failed to submit your rating and comment. Please try again.'

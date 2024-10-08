@@ -168,7 +168,10 @@ exports.getArticleById = onRequest(async (req, res) => {
         articleId: articleData.articleId,
         title: articleData.title,
         body: articleData.body,
-        requireAuth: articleData.requireAuth
+        requireAuth: articleData.requireAuth,
+        showMetadata: articleData.showMetadata,
+        showCategory: articleData.showCategory,
+        isRatable: articleData.isRatable
       }
 
       // Add conditional fields based on article properties and user role
