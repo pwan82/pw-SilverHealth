@@ -216,7 +216,7 @@ exports.getArticleRatings = onRequest(async (req, res) => {
       const articlesRef = db.collection('articles')
       const articleQuery = await articlesRef
         .where('articleId', '==', Number(articleId))
-        .select('isVisible', 'requireAuth')
+        .select('isVisible', 'requireAuth', 'isRatable')
         .limit(1)
         .get()
       console.log(`Query result for articleId ${articleId}: ${articleQuery.size} document(s) found`)
@@ -230,27 +230,25 @@ exports.getArticleRatings = onRequest(async (req, res) => {
       const articleData = articleDoc.data()
       console.log(`Fetched article data for articleId ${articleId}:`, articleData)
 
-      // If the article is visible to everyone, skip the auth & role check.
-      if (articleData.isVisible === true) {
-        console.log('Article is visible to all users, skipping authorization check.')
-      } else {
-        // If the article is not visible, must check for admin access
-        const authCheck = await checkUserRole(req, 'admin')
-        console.log(`Authorization check result: ${authCheck.status}`)
+      const authCheck = await checkUserRole(req, 'admin')
+      const { isAdmin, isLoggedIn } = authCheck
 
-        if (authCheck.status !== 200) {
-          console.error(`Authorization failed for articleId ${articleId}: ${authCheck.message}`)
-          return res.status(authCheck.status).send(authCheck.message)
-        }
+      // If the article is not visible to everyone, check for admin access
+      if (articleData.isVisible !== true && !isAdmin) {
+        console.error(`Authorization failed for articleId ${articleId}: ${authCheck.message}`)
+        return res.status(authCheck.status).send(authCheck.message)
       }
 
-      // If the article requires authentication, check for logged-in user
-      if (articleData.requireAuth) {
-        const authCheck = await checkUserRole(req, null)
-        if (authCheck.status !== 200) {
-          console.warn(`Unauthorized access attempt for articleId ${articleId}`)
-          return res.status(401).send('Unauthorized')
-        }
+      // If the article is not ratable to everyone, check for admin access
+      if (articleData.isRatable === false && !isAdmin) {
+        console.warn(`Forbidden access attempt for articleId ${articleId}`)
+        return res.status(403).send('Forbidden')
+      }
+
+      // If the article requires authentication or we need to check login status
+      if (articleData.requireAuth && !isLoggedIn) {
+        console.warn(`Unauthorized access attempt for articleId ${articleId}`)
+        return res.status(401).send('Unauthorized')
       }
 
       // Fetch ratings for the article from its subcollection "ratings"
@@ -267,7 +265,8 @@ exports.getArticleRatings = onRequest(async (req, res) => {
 
       const ratingsList = []
       ratingsSnapshot.forEach((doc) => {
-        ratingsList.push(doc.data())
+        const ratingData = doc.data()
+        ratingsList.push(ratingData)
       })
 
       console.log(`Returning ${ratingsList.length} ratings for articleId ${articleId}`)
