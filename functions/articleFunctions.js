@@ -306,17 +306,6 @@ exports.publishArticleRating = onRequest((req, res) => {
     const articleId = req.path.split('/')[1]
     console.log(`Received request to publish rating for articleId: ${articleId}`)
 
-    console.log(req.headers.authorization)
-
-    // Check user authentication
-    const authCheck = await checkUserRole(req, null)
-    if (authCheck.status !== 200) {
-      console.error(`Authorization failed for articleId ${articleId}: ${authCheck.message}`)
-      return res.status(authCheck.status).send(authCheck.message)
-    }
-
-    const userId = authCheck.userId
-
     if (!articleId) {
       return res.status(400).send('Missing articleId in path')
     }
@@ -332,11 +321,20 @@ exports.publishArticleRating = onRequest((req, res) => {
     }
 
     try {
+      // Check user authentication and role
+      const authCheck = await checkUserRole(req, 'admin')
+      const { isAdmin, isLoggedIn, userId } = authCheck
+
+      if (!isLoggedIn) {
+        console.error(`Authorization failed for articleId ${articleId}: User not logged in`)
+        return res.status(401).send('Unauthorized: User must be logged in to rate articles')
+      }
+
       // Find the article document by its articleId field
       const articlesRef = db.collection('articles')
       const articleQuery = await articlesRef
         .where('articleId', '==', Number(articleId))
-        .select('isVisible')
+        .select('isVisible', 'isRatable')
         .limit(1)
         .get()
 
@@ -348,15 +346,16 @@ exports.publishArticleRating = onRequest((req, res) => {
       const articleDoc = articleQuery.docs[0]
       const articleData = articleDoc.data()
 
-      // If the article is not visible, check for admin role
-      if (!articleData.isVisible) {
-        const adminCheck = await checkUserRole(req, 'admin')
-        if (adminCheck.status !== 200) {
-          console.error(
-            `Admin authorization failed for articleId ${articleId}: ${adminCheck.message}`
-          )
-          return res.status(adminCheck.status).send(adminCheck.message)
-        }
+      // If the article is not visible and user is not admin, deny access
+      if (!articleData.isVisible && !isAdmin) {
+        console.error(`Access denied for non-visible articleId ${articleId}`)
+        return res.status(authCheck.status).send(authCheck.message)
+      }
+
+      // If the article is not ratable and user is not admin, deny access
+      if (articleData.isRatable === false && !isAdmin) {
+        console.error(`Rating denied for non-ratable articleId ${articleId}`)
+        return res.status(403).send('Forbidden')
       }
 
       // Prepare the rating document
