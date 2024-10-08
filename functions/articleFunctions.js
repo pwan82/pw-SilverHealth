@@ -135,6 +135,8 @@ exports.getArticleById = onRequest(async (req, res) => {
       const articleData = articleDoc.data()
       console.log(`Fetched article data for articleId ${articleId}:`, articleData)
 
+      let isAdmin = false
+
       // If the article is visible to everyone, skip the auth & role check.
       if (articleData.isVisible === true) {
         console.log('Article is visible to all users, skipping authorization check.')
@@ -147,6 +149,7 @@ exports.getArticleById = onRequest(async (req, res) => {
           console.error(`Authorization failed for articleId ${articleId}: ${authCheck.message}`)
           return res.status(authCheck.status).send(authCheck.message)
         }
+        isAdmin = authCheck.isAdmin
       }
 
       // If the article requires authentication, check for logged-in user
@@ -158,18 +161,33 @@ exports.getArticleById = onRequest(async (req, res) => {
         }
       }
 
-      console.log(`Returning article details for articleId ${articleId}`)
-      res.status(200).json({
-        articleId: articleData.articleId, // Use the articleId from the document
-        author: articleData.author,
-        publicationTime: articleData.publicationTime,
-        modificationTime: articleData.modificationTime,
-        category: articleData.category,
+      console.log(`Preparing article details for articleId ${articleId}`)
+
+      // Prepare the response object
+      let responseData = {
+        articleId: articleData.articleId,
         title: articleData.title,
-        body: articleData.body, // Article content
-        requireAuth: articleData.requireAuth,
-        averageRating: articleData.averageRating
-      })
+        body: articleData.body,
+        requireAuth: articleData.requireAuth
+      }
+
+      // Add conditional fields based on article properties and user role
+      if (articleData.showMetadata !== false || isAdmin) {
+        responseData.author = articleData.author
+        responseData.publicationTime = articleData.publicationTime
+        responseData.modificationTime = articleData.modificationTime
+      }
+
+      if (articleData.showCategory !== false || isAdmin) {
+        responseData.category = articleData.category
+      }
+
+      if (articleData.isRatable !== false || isAdmin) {
+        responseData.averageRating = articleData.averageRating
+      }
+
+      console.log(`Returning article details for articleId ${articleId}`)
+      res.status(200).json(responseData)
     } catch (error) {
       console.error(`Error fetching articleId ${articleId}:`, error)
       res.status(500).send('Error fetching article')

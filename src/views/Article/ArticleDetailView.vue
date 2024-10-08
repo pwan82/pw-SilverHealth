@@ -186,6 +186,7 @@ const fetchArticleData = async (token) => {
     const response = await axios.get(
       `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleById/${articleId}`
     )
+    console.log('response.data', response.data)
     article.value = response.data
   } catch (error) {
     console.error('Error fetching article:', error)
