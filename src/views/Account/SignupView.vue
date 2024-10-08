@@ -17,7 +17,10 @@
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Username Input -->
-              <label for="username" class="form-label mt-3 fw-bold">Username *</label>
+              <label for="username" class="form-label mt-3">
+                <div class="fw-bold">Username *</div>
+                <div>Length from 3 to 30 characters.</div>
+              </label>
               <input type="text" class="form-control" id="username" v-model="formData.username"
                 @blur="() => validateUsername(true)" @input="() => validateUsername(false)" placeholder="Enter username"
                 maxlength="30" />
@@ -114,7 +117,8 @@ const formData = ref({
     suburb: '',
     state: '',
     postcode: ''
-  }
+  },
+  subscribeToNewsletter: true
 })
 
 const errors = ref({
@@ -176,7 +180,8 @@ const handleRegister = () => {
             username: formData.value.username,
             gender: formData.value.gender,
             birthday: formData.value.birthday,
-            address: formData.value.address // Address must be an object {streetAddress, building, suburb, state, postcode}
+            address: formData.value.address, // Address must be an object {streetAddress, building, suburb, state, postcode}
+            subscribeToNewsletter: true
           })
 
           console.log('User information stored successfully in Firestore.')

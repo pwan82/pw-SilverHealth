@@ -164,7 +164,8 @@ const handleLoginWithGoogle = async () => {
             suburb: '',
             state: '',
             postcode: ''
-          }
+          },
+          subscribeToNewsletter: true
         })
 
         console.log('New user created in Firestore using addOrUpdateUserInfo.')

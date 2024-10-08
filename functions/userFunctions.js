@@ -69,6 +69,10 @@ exports.addOrUpdateUserInfo = functions.https.onCall(async (data, context) => {
     }
   }
 
+  if (data.subscribeToNewsletter) {
+    updateData.subscribeToNewsletter = data.subscribeToNewsletter === true
+  }
+
   // If no valid fields are found to update, throw an error
   if (Object.keys(updateData).length === 0) {
     throw new functions.https.HttpsError('invalid-argument', 'No valid fields provided for update.')

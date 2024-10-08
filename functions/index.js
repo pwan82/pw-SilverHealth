@@ -38,6 +38,10 @@ exports.onAdminUserChanged = onAdminUserChanged
 const { addOrUpdateUserInfo } = require('./userFunctions')
 exports.addOrUpdateUserInfo = addOrUpdateUserInfo
 
+// userFunctions
+const { getAllUsers } = require('./adminFunctions')
+exports.getAllUsers = getAllUsers
+
 // articleFunctions
 const {
   getArticles,
