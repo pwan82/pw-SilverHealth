@@ -12,7 +12,7 @@ import './assets/custom-button.css'
 import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
 import DataTable from 'primevue/datatable'
-import Column from 'primevue/Column'
+import Column from 'primevue/column'
 import Rating from 'primevue/rating'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -21,6 +21,11 @@ import DatePicker from 'primevue/datepicker'
 import Divider from 'primevue/divider'
 import Chip from 'primevue/chip'
 import Card from 'primevue/card'
+import Dialog from 'primevue/dialog'
+import Editor from 'primevue/editor'
+import Toast from 'primevue/toast'
+
+import ToastService from 'primevue/toastservice'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -33,6 +38,8 @@ app.use(PrimeVue, {
   }
 })
 
+app.use(ToastService)
+
 app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('Rating', Rating)
@@ -43,6 +50,9 @@ app.component('DatePicker', DatePicker)
 app.component('Divider', Divider)
 app.component('Chip', Chip)
 app.component('Card', Card)
+app.component('Editor', Editor)
+app.component('Dialog', Dialog)
+app.component('Toast', Toast)
 
 app.mount('#app')
 
