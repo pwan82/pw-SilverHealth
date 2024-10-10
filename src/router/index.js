@@ -25,8 +25,8 @@ const routes = [
   },
   {
     path: '/news',
-    name: 'News',
-    component: () => import('../views/Article/NewsView.vue'),
+    name: 'NewsList',
+    component: () => import('../views/Article/NewsListView.vue'),
     meta: { requiresAuth: false }
   },
   {

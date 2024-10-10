@@ -332,16 +332,6 @@ const formatDate = (value) => {
 </script>
 
 <style>
-.rating-display {
-  display: flex;
-  align-items: center;
-}
-
-.rating-value {
-  margin-right: 0.5rem;
-  font-weight: bold;
-}
-
 .flex {
   display: flex;
 }
@@ -362,51 +352,7 @@ const formatDate = (value) => {
   width: 100%;
 }
 
-.p-input-icon-left {
-  position: relative;
-  display: inline-block;
-}
-
-.p-input-icon-left i {
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-}
-
-.p-input-icon-left input {
-  padding-left: 2rem;
-}
-
 .mr-2 {
   margin-right: 0.5rem;
-}
-
-.rating-display {
-  display: flex;
-  align-items: center;
-}
-
-.rating-value {
-  margin-right: 0.5rem;
-  font-weight: bold;
-}
-
-@media (max-width: 768px) {
-  .rating-display {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .rating-value {
-    margin-right: 0;
-    margin-bottom: 0.25rem;
-  }
-
-  .rating-stars {
-    transform: scale(0.8);
-    transform-origin: left;
-  }
 }
 </style>
