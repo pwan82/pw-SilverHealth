@@ -6,7 +6,7 @@ const {
   isValidGender,
   isValidBirthday,
   isValidAddress
-} = require('./validators') // Import validation functions
+} = require('./helpers') // Import validation functions
 
 // Cloud Function to add or update user information with validation
 exports.addOrUpdateUserInfo = functions.https.onCall(async (data, context) => {

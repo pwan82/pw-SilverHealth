@@ -1,3 +1,5 @@
+const sanitizeHtml = require('sanitize-html')
+
 // Validate email input
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -41,11 +43,36 @@ const isValidAddress = (address) => {
   ) // Allow empty fields or fields that meet length criteria
 }
 
+const sanitizeEmailHtml = (dirtyHtml) => {
+  // Config sanitize-html
+  const config = {
+    allowedTags: ['p', 'br', 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li', 'span'],
+    allowedAttributes: {
+      a: ['href', 'target'],
+      '*': ['style']
+    },
+    allowedStyles: {
+      '*': {
+        // Allow all inline styles
+        '*': [/.*/]
+      }
+    },
+    disallowedTagsMode: 'discard',
+    parseStyleAttributes: true
+  }
+
+  // Clean HTML
+  const cleanHtml = sanitizeHtml(dirtyHtml, config)
+  console.log(`sanitizeEmailHtml: cleanHtml: `, cleanHtml)
+  return cleanHtml
+}
+
 // Export validation functions
 module.exports = {
   isValidEmail,
   isValidUsername,
   isValidGender,
   isValidBirthday,
-  isValidAddress
+  isValidAddress,
+  sanitizeEmailHtml
 }

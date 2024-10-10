@@ -53,3 +53,7 @@ exports.getArticles = getArticles
 exports.getArticleById = getArticleById
 exports.getArticleRatings = getArticleRatings
 exports.publishArticleRating = publishArticleRating
+
+// emailFunctions
+const { sendBulkEmails } = require('./emailFunctions')
+exports.sendBulkEmails = sendBulkEmails

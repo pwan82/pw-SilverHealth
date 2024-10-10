@@ -3,12 +3,12 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
 // Helper function: Check if user is authenticated and has specific role
-exports.checkUserRole = async (req, expectedRole) => {
-  const token = req.headers.authorization && req.headers.authorization.split('Bearer ')[1]
+exports.checkUserRole = async (reqHeaders, expectedRole) => {
+  const token = reqHeaders.authorization && reqHeaders.authorization.split('Bearer ')[1]
   if (!token) {
     return { status: 401, message: 'Unauthorized', isLoggedIn: false, isAdmin: false }
   }
-  console.log(`checkUserRole: req.headers.authorization: ${req.headers.authorization}`)
+  console.log(`checkUserRole: req.headers.authorization: ${reqHeaders.authorization}`)
   try {
     const decodedToken = await admin.auth().verifyIdToken(token)
     console.log(`checkUserRole: decodedToken: ${decodedToken}`)

@@ -18,7 +18,7 @@ exports.getArticles = onRequest(async (req, res) => {
       // Check if user is admin once
       let isAdmin = false
       console.log(`getArticles: req.headers.authorization: ${req.headers.authorization}`)
-      const authCheck = await checkUserRole(req, 'admin')
+      const authCheck = await checkUserRole(req.headers, 'admin')
       if (authCheck.status === 200) {
         isAdmin = true
       }
@@ -142,7 +142,7 @@ exports.getArticleById = onRequest(async (req, res) => {
         console.log('Article is visible to all users, skipping authorization check.')
       } else {
         // If the article is not visible, must check for admin access
-        const authCheck = await checkUserRole(req, 'admin')
+        const authCheck = await checkUserRole(req.headers, 'admin')
         console.log(`Authorization check result: ${authCheck.status}`)
 
         if (!authCheck.isAdmin) {
@@ -154,7 +154,7 @@ exports.getArticleById = onRequest(async (req, res) => {
 
       // If the article requires authentication, check for logged-in user
       if (articleData.requireAuth) {
-        const authCheck = await checkUserRole(req, null)
+        const authCheck = await checkUserRole(req.headers, null)
         if (!authCheck.isLoggedIn) {
           console.warn(`Unauthorized access attempt for articleId ${articleId}`)
           return res.status(401).send('Unauthorized')
@@ -233,7 +233,7 @@ exports.getArticleRatings = onRequest(async (req, res) => {
       const articleData = articleDoc.data()
       console.log(`Fetched article data for articleId ${articleId}:`, articleData)
 
-      const authCheck = await checkUserRole(req, 'admin')
+      const authCheck = await checkUserRole(req.headers, 'admin')
       const { isAdmin, isLoggedIn } = authCheck
 
       // If the article is not visible to everyone, check for admin access
@@ -325,7 +325,7 @@ exports.publishArticleRating = onRequest((req, res) => {
 
     try {
       // Check user authentication and role
-      const authCheck = await checkUserRole(req, 'admin')
+      const authCheck = await checkUserRole(req.headers, 'admin')
       const { isAdmin, isLoggedIn, userId } = authCheck
 
       if (!isLoggedIn) {

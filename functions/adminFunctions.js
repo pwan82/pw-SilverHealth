@@ -14,7 +14,7 @@ exports.getAllUsers = onRequest((req, res) => {
 
     try {
       // Verify user authentication and admin status
-      const authCheck = await checkUserRole(req, 'admin')
+      const authCheck = await checkUserRole(req.headers, 'admin')
       if (!authCheck.isLoggedIn || !authCheck.isAdmin) {
         return res.status(authCheck.status).send(authCheck.message)
       }
