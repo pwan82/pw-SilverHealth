@@ -58,43 +58,23 @@
             :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="userId" :filters="filters" filterDisplay="menu"
             :loading="loading" @sort="onSort" :sortField="sortField" :sortOrder="sortOrder" removableSort>
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="email" header="Email" :sortable="true">
-              <template #filter="{ filterModel }">
-                <InputText v-model="filterModel.value" type="text" class="p-column-filter"
-                  placeholder="Search by email" />
-              </template>
-            </Column>
-            <Column field="username" header="Username" :sortable="true">
-              <template #filter="{ filterModel }">
-                <InputText v-model="filterModel.value" type="text" class="p-column-filter"
-                  placeholder="Search by username" />
-              </template>
-            </Column>
+            <Column field="email" header="Email" :sortable="true"></Column>
+            <Column field="username" header="Username" :sortable="true"></Column>
             <Column field="gender" header="Gender" :sortable="true">
-              <template #filter="{ filterModel }">
-                <Select v-model="filterModel.value" :options="genderOptions" placeholder="Select Gender"
-                  class="p-column-filter" :showClear="true" />
+              <template #body="slotProps">
+                {{ getGenderLabel(slotProps.data.gender) }}
               </template>
             </Column>
             <Column field="role" header="Role" :sortable="true">
-              <template #filter="{ filterModel }">
-                <Select v-model="filterModel.value" :options="roleOptions" placeholder="Select Role"
-                  class="p-column-filter" :showClear="true" />
+              <template #body="slotProps">
+                {{ roleOptions.find(option => option.value === slotProps.data.role)?.label || 'Unknown' }}
               </template>
             </Column>
-            <Column field="birthday" header="Birthday" :sortable="true">
-              <template #filter="{ filterModel }">
-                <DatePicker v-model="filterModel.value" dateFormat="dd/mm/yy" placeholder="Select Birthday"
-                  class="p-column-filter" />
-              </template>
-            </Column>
+            <Column field="birthday" header="Birthday" :sortable="true"></Column>
             <Column field="subscribeToNewsletter" header="Newsletter" :sortable="true">
               <template #body="slotProps">
-                {{ slotProps.data.subscribeToNewsletter ? 'Yes' : 'No' }}
-              </template>
-              <template #filter="{ filterModel }">
-                <Select v-model="filterModel.value" :options="newsletterOptions" placeholder="Select Status"
-                  class="p-column-filter" :showClear="true" />
+                {{ newsletterOptions.find(option => option.value === slotProps.data.subscribeToNewsletter)?.label ||
+                  'Unknown' }}
               </template>
             </Column>
           </DataTable>
@@ -181,6 +161,15 @@ const genderOptions = [
   { label: 'Non-binary', value: 'non-binary' },
   { label: 'Prefer not to say', value: 'prefer-not-to-say' }
 ]
+
+const getGenderLabel = (gender) => {
+  if (gender === null || gender.trim() === '') {
+    return 'Unknown'
+  } else {
+    const option = genderOptions.find(option => option.value === gender)
+    return option ? option.label : gender
+  }
+}
 
 const roleOptions = [
   { label: 'User', value: 'user' },
