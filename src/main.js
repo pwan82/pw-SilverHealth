@@ -23,6 +23,7 @@ import Chip from 'primevue/chip'
 import Card from 'primevue/card'
 import Dialog from 'primevue/dialog'
 import Editor from 'primevue/editor'
+import FileUpload from 'primevue/fileupload'
 import Toast from 'primevue/toast'
 
 import ToastService from 'primevue/toastservice'
@@ -52,6 +53,8 @@ app.component('Chip', Chip)
 app.component('Card', Card)
 app.component('Editor', Editor)
 app.component('Dialog', Dialog)
+app.component('FileUpload', FileUpload)
+
 app.component('Toast', Toast)
 
 app.mount('#app')

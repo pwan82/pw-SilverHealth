@@ -79,32 +79,57 @@
             </Column>
           </DataTable>
 
+          <!-- Send Email Button -->
+          <Button @click="openEmailEditor" :disabled="!selectedUsers.length" class="mt-3">
+            <i class="bi bi-envelope-plus mr-2"></i>
+            {{ `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ""}
+            Selected ${selectedUsers.length > 1 ? "Users" : "User"}` }}
+          </Button>
+
           <!-- Email Editor Dialog -->
-          <Dialog v-model:visible="displayEmailEditor" header="Compose Email" :style="{ width: '50vw' }" :modal="true">
+          <Dialog v-model:visible="displayEmailEditor" header="Compose Email" :modal="true">
+            <div class="mb-3 field">
+              <h5>Recipients</h5>
+              <div class="p-inputtext p-component p-inputtext-sm" style="max-height: 100px; overflow-y: auto;">
+                <Chip v-for="user in selectedUsers" :key="user.userId" :label="user.email" />
+                <!-- removable @remove="removeUser(user)" /> -->
+              </div>
+            </div>
+
             <div class="p-fluid">
-              <div class="field">
-                <label for="subject">Subject</label>
-                <InputText id="subject" v-model="emailSubject" required="true" autofocus />
+              <div class="mb-3 field">
+                <h5>Subject</h5>
+                <InputText id="subject" v-model="emailSubject" required="true" autofocus
+                  placeholder="Enter email subject" />
               </div>
-              <div class="field">
-                <label for="content">Content</label>
-                <Editor v-model="emailContent" editorStyle="height: 320px" />
+
+              <div class="mb-3 field">
+                <h5>Content</h5>
+                <Editor v-model="emailContent" editorStyle="height: 200px" />
               </div>
-              <div class="field">
-                <label for="attachment">Attachment</label>
-                <FileUpload mode="basic" name="attachment" url="./upload" @upload="onUpload" :auto="true"
-                  chooseLabel="Choose" />
+
+              <div class="mb-3 field">
+                <h5>Attachment</h5>
+                <p>Up to 5 files, maximum 10MB each.</p>
+                <FileUpload mode="advanced" :multiple="true" :maxFileSize="10000000" @select="onFileSelect"
+                  @remove="onFileRemove" :auto="true" chooseLabel="Choose Files" :showUploadButton="false"
+                  :showCancelButton="false" :fileLimit="5" @error="onError">
+                  <template #empty>
+                    <p>Drag and drop files here to upload.</p>
+                  </template>
+                </FileUpload>
               </div>
             </div>
             <template #footer>
-              <Button label="Send" icon="bi bi-send" @click="sendEmail" :loading="sending" />
+              <Button @click="sendEmail" :disabled="!selectedUsers.length" :loading="sending">
+                <i class="bi bi-send mr-2"></i>
+                {{ `Send to ${selectedUsers.length > 0 ? selectedUsers.length : ""}
+                ${selectedUsers.length > 1 ? "Users" : "User"}` }}
+              </Button>
               <Button label="Cancel" icon="bi bi-x-lg" @click="closeEmailEditor" class="p-button-text" />
             </template>
           </Dialog>
 
-          <!-- Send Email Button -->
-          <Button label="Send Email to Selected Users" icon="bi bi-envelope-plus" @click="openEmailEditor"
-            :disabled="!selectedUsers.length" class="mt-3" />
         </div>
       </div>
     </div>
@@ -125,6 +150,7 @@ const loading = ref(true)
 const displayEmailEditor = ref(false)
 const emailSubject = ref('')
 const emailContent = ref('')
+const selectedFiles = ref([])
 const sending = ref(false)
 const toast = useToast()
 
@@ -245,6 +271,10 @@ const fetchUsers = async (token) => {
       config
     )
     users.value = response.data
+
+    users.value.forEach(user => {
+      user.email = user.email.toLowerCase();
+    })
   } catch (error) {
     console.error('Error fetching users:', error)
     toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch users', life: 3000 })
@@ -267,8 +297,28 @@ const openEmailEditor = () => {
 const closeEmailEditor = () => {
   displayEmailEditor.value = false
   emailSubject.value = ''
-  emailContent.value = ''
+  // emailContent.value = ''
 }
+
+const removeUser = (user) => {
+  selectedUsers.value = selectedUsers.value.filter(u => u.email !== user.email);
+}
+
+const onFileSelect = (event) => {
+  selectedFiles.value = event.files;
+};
+
+const onFileRemove = (event) => {
+  selectedFiles.value = selectedFiles.value.filter(file => file.name !== event.file.name);
+};
+
+const onError = (event) => {
+  if (event.type === 'max-file-size') {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'File size exceeds 1MB limit', life: 3000 });
+  } else if (event.type === 'max-files') {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Maximum 5 files allowed', life: 3000 });
+  }
+};
 
 const sendEmail = async () => {
   // Implement email sending logic here
@@ -309,7 +359,39 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.user-management {
-  padding: 2rem;
+.email-compose-dialog {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.email-compose-dialog .field {
+  margin-bottom: 1.5rem;
+}
+
+.email-compose-dialog h3 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.recipients-container {
+  max-height: 100px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.p-chip {
+  margin: 2px;
+}
+
+:deep(.p-dialog-content) {
+  padding-top: 1rem;
+}
+
+:deep(.p-inputtext) {
+  width: 100%;
 }
 </style>

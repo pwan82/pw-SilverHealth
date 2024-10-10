@@ -21,6 +21,7 @@ watch(
 </script>
 
 <template>
+  <Toast />
   <div class="layout-container">
     <header>
       <Header />
