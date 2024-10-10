@@ -21,22 +21,32 @@
 
             <span>Published: {{ formatDate(article.publicationTime) }}</span>
             <span class="mx-2 non-selectable">|</span>
-            <span>Last modified: {{ formatDate(article.modificationTime) }}
-            </span>
+            <span>Last modified: {{ formatDate(article.modificationTime) }} </span>
           </p>
 
           <!-- Categories display -->
-          <div v-if="article.showCategory && article.category"
-            class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+          <div
+            v-if="article.showCategory && article.category"
+            class="d-flex justify-content-center flex-wrap gap-2 mb-3"
+          >
             <Chip v-for="category in article.category" :key="category" :label="category" />
           </div>
 
           <!-- Show average rating -->
-          <div v-if="article.isRatable" class="d-flex justify-content-center align-items-center mb-3">
+          <div
+            v-if="article.isRatable"
+            class="d-flex justify-content-center align-items-center mb-3"
+          >
             <span class="me-2 fw-bold">Rating:</span>
-            <span v-if="averageRating(article)" class="me-2 fw-bold">{{ averageRating(article).toFixed(1)
-              }}/5</span>
-            <Rating v-if="averageRating(article)" v-model="article.averageRating" disabled :stars="5" />
+            <span v-if="averageRating(article)" class="me-2 fw-bold"
+              >{{ averageRating(article).toFixed(1) }}/5</span
+            >
+            <Rating
+              v-if="averageRating(article)"
+              v-model="article.averageRating"
+              disabled
+              :stars="5"
+            />
             <span v-else class="me-2 fw-bold">No rating given</span>
           </div>
           <Divider />
@@ -45,7 +55,7 @@
 
           <!-- Rating and Comment Submission -->
           <div v-if="article.isRatable" class="d-flex justify-content-center mt-5 mb-5">
-            <div class="text-center" style="width: 100%; max-width: 30rem;">
+            <div class="text-center" style="width: 100%; max-width: 30rem">
               <button v-if="!isLoggedIn" class="btn btn-outline-primary" @click="redirectToLogin">
                 Login to leave a comment
               </button>
@@ -53,23 +63,48 @@
                 <template #title>Please rate this article</template>
                 <template #content>
                   <div class="mt-2 d-flex flex-column align-items-center">
-                    <Rating v-model.number="userRating" :stars="5" :cancel="true" :disabled="isSubmitting" />
-                    <textarea v-model="userComment" class="form-control mt-3" rows="3"
-                      placeholder="Leave your comment (optional)" :disabled="isSubmitting"></textarea>
+                    <Rating
+                      v-model.number="userRating"
+                      :stars="5"
+                      :cancel="true"
+                      :disabled="isSubmitting"
+                    />
+                    <textarea
+                      v-model="userComment"
+                      class="form-control mt-3"
+                      rows="3"
+                      placeholder="Leave your comment (optional)"
+                      :disabled="isSubmitting"
+                    ></textarea>
                     <p class="mt-2 text-muted" v-if="!submissionMessage">not submitted</p>
-                    <p class="mt-2" :class="{ 'text-success': submissionSuccess, 'text-danger': !submissionSuccess }"
-                      v-else>
+                    <p
+                      class="mt-2"
+                      :class="{
+                        'text-success': submissionSuccess,
+                        'text-danger': !submissionSuccess
+                      }"
+                      v-else
+                    >
                       {{ submissionMessage }}
                     </p>
                   </div>
                 </template>
                 <template #footer>
-                  <button @click="submitRatingAndComment" class="btn" :class="{
-                    'btn-primary': userRating !== null,
-                    'btn-secondary': userRating === null
-                  }" :disabled="userRating === null || isSubmitting">
-                    <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                      aria-hidden="true"></span>
+                  <button
+                    @click="submitRatingAndComment"
+                    class="btn"
+                    :class="{
+                      'btn-primary': userRating !== null,
+                      'btn-secondary': userRating === null
+                    }"
+                    :disabled="userRating === null || isSubmitting"
+                  >
+                    <span
+                      v-if="isSubmitting"
+                      class="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
                     {{ isSubmitting ? 'Submitting...' : 'Submit' }}
                   </button>
                 </template>
@@ -84,10 +119,16 @@
             </Divider>
             <!-- <h4 class="mt-5">Ratings and Comments</h4> -->
             <div v-if="hasComments" class="">
-              <DataTable :value="ratings" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
-                sortMode="multiple" :loading="ratingsLoading"
+              <DataTable
+                :value="ratings"
+                :paginator="true"
+                :rows="10"
+                :rowsPerPageOptions="[5, 10, 20, 50]"
+                sortMode="multiple"
+                :loading="ratingsLoading"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink  RowsPerPageDropdown"
-                removableSort>
+                removableSort
+              >
                 <Column field="rating" header="Rating" sortable>
                   <template #body="slotProps">
                     <Rating v-model="slotProps.data.rating" :cancel="false" disabled />
@@ -95,8 +136,9 @@
                 </Column>
                 <Column field="comment" header="Comment">
                   <template #body="slotProps">
-                    <span v-if="slotProps.data.comment && slotProps.data.comment.trim()">{{ slotProps.data.comment
-                      }}</span>
+                    <span v-if="slotProps.data.comment && slotProps.data.comment.trim()">{{
+                      slotProps.data.comment
+                    }}</span>
                     <span v-else class="text-muted fst-italic">No comment provided</span>
                   </template>
                 </Column>
@@ -112,7 +154,6 @@
               <p class="text-muted">No comments yet. Be the first to comment!</p>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -170,17 +211,19 @@ const redirectToLogin = () => {
 
 // Format date helper function
 const formatDate = (timestamp) => {
-  return timestamp === -1 ? 'Never modified' : new Date(timestamp).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
+  return timestamp === -1
+    ? 'Never modified'
+    : new Date(timestamp).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      })
 }
 
 // Fetch article data from API
 const fetchArticleData = async (token) => {
   try {
-    loading.value = true  // Set loading to true before fetching data
+    loading.value = true // Set loading to true before fetching data
 
     // Setting up the Axios interceptor
     axios.interceptors.request.use(
@@ -205,7 +248,7 @@ const fetchArticleData = async (token) => {
     console.error('Error fetching article:', error)
     router.push({ name: 'ArticleNotFound' })
   } finally {
-    loading.value = false  // Set loading to false after fetching data, regardless of success or failure
+    loading.value = false // Set loading to false after fetching data, regardless of success or failure
   }
 }
 
@@ -214,13 +257,13 @@ const fetchRatings = async (token) => {
   try {
     ratingsLoading.value = true
     const config = {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
     }
     const response = await axios.get(
       `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleRatings/${articleId}`,
       config
     )
-    ratings.value = response.data.map(rating => ({
+    ratings.value = response.data.map((rating) => ({
       ...rating,
       publicationTime: new Date(rating.publicationTime)
     }))
@@ -245,15 +288,15 @@ const submitRatingAndComment = async () => {
     if (article.value.isRatable) {
       const token = await auth.currentUser.getIdToken()
       const config = {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` }
       }
-      const data = {
+      const payload = {
         rating: userRating.value,
         comment: userComment.value
       }
       await axios.post(
         `https://us-central1-silverhealth-87f2a.cloudfunctions.net/publishArticleRating/${articleId}`,
-        data,
+        payload,
         config
       )
       submissionMessage.value = 'Submitted successfully!'

@@ -3,18 +3,21 @@
     Manually delete the article collection in Firestore before uploading.
 
     <!-- Display list of files with checkboxes to be uploaded -->
-    <ul style="margin: 10px 0;">
+    <ul style="margin: 10px 0">
       <li v-for="(file, index) in articleFiles" :key="file.name">
-        <input type="checkbox" v-model="selectedFiles" :value="index"> {{ file.name }}
+        <input type="checkbox" v-model="selectedFiles" :value="index" /> {{ file.name }}
       </li>
     </ul>
     <!-- Buttons for selecting and clearing files, and uploading -->
-    <div style="margin: 10px 0;">
-      <button class="btn btn-secondary" @click="selectAllFiles" style="margin-right: 10px;">Select All</button>
-      <button class="btn btn-secondary" @click="clearSelectedFiles" style="margin-right: 10px;">Clear Selection</button>
+    <div style="margin: 10px 0">
+      <button class="btn btn-secondary" @click="selectAllFiles" style="margin-right: 10px">
+        Select All
+      </button>
+      <button class="btn btn-secondary" @click="clearSelectedFiles" style="margin-right: 10px">
+        Clear Selection
+      </button>
       <button class="btn btn-primary" @click="uploadData">Upload Articles to Firestore</button>
     </div>
-
   </div>
 </template>
 
@@ -79,7 +82,7 @@ const uploadData = async () => {
           // Add showCategory if it exists, default to true
           showCategory: article.showCategory !== undefined ? article.showCategory : true,
           // Add isRatable if it exists, default to true
-          isRatable: article.isRatable !== undefined ? article.isRatable : true,
+          isRatable: article.isRatable !== undefined ? article.isRatable : true
         }
 
         const articleRef = await addDoc(collection(db, 'articles'), articleData)
@@ -103,8 +106,7 @@ const uploadData = async () => {
           }
 
           // Recalculate averageRating with two decimal precision
-          articleData.averageRating
-            = parseFloat((totalRating / article.ratings.length).toFixed(2))
+          articleData.averageRating = parseFloat((totalRating / article.ratings.length).toFixed(2))
           // Update the article document with the new averageRating
           await updateDoc(articleRef, { averageRating: articleData.averageRating })
         }

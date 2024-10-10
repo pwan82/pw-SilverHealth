@@ -22,7 +22,11 @@
                   placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
               </div>
 
-              <div v-if="!['gender', 'role', 'birthday', 'subscribeToNewsletter'].includes(selectedSearchColumn.field)">
+              <div v-if="
+                !['gender', 'role', 'birthday', 'subscribeToNewsletter'].includes(
+                  selectedSearchColumn.field
+                )
+              ">
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
                   <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
@@ -67,14 +71,20 @@
             </Column>
             <Column field="role" header="Role" :sortable="true">
               <template #body="slotProps">
-                {{ roleOptions.find(option => option.value === slotProps.data.role)?.label || 'Unknown' }}
+                {{
+                  roleOptions.find((option) => option.value === slotProps.data.role)?.label ||
+                  'Unknown'
+                }}
               </template>
             </Column>
             <Column field="birthday" header="Birthday" :sortable="true"></Column>
             <Column field="subscribeToNewsletter" header="Newsletter" :sortable="true">
               <template #body="slotProps">
-                {{ newsletterOptions.find(option => option.value === slotProps.data.subscribeToNewsletter)?.label ||
-                  'Unknown' }}
+                {{
+                  newsletterOptions.find(
+                    (option) => option.value === slotProps.data.subscribeToNewsletter
+                  )?.label || 'Unknown'
+                }}
               </template>
             </Column>
           </DataTable>
@@ -82,15 +92,17 @@
           <!-- Send Email Button -->
           <Button @click="openEmailEditor" :disabled="!selectedUsers.length" class="mt-3">
             <i class="bi bi-envelope-plus mr-2"></i>
-            {{ `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ""}
-            Selected ${selectedUsers.length > 1 ? "Users" : "User"}` }}
+            {{
+              `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
+            Selected ${selectedUsers.length > 1 ? 'Users' : 'User'}`
+            }}
           </Button>
 
           <!-- Email Editor Dialog -->
           <Dialog v-model:visible="displayEmailEditor" header="Compose Email" :modal="true">
             <div class="mb-3 field">
               <h5>Recipients</h5>
-              <div class="p-inputtext p-component p-inputtext-sm" style="max-height: 100px; overflow-y: auto;">
+              <div class="p-inputtext p-component p-inputtext-sm" style="max-height: 100px; overflow-y: auto">
                 <Chip v-for="user in selectedUsers" :key="user.userId" :label="user.email" />
                 <!-- removable @remove="removeUser(user)" /> -->
               </div>
@@ -121,15 +133,16 @@
               </div>
             </div>
             <template #footer>
-              <Button @click="sendEmail" :disabled="!selectedUsers.length" :loading="sending">
+              <Button @click="sendBulkEmails" :disabled="!selectedUsers.length" :loading="sending">
                 <i class="bi bi-send mr-2"></i>
-                {{ `Send to ${selectedUsers.length > 0 ? selectedUsers.length : ""}
-                ${selectedUsers.length > 1 ? "Users" : "User"}` }}
+                {{
+                  `Send to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
+                ${selectedUsers.length > 1 ? 'Users' : 'User'}`
+                }}
               </Button>
               <Button label="Cancel" icon="bi bi-x-lg" @click="closeEmailEditor" class="p-button-text" />
             </template>
           </Dialog>
-
         </div>
       </div>
     </div>
@@ -152,6 +165,7 @@ const emailSubject = ref('')
 const emailContent = ref('')
 const selectedFiles = ref([])
 const sending = ref(false)
+const sendingProgress = ref(0)
 const toast = useToast()
 
 // Filter and search state
@@ -192,7 +206,7 @@ const getGenderLabel = (gender) => {
   if (gender === null || gender.trim() === '') {
     return 'Unknown'
   } else {
-    const option = genderOptions.find(option => option.value === gender)
+    const option = genderOptions.find((option) => option.value === gender)
     return option ? option.label : gender
   }
 }
@@ -236,7 +250,9 @@ const onRoleFilterChange = () => {
 
 const onBirthdayRangeChange = () => {
   if (birthdayRange.value && birthdayRange.value.length === 2) {
-    filters.value.birthday.value = birthdayRange.value.map(date => date.toISOString().split('T')[0])
+    filters.value.birthday.value = birthdayRange.value.map(
+      (date) => date.toISOString().split('T')[0]
+    )
     filters.value.birthday.matchMode = 'between'
   } else {
     filters.value.birthday.value = null
@@ -264,7 +280,7 @@ const fetchUsers = async (token) => {
   try {
     loading.value = true
     const config = {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
     }
     const response = await axios.get(
       'https://us-central1-silverhealth-87f2a.cloudfunctions.net/getAllUsers',
@@ -272,8 +288,8 @@ const fetchUsers = async (token) => {
     )
     users.value = response.data
 
-    users.value.forEach(user => {
-      user.email = user.email.toLowerCase();
+    users.value.forEach((user) => {
+      user.email = user.email.toLowerCase()
     })
   } catch (error) {
     console.error('Error fetching users:', error)
@@ -301,38 +317,115 @@ const closeEmailEditor = () => {
 }
 
 const removeUser = (user) => {
-  selectedUsers.value = selectedUsers.value.filter(u => u.email !== user.email);
+  selectedUsers.value = selectedUsers.value.filter((u) => u.email !== user.email)
 }
 
-const onFileSelect = (event) => {
-  selectedFiles.value = event.files;
+const onFileSelect = async (event) => {
+  const convertedFiles = await convertFilesToBase64(event.files);
+  selectedFiles.value = convertedFiles;
 };
 
 const onFileRemove = (event) => {
-  selectedFiles.value = selectedFiles.value.filter(file => file.name !== event.file.name);
+  selectedFiles.value = selectedFiles.value.filter((file) => file.name !== event.file.name)
+}
+
+const convertFilesToBase64 = async (files) => {
+  const convertedFiles = await Promise.all(files.map(async (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64Content = e.target.result.split(',')[1];
+        resolve({
+          name: file.name,
+          type: file.type || 'application/octet-stream',
+          content: base64Content
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  }));
+  return convertedFiles;
 };
 
 const onError = (event) => {
   if (event.type === 'max-file-size') {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'File size exceeds 1MB limit', life: 3000 });
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'File size exceeds 1MB limit',
+      life: 3000
+    })
   } else if (event.type === 'max-files') {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Maximum 5 files allowed', life: 3000 });
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Maximum 5 files allowed',
+      life: 3000
+    })
   }
-};
-
-const sendEmail = async () => {
-  // Implement email sending logic here
-  sending.value = true
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 2000))
-  sending.value = false
-  closeEmailEditor()
-  toast.add({ severity: 'success', summary: 'Success', detail: 'Emails sent successfully', life: 3000 })
 }
 
-const onUpload = (event) => {
-  // Handle file upload logic here
-  toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 })
+const sendBulkEmails = async () => {
+  if (!selectedUsers.value.length || !emailSubject.value || !emailContent.value) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill in all required fields',
+      life: 3000
+    })
+    return
+  }
+
+  sending.value = true
+  sendingProgress.value = 0
+
+  try {
+    const token = await auth.currentUser.getIdToken()
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+
+    const payload = {
+      emails: selectedUsers.value.map((user) => user.email),
+      subject: emailSubject.value,
+      content: emailContent.value,
+      attachments: selectedFiles.value.map((file) => ({
+        content: file.content,
+        filename: file.name,
+        type: file.type
+      }))
+    }
+
+    const response = await axios.post(
+      'https://sendbulkemails-s3vwdaiioq-uc.a.run.app',
+      payload,
+      config
+    )
+
+    if (response.data && response.data.message === 'Emails sent successfully') {
+      console.log('response.data ', response.data)
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `Sent ${response.data.count} emails successfully`,
+        life: 3000
+      })
+      closeEmailEditor()
+    } else {
+      throw new Error('Unexpected response from server')
+    }
+  } catch (error) {
+    console.error('Error sending emails:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to send emails. Please try again.',
+      life: 3000
+    })
+  } finally {
+    sending.value = false
+    sendingProgress.value = 100
+  }
 }
 
 // Watch for changes in selectedSearchColumn
