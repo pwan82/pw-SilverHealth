@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from 'vue'
+import { onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
 import { auth } from '@/firebase/init'
@@ -11,24 +11,22 @@ import Footer from './components/sharedComponents/footer/Footer.vue'
 const authStore = useAuthStore()
 const router = useRouter()
 
-watch(
-  () => authStore.currentUser,
-  (newUser) => {
-    if (!newUser) {
-      // If user logs out (newUser is null), navigate to the home page
-      router.push({ name: 'Home' })
+onMounted(() => {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      if (!authStore.isLoggedIn) {
+        await authStore.login()
+        const token = await user.getIdToken()
+        console.log(`getIdToken Bearer ${token}`)
+      }
+    } else {
+      if (authStore.isLoggedIn) {
+        authStore.logout()
+        // If user logs out (newUser is null), navigate to the home page
+        router.push({ name: 'Home' })
+      }
     }
-  }
-)
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    await authStore.login()
-    const token = await user.getIdToken()
-    console.log(`getIdToken Bearer ${token}`)
-  } else {
-    authStore.logout()
-  }
+  })
 })
 </script>
 
