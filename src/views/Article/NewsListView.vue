@@ -132,7 +132,7 @@
                     />
                   </div>
                 </div>
-                <span v-else class="me-2">No rating given</span>
+                <span v-else class="text-muted fst-italic">No rating given</span>
               </template>
             </Column>
           </DataTable>

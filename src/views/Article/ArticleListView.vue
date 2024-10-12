@@ -14,40 +14,21 @@
         <div v-else>
           <!-- Search and filter controls -->
           <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"
-          >
+            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
             <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
               <div class="mb-2 mb-md-0 me-md-2">
-                <Select
-                  v-model="selectedSearchColumn"
-                  :options="searchColumns"
-                  optionLabel="label"
-                  placeholder="Select column"
-                  class="w-100 w-md-auto"
-                  @change="onSearchColumnChange"
-                />
+                <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
+                  placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
               </div>
               <div v-if="selectedSearchColumn.field !== 'averageRating'">
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
-                  <InputText
-                    v-model="searchValue"
-                    placeholder="Keyword Search"
-                    @input="onSearchInput"
-                    class="w-100"
-                  />
+                  <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
                 </span>
               </div>
               <div v-else>
-                <Select
-                  v-model="ratingFilter"
-                  :options="ratingOptions"
-                  optionLabel="label"
-                  optionValue="value"
-                  placeholder="Select min rating"
-                  class="w-100 w-md-auto"
-                  @change="onRatingFilterChange"
-                />
+                <Select v-model="ratingFilter" :options="ratingOptions" optionLabel="label" optionValue="value"
+                  placeholder="Select min rating" class="w-100 w-md-auto" @change="onRatingFilterChange" />
               </div>
             </div>
             <div>
@@ -58,67 +39,33 @@
             </div>
           </div>
 
-          <DataTable
-            :value="articles"
-            paginator
-            :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
-            :filters="filters"
-            filterDisplay="menu"
-            responsiveLayout="scroll"
-            :sortField="sortField"
-            :sortOrder="sortOrder"
-            @sort="onSort"
-            removableSort
-          >
-            <Column
-              field="title"
-              header="Title"
-              sortable
-              filter
-              filterPlaceholder="Search by title"
-            >
+          <DataTable :value="articles" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" :filters="filters"
+            filterDisplay="menu" responsiveLayout="scroll" :sortField="sortField" :sortOrder="sortOrder" @sort="onSort"
+            removableSort>
+            <Column field="title" header="Title" sortable filter filterPlaceholder="Search by title">
               <template #body="slotProps">
-                <router-link
-                  class="fw-bold"
-                  :to="{ name: 'ArticleDetail', params: { articleId: slotProps.data.articleId } }"
-                >
+                <router-link class="fw-bold"
+                  :to="{ name: 'ArticleDetail', params: { articleId: slotProps.data.articleId } }">
                   {{ slotProps.data.title }}
                 </router-link>
               </template>
             </Column>
 
-            <Column
-              field="category"
-              header="Category"
-              sortable
-              filter
-              filterPlaceholder="Search by category"
-            >
+            <Column field="category" header="Category" sortable filter filterPlaceholder="Search by category">
               <template #body="slotProps">
                 {{ slotProps.data.category.join(', ') }}
               </template>
             </Column>
 
-            <Column
-              field="averageRating"
-              header="Rating"
-              sortable
-              filter
-              filterPlaceholder="Search by rating"
-            >
+            <Column field="averageRating" header="Rating" sortable filter filterPlaceholder="Search by rating">
               <template #body="slotProps">
                 <div v-if="averageRating(slotProps.data) !== null" class="rating-display">
                   <span class="rating-value">{{ averageRating(slotProps.data).toFixed(1) }}</span>
                   <div class="rating-stars">
-                    <Rating
-                      :modelValue="parseFloat(averageRating(slotProps.data))"
-                      readonly
-                      :stars="5"
-                    />
+                    <Rating :modelValue="parseFloat(averageRating(slotProps.data))" readonly :stars="5" />
                   </div>
                 </div>
-                <span v-else class="me-2">No rating given</span>
+                <span v-else class="text-muted fst-italic">No rating given</span>
               </template>
             </Column>
           </DataTable>

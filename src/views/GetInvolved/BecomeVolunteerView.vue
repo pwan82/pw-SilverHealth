@@ -1,12 +1,7 @@
 <template>
-  <div class="become-volunteer">
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-8 offset-md-2">
-          <h1 class="text-center">Become a Volunteer</h1>
-          <p class="text-center">Join us right now.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ArticleDetailView :articleId="5" />
 </template>
+
+<script setup>
+import ArticleDetailView from '@/views/Article/ArticleDetailView.vue'
+</script>

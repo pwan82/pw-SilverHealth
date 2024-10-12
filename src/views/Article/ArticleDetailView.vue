@@ -44,10 +44,10 @@
             <Rating
               v-if="averageRating(article)"
               v-model="article.averageRating"
-              disabled
+              readonly
               :stars="5"
             />
-            <span v-else class="me-2 fw-bold">No rating given</span>
+            <span v-else class="text-muted fst-italic">No rating given</span>
           </div>
           <Divider />
           <!-- Render Markdown content -->
@@ -76,7 +76,7 @@
                       placeholder="Leave your comment (optional)"
                       :disabled="isSubmitting"
                     ></textarea>
-                    <p class="mt-2 text-muted" v-if="!submissionMessage">not submitted</p>
+                    <p class="mt-2 text-muted fst-italic" v-if="!submissionMessage">not submitted</p>
                     <p
                       class="mt-2"
                       :class="{
