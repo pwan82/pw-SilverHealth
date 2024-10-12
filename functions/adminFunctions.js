@@ -29,26 +29,34 @@ exports.getAllUsers = onRequest((req, res) => {
         const userData = doc.data()
         const userId = doc.id
 
-        // Get user's custom claims (including role)
+        // Get user's custom claims (including role) and metadata
         const userRecord = await admin.auth().getUser(userId)
         const customClaims = userRecord.customClaims || {}
+
+        // Convert time strings to timestamps
+        const creationTime = Date.parse(userRecord.metadata.creationTime) || null
+        const lastSignInTime = Date.parse(userRecord.metadata.lastSignInTime) || null
+        const lastRefreshTime = Date.parse(userRecord.metadata.lastRefreshTime) || null
 
         // Construct user object with all properties
         const user = {
           userId: userId,
-          email: userData.email || '',
-          gender: userData.gender || '',
-          birthday: userData.birthday || '',
-          username: userData.username || '',
+          email: userData.email || null,
+          gender: userData.gender || null,
+          birthday: userData.birthday || null,
+          username: userData.username || null,
           subscribeToNewsletter: userData.subscribeToNewsletter || false,
           address: {
-            building: (userData.address && userData.address.building) || '',
-            postcode: (userData.address && userData.address.postcode) || '',
-            state: (userData.address && userData.address.state) || '',
-            streetAddress: (userData.address && userData.address.streetAddress) || '',
-            suburb: (userData.address && userData.address.suburb) || ''
+            building: (userData.address && userData.address.building) || null,
+            postcode: (userData.address && userData.address.postcode) || null,
+            state: (userData.address && userData.address.state) || null,
+            streetAddress: (userData.address && userData.address.streetAddress) || null,
+            suburb: (userData.address && userData.address.suburb) || null
           },
-          role: customClaims.role || 'unknown'
+          role: customClaims.role || null,
+          creationTime: creationTime,
+          lastSignInTime: lastSignInTime,
+          lastRefreshTime: lastRefreshTime
         }
 
         users.push(user)

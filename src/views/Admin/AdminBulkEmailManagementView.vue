@@ -23,9 +23,10 @@
               </div>
 
               <div v-if="
-                !['gender', 'role', 'birthday', 'subscribeToNewsletter'].includes(
-                  selectedSearchColumn.field
-                )
+                !['gender', 'role', 'birthday', 'subscribeToNewsletter',
+                  'creationTime', 'lastSignInTime', 'lastRefreshTime'].includes(
+                    selectedSearchColumn.field
+                  )
               ">
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
@@ -41,12 +42,19 @@
                   placeholder="Select Role" class="w-100 w-md-auto" @change="onRoleFilterChange" />
               </div>
               <div v-else-if="selectedSearchColumn.field === 'birthday'">
-                <DatePicker v-model="birthdayRange" selectionMode="range" :manualInput="false"
-                  @date-select="onBirthdayRangeChange" placeholder="Select birthday range" />
+                <DatePicker v-model="birthdayRange" selectionMode="range" :manualInput="true"
+                  @date-select="onBirthdayRangeChange" placeholder="Select birthday range" class="w-100 w-md-auto" />
               </div>
               <div v-else-if="selectedSearchColumn.field === 'subscribeToNewsletter'">
                 <Select v-model="newsletterFilter" :options="newsletterOptions" optionLabel="label" optionValue="value"
                   placeholder="Select Newsletter Status" class="w-100 w-md-auto" @change="onNewsletterFilterChange" />
+              </div>
+
+              <div
+                v-else-if="['creationTime', 'lastSignInTime', 'lastRefreshTime'].includes(selectedSearchColumn.field)">
+                <DatePicker v-model="currentDateRange" selectionMode="range" :manualInput="false"
+                  @date-select="onDateRangeChange" :placeholder="`Select ${selectedSearchColumn.label} range`"
+                  class="wide-date-picker" style="" />
               </div>
             </div>
             <div>
@@ -103,13 +111,38 @@
                 <span v-else class="text-muted fst-italic">No Record</span>
               </template>
             </Column>
+
+            <Column field="creationTime" header="Creation Time" :sortable="true">
+              <template #body="slotProps">
+                <span v-if="slotProps.data.creationTime">
+                  {{ formatDate(slotProps.data.creationTime) }}
+                </span>
+                <span v-else class="text-muted fst-italic">No Record</span>
+              </template>
+            </Column>
+            <Column field="lastSignInTime" header="Last Sign In" :sortable="true">
+              <template #body="slotProps">
+                <span v-if="slotProps.data.lastSignInTime">
+                  {{ formatDate(slotProps.data.lastSignInTime) }}
+                </span>
+                <span v-else class="text-muted fst-italic">No Record</span>
+              </template>
+            </Column>
+            <Column field="lastRefreshTime" header="Last Refresh" :sortable="true">
+              <template #body="slotProps">
+                <span v-if="slotProps.data.lastRefreshTime">
+                  {{ formatDate(slotProps.data.lastRefreshTime) }}
+                </span>
+                <span v-else class="text-muted fst-italic">No Record</span>
+              </template>
+            </Column>
           </DataTable>
 
           <!-- Send Email Button -->
           <Button @click="openEmailEditor" :disabled="!selectedUsers.length" class="mt-3">
             <i class="bi bi-envelope-plus mr-2"></i>
             {{
-              `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
+            `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
             Selected ${selectedUsers.length > 1 ? 'Users' : 'User'}`
             }}
           </Button>
@@ -128,12 +161,12 @@
               <div class="mb-3 field">
                 <h5>Subject</h5>
                 <InputText id="subject" v-model="emailSubject" required="true" autofocus
-                  placeholder="Enter email subject" />
+                  placeholder="Enter email subject" :disabled="sending" />
               </div>
 
               <div class="mb-3 field">
                 <h5>Content</h5>
-                <Editor v-model="emailContent" editorStyle="height: 200px" />
+                <Editor v-model="emailContent" editorStyle="height: 200px" :disabled="sending" />
               </div>
 
               <div class="mb-3 field">
@@ -141,7 +174,7 @@
                 <p>Up to 5 files, maximum 10MB each.</p>
                 <FileUpload mode="advanced" :multiple="true" :maxFileSize="10000000" @select="onFileSelect"
                   @remove="onFileRemove" :auto="true" chooseLabel="Choose Files" :showUploadButton="false"
-                  :showCancelButton="false" :fileLimit="5" @error="onError">
+                  :showCancelButton="false" :fileLimit="5" @error="onError" :disabled="sending">
                   <template #empty>
                     <p>Drag and drop files here to upload.</p>
                   </template>
@@ -149,14 +182,15 @@
               </div>
             </div>
             <template #footer>
-              <Button @click="sendBulkEmails" :disabled="!selectedUsers.length" :loading="sending">
-                <i class="bi bi-send mr-2"></i>
-                {{
-                  `Send to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
-                ${selectedUsers.length > 1 ? 'Users' : 'User'}`
-                }}
+              <Button @click="sendBulkEmails" :disabled="!selectedUsers.length || sending" :loading="sending">
+                <span v-if="sending" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+                <i v-else class="bi bi-send mr-2"></i>
+                {{ (sending ? `Sending` : `Send`) + ` to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
+                ${selectedUsers.length > 1 ? 'Users' : 'User'}` }}
               </Button>
-              <Button label="Cancel" icon="bi bi-x-lg" @click="closeEmailEditor" class="p-button-text" />
+              <Button label="Cancel" icon="bi bi-x-lg" @click="closeEmailEditor" class="p-button-text"
+                :disabled="sending" />
             </template>
           </Dialog>
         </div>
@@ -190,6 +224,10 @@ const genderFilter = ref(null)
 const roleFilter = ref(null)
 const birthdayRange = ref(null)
 const newsletterFilter = ref(null)
+const creationTimeRange = ref(null)
+const lastSignInTimeRange = ref(null)
+const lastRefreshTimeRange = ref(null)
+
 const filters = ref({
   global: { value: null, matchMode: 'contains' },
   email: { value: null, matchMode: 'contains' },
@@ -197,7 +235,10 @@ const filters = ref({
   gender: { value: null, matchMode: 'equals' },
   role: { value: null, matchMode: 'equals' },
   birthday: { value: null, matchMode: 'between' },
-  subscribeToNewsletter: { value: null, matchMode: 'equals' }
+  subscribeToNewsletter: { value: null, matchMode: 'equals' },
+  creationTime: { value: null, matchMode: 'between' },
+  lastSignInTime: { value: null, matchMode: 'between' },
+  lastRefreshTime: { value: null, matchMode: 'between' }
 })
 
 const searchColumns = ref([
@@ -207,7 +248,10 @@ const searchColumns = ref([
   { label: 'Gender', field: 'gender' },
   { label: 'Role', field: 'role' },
   { label: 'Birthday', field: 'birthday' },
-  { label: 'Newsletter', field: 'subscribeToNewsletter' }
+  { label: 'Newsletter', field: 'subscribeToNewsletter' },
+  { label: 'Creation Time', field: 'creationTime' },
+  { label: 'Last Sign In Time', field: 'lastSignInTime' },
+  { label: 'Last Refresh Time', field: 'lastRefreshTime' }
 ])
 
 const genderOptions = [
@@ -276,6 +320,19 @@ const onBirthdayRangeChange = () => {
   }
 }
 
+const currentDateRange = ref(null)
+
+const onDateRangeChange = () => {
+  if (currentDateRange.value && currentDateRange.value.length === 2) {
+    const [start, end] = currentDateRange.value
+    filters.value[selectedSearchColumn.value.field].value = [start.getTime(), end.getTime()]
+    filters.value[selectedSearchColumn.value.field].matchMode = 'between'
+  } else {
+    filters.value[selectedSearchColumn.value.field].value = null
+    filters.value[selectedSearchColumn.value.field].matchMode = 'between'
+  }
+}
+
 const onNewsletterFilterChange = () => {
   filters.value.subscribeToNewsletter.value = newsletterFilter.value
 }
@@ -286,9 +343,17 @@ const clearFilters = () => {
   roleFilter.value = null
   birthdayRange.value = null
   newsletterFilter.value = null
+  creationTimeRange.value = null
+  lastSignInTimeRange.value = null
+  lastRefreshTimeRange.value = null
+  currentDateRange.value = null
   Object.keys(filters.value).forEach((key) => {
     filters.value[key].value = null
   })
+}
+
+const formatDate = (timestamp) => {
+  return new Date(timestamp).toLocaleString()
 }
 
 // Fetch users data
@@ -504,5 +569,16 @@ onUnmounted(() => {
 
 :deep(.p-inputtext) {
   width: 100%;
+}
+
+.wide-date-picker {
+  min-width: 250px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .wide-date-picker {
+    min-width: 100%;
+  }
 }
 </style>
