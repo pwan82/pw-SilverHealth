@@ -3,7 +3,11 @@ import { computed, ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { auth } from '@/firebase/init'
 import { onAuthStateChanged } from 'firebase/auth'
+import { redirectToLogin as baseRedirectToLogin } from '@/utils/helpers'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 
 // const currentUser = computed(() => authStore.currentUser)
@@ -14,6 +18,11 @@ const handleLogout = () => {
     alert('You have successfully logged out!')
     // router.push({ name: 'Home' })
   }
+}
+
+// Redirect to the login page
+const redirectToLogin = () => {
+  baseRedirectToLogin(router, { route })
 }
 
 const currentUser = ref(null)
@@ -49,20 +58,16 @@ onMounted(() => {
 
       <div class="col-12 col-md-6 text-center text-md-end">
         <p v-if="currentUser">
-          <span
-            >🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'Guest' }} ({{
-              currentRole
-            }})</span
-          >
+          <span>🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'Guest' }} ({{
+            currentRole
+            }})</span>
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/account" class="text-decoration-none">My Account</router-link>
           <span class="mx-2 non-selectable">|</span>
-          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer"
-            >Log out</span
-          >
+          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer">Log out</span>
         </p>
         <p v-else>
-          <router-link to="/login" class="text-decoration-none">Log In</router-link>
+          <a href="#" @click.prevent="redirectToLogin" class="text-decoration-none">Log In</a>
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/signup" class="text-decoration-none">Sign Up</router-link>
         </p>

@@ -51,7 +51,7 @@ export const useAuthStore = defineStore('user', {
       signOut(auth)
         .then(() => {
           this.clearUser()
-          window.location.href = '/'
+          // window.location.href = '/'
           console.log('Successfully logged out!')
           console.log(auth.currentUser)
         })

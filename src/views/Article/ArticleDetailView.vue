@@ -168,6 +168,7 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
+import { redirectToLogin as baseRedirectToLogin } from '@/utils/helpers'
 
 const route = useRoute()
 const router = useRouter()
@@ -206,7 +207,7 @@ const renderedContent = computed(() => (article.value ? md.render(article.value.
 
 // Redirect to the login page
 const redirectToLogin = () => {
-  router.push({ name: 'Login', query: { redirect: route.fullPath } })
+  baseRedirectToLogin(router, { route })
 }
 
 // Format date helper function
