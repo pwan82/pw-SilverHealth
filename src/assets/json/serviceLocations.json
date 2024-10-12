@@ -1,0 +1,242 @@
+[
+  {
+    "locationId": 1,
+    "name": "SilverHealth Clayton Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Clayton Service Centre is located in the north of Clayton. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 1234 5678",
+    "address": "21 Chancellors Walk, Clayton VIC 3168",
+    "latitude": -37.9132538,
+    "longitude": 145.1303405,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 2,
+    "name": "SilverHealth Melbourne Office",
+    "type": "Administration Office",
+    "description": "SilverHealth's administrative office in Melbourne City. It is responsible for managing the staff and finances of SilverHealth's Victorian branches, accepting donations and more.",
+    "phoneNumber": "+61 3 1002 2003",
+    "address": "750 Collins St, Docklands VIC 3008",
+    "latitude": -37.8200143,
+    "longitude": 144.9467346,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "17:00"
+      },
+      "saturday": {
+        "open": null,
+        "close": null
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 3,
+    "name": "SilverHealth Southbank Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Southbank Service Centre is located in the heart of Southbank. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 2233 4455",
+    "address": "120 Sturt St, Southbank VIC 3006",
+    "latitude": -37.823409,
+    "longitude": 144.964401,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 4,
+    "name": "SilverHealth Fitzroy Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Fitzroy Service Centre is located in the vibrant area of Fitzroy. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 3344 5566",
+    "address": "230 Brunswick St, Fitzroy VIC 3065",
+    "latitude": -37.79874,
+    "longitude": 144.97868,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 5,
+    "name": "SilverHealth St Kilda Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth St Kilda Service Centre is located near the beachside of St Kilda. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 4455 6677",
+    "address": "15 Acland St, St Kilda VIC 3182",
+    "latitude": -37.86759,
+    "longitude": 144.97871,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 6,
+    "name": "SilverHealth Box Hill Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Box Hill Service Centre is located in the bustling area of Box Hill. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 5566 7788",
+    "address": "12 Prospect St, Box Hill VIC 3128",
+    "latitude": -37.82062,
+    "longitude": 145.12252,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 7,
+    "name": "SilverHealth Oakleigh Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Oakleigh Service Centre is located in the vibrant suburb of Oakleigh. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 6677 8899",
+    "address": "18 Atherton Rd, Oakleigh VIC 3166",
+    "latitude": -37.899,
+    "longitude": 145.0878,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 8,
+    "name": "SilverHealth Glen Waverley Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Glen Waverley Service Centre is located in the popular suburb of Glen Waverley. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 7788 9900",
+    "address": "45 Kingsway, Glen Waverley VIC 3150",
+    "latitude": -37.8814,
+    "longitude": 145.1643,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 9,
+    "name": "SilverHealth Southland Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Southland Service Centre is located near the busy Southland Shopping Centre. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 8899 0011",
+    "address": "1239 Nepean Hwy, Cheltenham VIC 3192",
+    "latitude": -37.9644,
+    "longitude": 145.0506,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  },
+  {
+    "locationId": 10,
+    "name": "SilverHealth Dandenong Service Centre",
+    "type": "Service Centre",
+    "description": "SilverHealth Dandenong Service Centre is located in the lively suburb of Dandenong. It provides free health support and services to seniors in the neighbouring community and hosts community events.",
+    "phoneNumber": "+61 3 9900 1122",
+    "address": "225 Lonsdale St, Dandenong VIC 3175",
+    "latitude": -37.984,
+    "longitude": 145.2133,
+    "openingHours": {
+      "weekday": {
+        "open": "09:00",
+        "close": "19:00"
+      },
+      "saturday": {
+        "open": "10:00",
+        "close": "15:00"
+      },
+      "sunday": {
+        "open": null,
+        "close": null
+      }
+    }
+  }
+]
