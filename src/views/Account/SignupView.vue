@@ -136,7 +136,7 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { getFunctions, httpsCallable } from 'firebase/functions'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '@/firebase/init.js' // Firestore initialization
-import * as inputValidators from '@/utils/inputValidators.js'
+import * as inputValidators from '@/utils/inputValidators'
 import DOMPurify from 'dompurify' // Import DOMPurify for sanitizing input
 
 const router = useRouter()

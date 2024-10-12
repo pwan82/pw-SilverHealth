@@ -44,7 +44,7 @@ import { ref } from 'vue'
 import { auth } from '@/firebase/init'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import DOMPurify from 'dompurify'
-import * as inputValidators from '@/utils/inputValidators.js'
+import * as inputValidators from '@/utils/inputValidators'
 
 const email = ref('')
 const errorMessage = ref(null)

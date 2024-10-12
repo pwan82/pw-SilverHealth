@@ -59,7 +59,7 @@
         </div>
         <div class="col-md-4 d-flex align-items-end justify-content-end text-end">
           <p class="mb-0" style="font-size: small">
-            SilverHealth Australia Limited.<br />ABN 10 000 000 000.
+            © SilverHealth Australia Ltd. All rights reserved.<br />ABN 10 000 000 000.
           </p>
         </div>
       </div>

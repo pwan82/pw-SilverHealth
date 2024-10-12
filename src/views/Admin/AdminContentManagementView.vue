@@ -8,11 +8,13 @@
         </div>
       </div>
 
-      <uploadArticlesAndRatings />
+      <UploadArticlesAndRatings />
+      <UploadLocations />
     </div>
   </div>
 </template>
 
 <script setup>
-import uploadArticlesAndRatings from '@/components/temp/UploadArticlesAndRatings.vue'
+import UploadArticlesAndRatings from '@/components/temp/UploadArticlesAndRatings.vue'
+import UploadLocations from '@/components/temp/UploadLocations.vue'
 </script>

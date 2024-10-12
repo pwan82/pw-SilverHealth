@@ -1,11 +1,9 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { auth } from '@/firebase/init'
 import { onAuthStateChanged } from 'firebase/auth'
 
-const router = useRouter()
 const authStore = useAuthStore()
 
 // const currentUser = computed(() => authStore.currentUser)
@@ -18,24 +16,25 @@ const handleLogout = () => {
   }
 }
 
-// const auth = getAuth()
 const currentUser = ref(null)
-const currentRole = ref(null)
-const currentEmail = ref(null)
+const currentRole = computed(() => authStore.role)
+const currentEmail = computed(() => authStore.email)
 const currentUserInfo = computed(() => authStore.userInfo)
 
 onMounted(() => {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       currentUser.value = user
-      await authStore.login()
-      currentRole.value = authStore.role
-      currentEmail.value = authStore.email
+      // await authStore.login()
+      // currentRole.value = authStore.role
+      // currentEmail.value = authStore.email
+      // currentUserInfo.value = authStore.userInfo
     } else {
-      authStore.clearUser()
       currentUser.value = null
-      currentRole.value = null
-      currentEmail.value = null
+      // authStore.clearUser()
+      // currentUser.value = null
+      // currentRole.value = null
+      // currentEmail.value = null
     }
   })
 })

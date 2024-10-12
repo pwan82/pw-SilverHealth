@@ -79,7 +79,7 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 
 import { getDoc, doc } from 'firebase/firestore'
 import { getFunctions, httpsCallable } from 'firebase/functions'
 import { useAuthStore } from '@/stores/authStore'
-import * as inputValidators from '@/utils/inputValidators.js'
+import * as inputValidators from '@/utils/inputValidators'
 import DOMPurify from 'dompurify'
 
 const authStore = useAuthStore()

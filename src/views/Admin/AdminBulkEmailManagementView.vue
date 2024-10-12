@@ -15,38 +15,78 @@
         <div v-else>
           <!-- Search and Filter Controls -->
           <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"
+          >
             <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
               <div class="mb-2 mb-md-0 me-md-2">
-                <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
-                  placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
+                <Select
+                  v-model="selectedSearchColumn"
+                  :options="searchColumns"
+                  optionLabel="label"
+                  placeholder="Select column"
+                  class="w-100 w-md-auto"
+                  @change="onSearchColumnChange"
+                />
               </div>
 
-              <div v-if="
-                !['gender', 'role', 'birthday', 'subscribeToNewsletter'].includes(
-                  selectedSearchColumn.field
-                )
-              ">
+              <div
+                v-if="
+                  !['gender', 'role', 'birthday', 'subscribeToNewsletter'].includes(
+                    selectedSearchColumn.field
+                  )
+                "
+              >
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
-                  <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
+                  <InputText
+                    v-model="searchValue"
+                    placeholder="Keyword Search"
+                    @input="onSearchInput"
+                    class="w-100"
+                  />
                 </span>
               </div>
               <div v-else-if="selectedSearchColumn.field === 'gender'">
-                <Select v-model="genderFilter" :options="genderOptions" optionLabel="label" optionValue="value"
-                  placeholder="Select Gender" class="w-100 w-md-auto" @change="onGenderFilterChange" />
+                <Select
+                  v-model="genderFilter"
+                  :options="genderOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select Gender"
+                  class="w-100 w-md-auto"
+                  @change="onGenderFilterChange"
+                />
               </div>
               <div v-else-if="selectedSearchColumn.field === 'role'">
-                <Select v-model="roleFilter" :options="roleOptions" optionLabel="label" optionValue="value"
-                  placeholder="Select Role" class="w-100 w-md-auto" @change="onRoleFilterChange" />
+                <Select
+                  v-model="roleFilter"
+                  :options="roleOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select Role"
+                  class="w-100 w-md-auto"
+                  @change="onRoleFilterChange"
+                />
               </div>
               <div v-else-if="selectedSearchColumn.field === 'birthday'">
-                <DatePicker v-model="birthdayRange" selectionMode="range" :manualInput="false"
-                  @date-select="onBirthdayRangeChange" placeholder="Select birthday range" />
+                <DatePicker
+                  v-model="birthdayRange"
+                  selectionMode="range"
+                  :manualInput="false"
+                  @date-select="onBirthdayRangeChange"
+                  placeholder="Select birthday range"
+                />
               </div>
               <div v-else-if="selectedSearchColumn.field === 'subscribeToNewsletter'">
-                <Select v-model="newsletterFilter" :options="newsletterOptions" optionLabel="label" optionValue="value"
-                  placeholder="Select Newsletter Status" class="w-100 w-md-auto" @change="onNewsletterFilterChange" />
+                <Select
+                  v-model="newsletterFilter"
+                  :options="newsletterOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select Newsletter Status"
+                  class="w-100 w-md-auto"
+                  @change="onNewsletterFilterChange"
+                />
               </div>
             </div>
             <div>
@@ -58,9 +98,21 @@
           </div>
 
           <!-- User List Table -->
-          <DataTable :value="users" v-model:selection="selectedUsers" :paginator="true" :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="userId" :filters="filters" filterDisplay="menu"
-            :loading="loading" @sort="onSort" :sortField="sortField" :sortOrder="sortOrder" removableSort>
+          <DataTable
+            :value="users"
+            v-model:selection="selectedUsers"
+            :paginator="true"
+            :rows="10"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+            dataKey="userId"
+            :filters="filters"
+            filterDisplay="menu"
+            :loading="loading"
+            @sort="onSort"
+            :sortField="sortField"
+            :sortOrder="sortOrder"
+            removableSort
+          >
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column field="email" header="Email" :sortable="true"></Column>
             <Column field="username" header="Username" :sortable="true"></Column>
@@ -102,7 +154,10 @@
           <Dialog v-model:visible="displayEmailEditor" header="Compose Email" :modal="true">
             <div class="mb-3 field">
               <h5>Recipients</h5>
-              <div class="p-inputtext p-component p-inputtext-sm" style="max-height: 100px; overflow-y: auto">
+              <div
+                class="p-inputtext p-component p-inputtext-sm"
+                style="max-height: 100px; overflow-y: auto"
+              >
                 <Chip v-for="user in selectedUsers" :key="user.userId" :label="user.email" />
                 <!-- removable @remove="removeUser(user)" /> -->
               </div>
@@ -111,8 +166,13 @@
             <div class="p-fluid">
               <div class="mb-3 field">
                 <h5>Subject</h5>
-                <InputText id="subject" v-model="emailSubject" required="true" autofocus
-                  placeholder="Enter email subject" />
+                <InputText
+                  id="subject"
+                  v-model="emailSubject"
+                  required="true"
+                  autofocus
+                  placeholder="Enter email subject"
+                />
               </div>
 
               <div class="mb-3 field">
@@ -123,9 +183,19 @@
               <div class="mb-3 field">
                 <h5>Attachment</h5>
                 <p>Up to 5 files, maximum 10MB each.</p>
-                <FileUpload mode="advanced" :multiple="true" :maxFileSize="10000000" @select="onFileSelect"
-                  @remove="onFileRemove" :auto="true" chooseLabel="Choose Files" :showUploadButton="false"
-                  :showCancelButton="false" :fileLimit="5" @error="onError">
+                <FileUpload
+                  mode="advanced"
+                  :multiple="true"
+                  :maxFileSize="10000000"
+                  @select="onFileSelect"
+                  @remove="onFileRemove"
+                  :auto="true"
+                  chooseLabel="Choose Files"
+                  :showUploadButton="false"
+                  :showCancelButton="false"
+                  :fileLimit="5"
+                  @error="onError"
+                >
                   <template #empty>
                     <p>Drag and drop files here to upload.</p>
                   </template>
@@ -140,7 +210,12 @@
                 ${selectedUsers.length > 1 ? 'Users' : 'User'}`
                 }}
               </Button>
-              <Button label="Cancel" icon="bi bi-x-lg" @click="closeEmailEditor" class="p-button-text" />
+              <Button
+                label="Cancel"
+                icon="bi bi-x-lg"
+                @click="closeEmailEditor"
+                class="p-button-text"
+              />
             </template>
           </Dialog>
         </div>
@@ -321,31 +396,33 @@ const removeUser = (user) => {
 }
 
 const onFileSelect = async (event) => {
-  const convertedFiles = await convertFilesToBase64(event.files);
-  selectedFiles.value = convertedFiles;
-};
+  const convertedFiles = await convertFilesToBase64(event.files)
+  selectedFiles.value = convertedFiles
+}
 
 const onFileRemove = (event) => {
   selectedFiles.value = selectedFiles.value.filter((file) => file.name !== event.file.name)
 }
 
 const convertFilesToBase64 = async (files) => {
-  const convertedFiles = await Promise.all(files.map(async (file) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64Content = e.target.result.split(',')[1];
-        resolve({
-          name: file.name,
-          type: file.type || 'application/octet-stream',
-          content: base64Content
-        });
-      };
-      reader.readAsDataURL(file);
-    });
-  }));
-  return convertedFiles;
-};
+  const convertedFiles = await Promise.all(
+    files.map(async (file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          const base64Content = e.target.result.split(',')[1]
+          resolve({
+            name: file.name,
+            type: file.type || 'application/octet-stream',
+            content: base64Content
+          })
+        }
+        reader.readAsDataURL(file)
+      })
+    })
+  )
+  return convertedFiles
+}
 
 const onError = (event) => {
   if (event.type === 'max-file-size') {
