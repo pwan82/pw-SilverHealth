@@ -16,8 +16,6 @@
     "remainingCapacity": 25,
     "registrationStartTime": 1678500000000,
     "registrationEndTime": 1678800000000,
-    "isRegistrationOpen": true,
-    "isEventEnded": false,
     "isVisible": true
   },
   {
@@ -37,8 +35,6 @@
     "remainingCapacity": 18,
     "registrationStartTime": 1678550000000,
     "registrationEndTime": 1678850000000,
-    "isRegistrationOpen": true,
-    "isEventEnded": false,
     "isVisible": true
   },
   {
@@ -58,8 +54,6 @@
     "remainingCapacity": 10,
     "registrationStartTime": 1678590000000,
     "registrationEndTime": 1678890000000,
-    "isRegistrationOpen": true,
-    "isEventEnded": false,
     "isVisible": true
   }
 ]

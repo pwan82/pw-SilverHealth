@@ -59,6 +59,8 @@ const { sendBulkEmails } = require('./emailFunctions')
 exports.sendBulkEmails = sendBulkEmails
 
 // eventFunctions
-const { getEvents, getEventById } = require('./eventFunctions')
+const { getEvents, getEventById, getEventBookings, manageEventBooking } = require('./eventFunctions')
 exports.getEvents = getEvents
 exports.getEventById = getEventById
+exports.getEventBookings = getEventBookings
+exports.manageEventBooking = manageEventBooking

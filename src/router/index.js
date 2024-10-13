@@ -36,6 +36,11 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
+    path: '/event/:eventId',
+    name: 'EventDetail',
+    component: () => import('../views/CommunityEvent/EventDetailView.vue')
+  },
+  {
     path: '/event/calendar',
     name: 'MyEventCalendar',
     component: () => import('../views/CommunityEvent/MyEventCalendarView.vue'),
@@ -210,6 +215,16 @@ const routes = [
       title: 'Article Not Found',
       message:
         'The article you are looking for does not exist, or you do not have permission to view it.'
+    }
+  },
+  {
+    path: '/event-not-found',
+    name: 'EventNotFound',
+    component: ErrorView,
+    props: {
+      title: 'Event Not Found',
+      message:
+        'The event you are looking for does not exist, or you do not have permission to view it.'
     }
   },
   {

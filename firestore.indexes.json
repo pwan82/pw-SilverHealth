@@ -7,6 +7,14 @@
         { "fieldPath": "category", "arrayConfig": "CONTAINS" },
         { "fieldPath": "publicationTime", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

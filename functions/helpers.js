@@ -62,7 +62,7 @@ const sanitizeEmailHtml = (dirtyHtml) => {
   }
 
   // Clean HTML
-  const cleanHtml = sanitizeHtml(dirtyHtml, config)
+  const cleanHtml = sanitizeHtml(dirtyHtml.trim(), config)
   console.log(`sanitizeEmailHtml: cleanHtml: `, cleanHtml)
   return cleanHtml
 }
