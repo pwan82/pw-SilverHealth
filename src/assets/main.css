@@ -84,3 +84,7 @@ a,
 .p-input-icon-left input {
   padding-left: 2rem;
 }
+
+.mr-2 {
+  margin-right: 0.5rem;
+}

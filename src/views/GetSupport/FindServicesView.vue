@@ -7,22 +7,26 @@
           <p class="text-center">
             Search for SilverHealth locations in your community to visit service centres.
             <br />Get navigation to the selected destination. <br />Click the marker on the map to
-            view location details. <br /><br /><strong
-              >Note: Please set the location permission to "Allow" to use the navigation
-              function.</strong
-            >
+            view location details. <br /><br /><strong>
+              Note: Please set the location permission to "Allow" to use the navigation function.
+            </strong>
           </p>
         </div>
-      </div>
 
-      <div class="map-container">
-        <div class="search-overlay">
-          <MapSearchComponent
-            @location-selected="flyToLocation"
-            @locations-loaded="handleLocationsLoaded"
-          />
+        <div class="map-container">
+          <div class="search-overlay">
+            <MapSearchComponent
+              @location-selected="flyToLocation"
+              @locations-loaded="handleLocationsLoaded"
+            />
+          </div>
+          <div id="map" ref="mapContainer" style="width: 100%; height: 100%"></div>
         </div>
-        <div id="map" ref="mapContainer" style="width: 100%; height: 100%"></div>
+
+        <div class="col-md-8 offset-md-2 text-center mt-2">
+          <button @click="clearDirections" class="btn btn-danger mr-2">Clear Navigation</button>
+          <button @click="reloadPage" class="btn btn-outline-primary">Reload Map</button>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +47,11 @@ let map = null
 let directions = null
 const locations = ref([])
 
-function createPopupContent(location) {
+const reloadPage = () => {
+  window.location.reload()
+}
+
+const createPopupContent = (location) => {
   const openingHours = location.openingHours
   const hoursHtml = `
     <p><strong>Opening Hours:</strong></p>
@@ -67,7 +75,7 @@ function createPopupContent(location) {
   `
 }
 
-function navigateToLocation(coords) {
+const navigateToLocation = (coords) => {
   if (directions && coords.lng && coords.lat) {
     const destLng = parseFloat(coords.lng)
     const destLat = parseFloat(coords.lat)
@@ -79,6 +87,11 @@ function navigateToLocation(coords) {
           const userLat = position.coords.latitude
           directions.setOrigin([userLng, userLat])
           directions.setDestination([destLng, destLat])
+
+          const popups = document.getElementsByClassName('mapboxgl-popup')
+          if (popups.length) {
+            popups[0].remove()
+          }
         },
         (error) => {
           console.error('Error getting user location:', error)
@@ -96,18 +109,40 @@ function navigateToLocation(coords) {
   }
 }
 
-function getDirectionsPosition() {
+const clearDirections = () => {
+  if (directions) {
+    directions.removeRoutes()
+  }
+
+  // Clear input box
+  const originInput = document.querySelector('.mapboxgl-ctrl-geocoder input')
+  const destinationInput = document.querySelector('.mapbox-directions-destination input')
+  if (originInput) originInput.value = ''
+  if (destinationInput) destinationInput.value = ''
+
+  // Clear any error information
+  const errorElements = document.querySelectorAll('.mapbox-directions-error')
+  errorElements.forEach((el) => (el.style.display = 'none'))
+
+  // Remove any popups that may have existed previously
+  const popups = document.getElementsByClassName('mapboxgl-popup')
+  if (popups.length) {
+    popups[0].remove()
+  }
+}
+
+const getDirectionsPosition = () => {
   return window.innerWidth <= 767 ? 'bottom-left' : 'top-right'
 }
 
-function handleLocationsLoaded(serviceLocations) {
+const handleLocationsLoaded = (serviceLocations) => {
   locations.value = serviceLocations
   if (map) {
     addMarkersToMap()
   }
 }
 
-function addMarkersToMap() {
+const addMarkersToMap = () => {
   locations.value.forEach((location) => {
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(createPopupContent(location))
 
@@ -195,7 +230,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', () => {})
 })
 
-function flyToLocation(location) {
+const flyToLocation = (location) => {
   map.flyTo({
     center: [location.longitude, location.latitude],
     zoom: 15,

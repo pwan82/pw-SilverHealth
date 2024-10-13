@@ -4,14 +4,17 @@
     <div class="col-md-10 offset-md-1">
       <div class="row mt-2 mb-5 iframe-container">
         <Transition name="fade">
-          <iframe v-if="showIframe"
+          <iframe
+            v-if="showIframe"
             src="https://docs.google.com/forms/d/e/1FAIpQLSc1Vd8sGrnk59Ltmou7o05O3EzRRTv8rIL1_8msLqGxZ3DOIg/viewform?embedded=true"
-            height="600" frameborder="0" marginheight="0" marginwidth="0">
+            height="600"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0"
+          >
             Loading form...
           </iframe>
-          <div v-else class="loading-placeholder">
-            Loading form...
-          </div>
+          <div v-else class="loading-placeholder">Loading form...</div>
         </Transition>
       </div>
     </div>
@@ -19,16 +22,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue'
 import ArticleDetailView from '@/views/Article/ArticleDetailView.vue'
 
-const showIframe = ref(false);
+const showIframe = ref(false)
 
 onMounted(() => {
   setTimeout(() => {
-    showIframe.value = true;
-  }, 1000);
-});
+    showIframe.value = true
+  }, 1000)
+})
 </script>
 
 <style scoped>

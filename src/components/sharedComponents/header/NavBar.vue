@@ -182,6 +182,11 @@
           </router-link>
           <ul class="dropdown-menu" aria-labelledby="adminDropdown">
             <li>
+              <router-link to="/admin" class="dropdown-item" active-class="active"
+                >Admin AdminDashboard</router-link
+              >
+            </li>
+            <li>
               <router-link to="/admin/user-analytics" class="dropdown-item" active-class="active"
                 >User Analytics</router-link
               >
