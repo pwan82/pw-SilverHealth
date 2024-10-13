@@ -106,11 +106,11 @@ exports.getArticles = onRequest(async (req, res) => {
   })
 })
 
-// GET /{articleId} - Fetch specific article by ID
+// GET /id={articleId} - Fetch specific article by ID
 exports.getArticleById = onRequest(async (req, res) => {
   return cors(req, res, async () => {
     console.log(`Full URL received: ${req.url}`)
-    const articleId = req.url.split('/')[1].split('?')[0]
+    const articleId = req.query.id
     console.log(`Received request for articleId: ${articleId}`)
 
     if (!articleId) {

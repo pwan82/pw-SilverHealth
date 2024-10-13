@@ -28,6 +28,7 @@ import ArticleDetailView from '@/views/Article/ArticleDetailView.vue'
 const showIframe = ref(false)
 
 onMounted(() => {
+  window.scrollTo(0, 0)
   setTimeout(() => {
     showIframe.value = true
   }, 1000)
@@ -60,7 +61,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   font-size: 18px;
   color: #666;
 }

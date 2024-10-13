@@ -10,6 +10,7 @@
 
       <UploadArticlesAndRatings />
       <UploadLocations />
+      <UploadEventsAndBookings />
     </div>
   </div>
 </template>
@@ -17,4 +18,5 @@
 <script setup>
 import UploadArticlesAndRatings from '@/components/temp/UploadArticlesAndRatings.vue'
 import UploadLocations from '@/components/temp/UploadLocations.vue'
+import UploadEventsAndBookings from '@/components/temp/UploadEventsAndBookings.vue'
 </script>

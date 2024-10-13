@@ -38,7 +38,7 @@ exports.onAdminUserChanged = onAdminUserChanged
 const { addOrUpdateUserInfo } = require('./userFunctions')
 exports.addOrUpdateUserInfo = addOrUpdateUserInfo
 
-// userFunctions
+// adminFunctions
 const { getAllUsers } = require('./adminFunctions')
 exports.getAllUsers = getAllUsers
 
@@ -57,3 +57,8 @@ exports.publishArticleRating = publishArticleRating
 // emailFunctions
 const { sendBulkEmails } = require('./emailFunctions')
 exports.sendBulkEmails = sendBulkEmails
+
+// eventFunctions
+const { getEvents, getEventById } = require('./eventFunctions')
+exports.getEvents = getEvents
+exports.getEventById = getEventById

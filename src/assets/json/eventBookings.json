@@ -1,0 +1,11 @@
+[
+  {
+    "userId": "user_001",
+    "eventId": "event_001",
+    "eventTitle": "活动标题",
+    "startTime": 1678905600000,
+    "endTime": 1678912800000,
+    "bookingTime": 1678600000000,
+    "status": "confirmed"
+  }
+]

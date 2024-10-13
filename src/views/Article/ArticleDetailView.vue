@@ -243,7 +243,7 @@ const fetchArticleData = async (token) => {
     )
 
     const response = await axios.get(
-      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleById/${articleId}`
+      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleById?id=${articleId}`
     )
     console.log('response.data', response.data)
     article.value = response.data

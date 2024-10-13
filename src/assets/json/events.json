@@ -1,0 +1,65 @@
+[
+  {
+    "organizerName": "SilverHealth Team",
+    "title": "Health and Wellness Workshop",
+    "description": "A workshop focused on health and wellness for seniors, providing practical exercises and health tips.",
+    "category": ["health", "wellness"],
+    "address": {
+      "placeName": "SilverHealth Clayton Service Centre",
+      "addressString": "21 Chancellors Walk, Clayton VIC 3168",
+      "latitude": -37.9132538,
+      "longitude": 145.1303405
+    },
+    "startTime": 1678905600000,
+    "endTime": 1678912800000,
+    "totalCapacity": 50,
+    "remainingCapacity": 25,
+    "registrationStartTime": 1678500000000,
+    "registrationEndTime": 1678800000000,
+    "isRegistrationOpen": true,
+    "isEventEnded": false,
+    "isVisible": true
+  },
+  {
+    "organizerName": "SilverHealth Team",
+    "title": "Community Social Gathering",
+    "description": "A social event for seniors to meet, share experiences, and build community bonds.",
+    "category": ["social", "community"],
+    "address": {
+      "placeName": "SilverHealth Southbank Service Centre",
+      "addressString": "120 Sturt St, Southbank VIC 3006",
+      "latitude": -37.823409,
+      "longitude": 144.964401
+    },
+    "startTime": 1678950000000,
+    "endTime": 1678960800000,
+    "totalCapacity": 40,
+    "remainingCapacity": 18,
+    "registrationStartTime": 1678550000000,
+    "registrationEndTime": 1678850000000,
+    "isRegistrationOpen": true,
+    "isEventEnded": false,
+    "isVisible": true
+  },
+  {
+    "organizerName": "SilverHealth Team",
+    "title": "Nutrition for Seniors Seminar",
+    "description": "A seminar covering nutritional needs for seniors, with practical advice on diet and supplements.",
+    "category": ["health", "nutrition"],
+    "address": {
+      "placeName": "SilverHealth Box Hill Service Centre",
+      "addressString": "12 Prospect St, Box Hill VIC 3128",
+      "latitude": -37.82062,
+      "longitude": 145.12252
+    },
+    "startTime": 1678992000000,
+    "endTime": 1679002800000,
+    "totalCapacity": 30,
+    "remainingCapacity": 10,
+    "registrationStartTime": 1678590000000,
+    "registrationEndTime": 1678890000000,
+    "isRegistrationOpen": true,
+    "isEventEnded": false,
+    "isVisible": true
+  }
+]
