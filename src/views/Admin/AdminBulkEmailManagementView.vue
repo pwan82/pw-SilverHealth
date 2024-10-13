@@ -5,206 +5,74 @@
         <h1 class="text-center">Admin Bulk Email Management</h1>
         <p class="text-center">Select the users you want to send bulk emails to.</p>
 
-        <!-- Loading indicator -->
-        <div v-if="loading" class="text-center my-4">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
+        <UserList ref="userList" :users="users" :loading="loading" v-model:selectedUsers="selectedUsers" />
 
-        <div v-else>
-          <!-- Search and Filter Controls -->
-          <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
-            <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
-              <div class="mb-2 mb-md-0 me-md-2">
-                <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
-                  placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
-              </div>
-
-              <div v-if="
-                !['gender', 'role', 'birthday', 'subscribeToNewsletter',
-                  'creationTime', 'lastSignInTime', 'lastRefreshTime'].includes(
-                    selectedSearchColumn.field
-                  )
-              ">
-                <span class="p-input-icon-left w-100">
-                  <i class="bi bi-search"></i>
-                  <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
-                </span>
-              </div>
-              <div v-else-if="selectedSearchColumn.field === 'gender'">
-                <Select v-model="genderFilter" :options="genderOptions" optionLabel="label" optionValue="value"
-                  placeholder="Select Gender" class="w-100 w-md-auto" @change="onGenderFilterChange" />
-              </div>
-              <div v-else-if="selectedSearchColumn.field === 'role'">
-                <Select v-model="roleFilter" :options="roleOptions" optionLabel="label" optionValue="value"
-                  placeholder="Select Role" class="w-100 w-md-auto" @change="onRoleFilterChange" />
-              </div>
-              <div v-else-if="selectedSearchColumn.field === 'birthday'">
-                <DatePicker v-model="birthdayRange" selectionMode="range" :manualInput="true"
-                  @date-select="onBirthdayRangeChange" placeholder="Select birthday range" class="w-100 w-md-auto" />
-              </div>
-              <div v-else-if="selectedSearchColumn.field === 'subscribeToNewsletter'">
-                <Select v-model="newsletterFilter" :options="newsletterOptions" optionLabel="label" optionValue="value"
-                  placeholder="Select Newsletter Status" class="w-100 w-md-auto" @change="onNewsletterFilterChange" />
-              </div>
-
-              <div
-                v-else-if="['creationTime', 'lastSignInTime', 'lastRefreshTime'].includes(selectedSearchColumn.field)">
-                <DatePicker v-model="currentDateRange" selectionMode="range" :manualInput="false"
-                  @date-select="onDateRangeChange" :placeholder="`Select ${selectedSearchColumn.label} range`"
-                  class="wide-date-picker" style="" />
-              </div>
-            </div>
-            <div>
-              <Button type="button" outlined @click="clearFilters" class="w-100 w-md-auto">
-                <i class="bi bi-x-lg mr-2"></i>
-                Clear Search
-              </Button>
-            </div>
-          </div>
-
-          <!-- User List Table -->
-          <DataTable :value="users" v-model:selection="selectedUsers" :paginator="true" :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="userId" :filters="filters" filterDisplay="menu"
-            :loading="loading" @sort="onSort" :sortField="sortField" :sortOrder="sortOrder" removableSort>
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="email" header="Email" :sortable="true"></Column>
-            <Column field="username" header="Username" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="slotProps.data.username && slotProps.data.username.trim()">
-                  {{ slotProps.data.username }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-            <Column field="gender" header="Gender" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="slotProps.data.gender && slotProps.data.gender.trim()">
-                  {{ getGenderLabel(slotProps.data.gender) }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-            <Column field="role" header="Role" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="roleOptions.find((option) => option.value === slotProps.data.role)">
-                  {{ roleOptions.find((option) => option.value === slotProps.data.role).label }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-            <Column field="birthday" header="Birthday" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="slotProps.data.birthday && slotProps.data.birthday.trim()">
-                  {{ slotProps.data.birthday }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-            <Column field="subscribeToNewsletter" header="Newsletter" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="newsletterOptions.find((option) => option.value === slotProps.data.subscribeToNewsletter)">
-                  {{ newsletterOptions.find((option) => option.value === slotProps.data.subscribeToNewsletter).label }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-
-            <Column field="creationTime" header="Creation Time" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="slotProps.data.creationTime">
-                  {{ formatDate(slotProps.data.creationTime) }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-            <Column field="lastSignInTime" header="Last Sign In" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="slotProps.data.lastSignInTime">
-                  {{ formatDate(slotProps.data.lastSignInTime) }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-            <Column field="lastRefreshTime" header="Last Refresh" :sortable="true">
-              <template #body="slotProps">
-                <span v-if="slotProps.data.lastRefreshTime">
-                  {{ formatDate(slotProps.data.lastRefreshTime) }}
-                </span>
-                <span v-else class="text-muted fst-italic">No Record</span>
-              </template>
-            </Column>
-          </DataTable>
-
-          <!-- Send Email Button -->
-          <Button @click="openEmailEditor" :disabled="!selectedUsers.length" class="mt-3">
-            <i class="bi bi-envelope-plus mr-2"></i>
-            {{
+        <!-- Send Email Button -->
+        <Button @click="openEmailEditor" :disabled="!selectedUsers.length" class="mt-3">
+          <i class="bi bi-envelope-plus mr-2"></i>
+          {{
             `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
-            Selected ${selectedUsers.length > 1 ? 'Users' : 'User'}`
-            }}
-          </Button>
+          Selected ${selectedUsers.length > 1 ? 'Users' : 'User'}`
+          }}
+        </Button>
 
-          <!-- Email Editor Dialog -->
-          <Dialog v-model:visible="displayEmailEditor" header="Compose Email" :modal="true">
+        <!-- Email Editor Dialog -->
+        <Dialog v-model:visible="displayEmailEditor" header="Compose Email" :modal="true">
+          <div class="mb-3 field">
+            <h5>Recipients</h5>
+            <div class="p-inputtext p-component p-inputtext-sm" style="max-height: 100px; overflow-y: auto">
+              <Chip v-for="user in selectedUsers" :key="user.userId" :label="user.email" />
+            </div>
+          </div>
+
+          <div class="p-fluid">
             <div class="mb-3 field">
-              <h5>Recipients</h5>
-              <div class="p-inputtext p-component p-inputtext-sm" style="max-height: 100px; overflow-y: auto">
-                <Chip v-for="user in selectedUsers" :key="user.userId" :label="user.email" />
-                <!-- removable @remove="removeUser(user)" /> -->
-              </div>
-            </div>
-
-            <div class="p-fluid">
-              <div class="mb-3 field">
-                <h5>Subject</h5>
-                <InputText id="subject" v-model="emailSubject" required="true" autofocus
-                  placeholder="Enter email subject" :disabled="sending" />
-              </div>
-
-              <div class="mb-3 field">
-                <h5>Content</h5>
-                <Editor v-model="emailContent" editorStyle="height: 200px" :disabled="sending" />
-              </div>
-
-              <div class="mb-3 field">
-                <h5>Attachment</h5>
-                <p>Up to 5 files, maximum 10MB each.</p>
-                <FileUpload mode="advanced" :multiple="true" :maxFileSize="10000000" @select="onFileSelect"
-                  @remove="onFileRemove" :auto="true" chooseLabel="Choose Files" :showUploadButton="false"
-                  :showCancelButton="false" :fileLimit="5" @error="onError" :disabled="sending">
-                  <template #empty>
-                    <p>Drag and drop files here to upload.</p>
-                  </template>
-                </FileUpload>
-              </div>
-            </div>
-            <template #footer>
-              <Button @click="sendBulkEmails" :disabled="!selectedUsers.length || sending" :loading="sending">
-                <span v-if="sending" class="spinner-border spinner-border-sm me-2" role="status"
-                  aria-hidden="true"></span>
-                <i v-else class="bi bi-send mr-2"></i>
-                {{ (sending ? `Sending` : `Send`) + ` to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
-                ${selectedUsers.length > 1 ? 'Users' : 'User'}` }}
-              </Button>
-              <Button label="Cancel" icon="bi bi-x-lg" @click="closeEmailEditor" class="p-button-text"
+              <h5>Subject</h5>
+              <InputText id="subject" v-model="emailSubject" required="true" autofocus placeholder="Enter email subject"
                 :disabled="sending" />
-            </template>
-          </Dialog>
-        </div>
+            </div>
+
+            <div class="mb-3 field">
+              <h5>Content</h5>
+              <Editor v-model="emailContent" editorStyle="height: 200px" :disabled="sending" />
+            </div>
+
+            <div class="mb-3 field">
+              <h5>Attachment</h5>
+              <p>Up to 5 files, maximum 10MB each.</p>
+              <FileUpload mode="advanced" :multiple="true" :maxFileSize="10000000" @select="onFileSelect"
+                @remove="onFileRemove" :auto="true" chooseLabel="Choose Files" :showUploadButton="false"
+                :showCancelButton="false" :fileLimit="5" @error="onError" :disabled="sending">
+                <template #empty>
+                  <p>Drag and drop files here to upload.</p>
+                </template>
+              </FileUpload>
+            </div>
+          </div>
+          <template #footer>
+            <Button @click="sendBulkEmails" :disabled="!selectedUsers.length || sending" :loading="sending">
+              <span v-if="sending" class="spinner-border spinner-border-sm me-2" role="status"
+                aria-hidden="true"></span>
+              <i v-else class="bi bi-send mr-2"></i>
+              {{ (sending ? `Sending` : `Send`) + ` to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
+              ${selectedUsers.length > 1 ? 'Users' : 'User'}` }}
+            </Button>
+            <Button label="Cancel" icon="bi bi-x-lg" @click="closeEmailEditor" class="p-button-text"
+              :disabled="sending" />
+          </template>
+        </Dialog>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import axios from 'axios'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
+import UserList from '@/components/Admin/UserList.vue'  // Adjust the path as needed
 
 // Component state
 const users = ref([])
@@ -218,143 +86,7 @@ const sending = ref(false)
 const sendingProgress = ref(0)
 const toast = useToast()
 
-// Filter and search state
-const searchValue = ref('')
-const genderFilter = ref(null)
-const roleFilter = ref(null)
-const birthdayRange = ref(null)
-const newsletterFilter = ref(null)
-const creationTimeRange = ref(null)
-const lastSignInTimeRange = ref(null)
-const lastRefreshTimeRange = ref(null)
-
-const filters = ref({
-  global: { value: null, matchMode: 'contains' },
-  email: { value: null, matchMode: 'contains' },
-  username: { value: null, matchMode: 'contains' },
-  gender: { value: null, matchMode: 'equals' },
-  role: { value: null, matchMode: 'equals' },
-  birthday: { value: null, matchMode: 'between' },
-  subscribeToNewsletter: { value: null, matchMode: 'equals' },
-  creationTime: { value: null, matchMode: 'between' },
-  lastSignInTime: { value: null, matchMode: 'between' },
-  lastRefreshTime: { value: null, matchMode: 'between' }
-})
-
-const searchColumns = ref([
-  { label: 'Search all columns', field: 'global' },
-  { label: 'Email', field: 'email' },
-  { label: 'Username', field: 'username' },
-  { label: 'Gender', field: 'gender' },
-  { label: 'Role', field: 'role' },
-  { label: 'Birthday', field: 'birthday' },
-  { label: 'Newsletter', field: 'subscribeToNewsletter' },
-  { label: 'Creation Time', field: 'creationTime' },
-  { label: 'Last Sign In Time', field: 'lastSignInTime' },
-  { label: 'Last Refresh Time', field: 'lastRefreshTime' }
-])
-
-const genderOptions = [
-  { label: 'All', value: null },
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
-  { label: 'Non-binary', value: 'non-binary' },
-  { label: 'Prefer not to say', value: 'prefer-not-to-say' }
-]
-
-const getGenderLabel = (gender) => {
-  if (gender === null || gender.trim() === '') {
-    return 'No Record'
-  } else {
-    const option = genderOptions.find((option) => option.value === gender)
-    return option ? option.label : gender
-  }
-}
-
-const roleOptions = [
-  { label: 'User', value: 'user' },
-  { label: 'Admin', value: 'admin' }
-]
-
-const newsletterOptions = [
-  { label: 'Subscribed', value: true },
-  { label: 'Not Subscribed', value: false }
-]
-
-const selectedSearchColumn = ref(searchColumns.value[0])
-
-const sortField = ref(null)
-const sortOrder = ref(null)
-
-// Filter and search functions
-const onSearchColumnChange = () => {
-  clearFilters()
-}
-
-const onSearchInput = () => {
-  Object.keys(filters.value).forEach((key) => {
-    if (key !== selectedSearchColumn.value.field) {
-      filters.value[key].value = null
-    }
-  })
-  filters.value[selectedSearchColumn.value.field].value = searchValue.value
-}
-
-const onGenderFilterChange = () => {
-  filters.value.gender.value = genderFilter.value
-}
-
-const onRoleFilterChange = () => {
-  filters.value.role.value = roleFilter.value
-}
-
-const onBirthdayRangeChange = () => {
-  if (birthdayRange.value && birthdayRange.value.length === 2) {
-    filters.value.birthday.value = birthdayRange.value.map(
-      (date) => date.toISOString().split('T')[0]
-    )
-    filters.value.birthday.matchMode = 'between'
-  } else {
-    filters.value.birthday.value = null
-    filters.value.birthday.matchMode = 'between'
-  }
-}
-
-const currentDateRange = ref(null)
-
-const onDateRangeChange = () => {
-  if (currentDateRange.value && currentDateRange.value.length === 2) {
-    const [start, end] = currentDateRange.value
-    filters.value[selectedSearchColumn.value.field].value = [start.getTime(), end.getTime()]
-    filters.value[selectedSearchColumn.value.field].matchMode = 'between'
-  } else {
-    filters.value[selectedSearchColumn.value.field].value = null
-    filters.value[selectedSearchColumn.value.field].matchMode = 'between'
-  }
-}
-
-const onNewsletterFilterChange = () => {
-  filters.value.subscribeToNewsletter.value = newsletterFilter.value
-}
-
-const clearFilters = () => {
-  searchValue.value = ''
-  genderFilter.value = null
-  roleFilter.value = null
-  birthdayRange.value = null
-  newsletterFilter.value = null
-  creationTimeRange.value = null
-  lastSignInTimeRange.value = null
-  lastRefreshTimeRange.value = null
-  currentDateRange.value = null
-  Object.keys(filters.value).forEach((key) => {
-    filters.value[key].value = null
-  })
-}
-
-const formatDate = (timestamp) => {
-  return new Date(timestamp).toLocaleString()
-}
+const userList = ref(null)
 
 // Fetch users data
 const fetchUsers = async (token) => {
@@ -380,12 +112,6 @@ const fetchUsers = async (token) => {
   }
 }
 
-// Sort function
-const onSort = (event) => {
-  sortField.value = event.sortField
-  sortOrder.value = event.sortOrder
-}
-
 // Email functions
 const openEmailEditor = () => {
   displayEmailEditor.value = true
@@ -394,11 +120,7 @@ const openEmailEditor = () => {
 const closeEmailEditor = () => {
   displayEmailEditor.value = false
   emailSubject.value = ''
-  // emailContent.value = ''
-}
-
-const removeUser = (user) => {
-  selectedUsers.value = selectedUsers.value.filter((u) => u.email !== user.email)
+  emailContent.value = ''
 }
 
 const onFileSelect = async (event) => {
@@ -435,7 +157,7 @@ const onError = (event) => {
     toast.add({
       severity: 'error',
       summary: 'Error',
-      detail: 'File size exceeds 1MB limit',
+      detail: 'File size exceeds 10MB limit',
       life: 3000
     })
   } else if (event.type === 'max-files') {
@@ -511,20 +233,21 @@ const sendBulkEmails = async () => {
   }
 }
 
-// Watch for changes in selectedSearchColumn
-watch(selectedSearchColumn, (newValue) => {
-  clearFilters()
-})
-
 // Lifecycle hooks
 let unsubscribe
 onMounted(() => {
   unsubscribe = onAuthStateChanged(auth, async (user) => {
     if (user) {
       const token = await user.getIdToken()
-      fetchUsers(token)
+      userList.value.fetchUsers = async () => {
+        await fetchUsers(token)
+      }
+      userList.value.fetchUsers()
     } else {
-      fetchUsers(null)
+      userList.value.fetchUsers = async () => {
+        await fetchUsers(null)
+      }
+      userList.value.fetchUsers()
     }
   })
 })
@@ -569,16 +292,5 @@ onUnmounted(() => {
 
 :deep(.p-inputtext) {
   width: 100%;
-}
-
-.wide-date-picker {
-  min-width: 250px;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .wide-date-picker {
-    min-width: 100%;
-  }
 }
 </style>
