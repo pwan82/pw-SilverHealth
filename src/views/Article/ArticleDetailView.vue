@@ -76,7 +76,9 @@
                       placeholder="Leave your comment (optional)"
                       :disabled="isSubmitting"
                     ></textarea>
-                    <p class="mt-2 text-muted fst-italic" v-if="!submissionMessage">not submitted</p>
+                    <p class="mt-2 text-muted fst-italic" v-if="!submissionMessage">
+                      not submitted
+                    </p>
                     <p
                       class="mt-2"
                       :class="{

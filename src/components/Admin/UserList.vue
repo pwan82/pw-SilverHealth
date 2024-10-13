@@ -1,40 +1,102 @@
 <template>
   <div>
     <!-- Search and Filter Controls -->
-    <div class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+    <div
+      class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"
+    >
       <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
         <div class="mb-2 mb-md-0 me-md-2">
-          <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
-            placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
+          <Select
+            v-model="selectedSearchColumn"
+            :options="searchColumns"
+            optionLabel="label"
+            placeholder="Select column"
+            class="w-100 w-md-auto"
+            @change="onSearchColumnChange"
+          />
         </div>
 
         <div
-          v-if="!['gender', 'role', 'birthday', 'subscribeToNewsletter', 'creationTime', 'lastSignInTime', 'lastRefreshTime'].includes(selectedSearchColumn.field)">
+          v-if="
+            ![
+              'gender',
+              'role',
+              'birthday',
+              'subscribeToNewsletter',
+              'creationTime',
+              'lastSignInTime',
+              'lastRefreshTime'
+            ].includes(selectedSearchColumn.field)
+          "
+        >
           <span class="p-input-icon-left w-100">
             <i class="bi bi-search"></i>
-            <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
+            <InputText
+              v-model="searchValue"
+              placeholder="Keyword Search"
+              @input="onSearchInput"
+              class="w-100"
+            />
           </span>
         </div>
         <div v-else-if="selectedSearchColumn.field === 'gender'">
-          <Select v-model="genderFilter" :options="genderOptions" optionLabel="label" optionValue="value"
-            placeholder="Select Gender" class="w-100 w-md-auto" @change="onGenderFilterChange" />
+          <Select
+            v-model="genderFilter"
+            :options="genderOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select Gender"
+            class="w-100 w-md-auto"
+            @change="onGenderFilterChange"
+          />
         </div>
         <div v-else-if="selectedSearchColumn.field === 'role'">
-          <Select v-model="roleFilter" :options="roleOptions" optionLabel="label" optionValue="value"
-            placeholder="Select Role" class="w-100 w-md-auto" @change="onRoleFilterChange" />
+          <Select
+            v-model="roleFilter"
+            :options="roleOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select Role"
+            class="w-100 w-md-auto"
+            @change="onRoleFilterChange"
+          />
         </div>
         <div v-else-if="selectedSearchColumn.field === 'birthday'">
-          <DatePicker v-model="birthdayRange" selectionMode="range" :manualInput="true"
-            @date-select="onBirthdayRangeChange" placeholder="Select birthday range" class="w-100 w-md-auto" />
+          <DatePicker
+            v-model="birthdayRange"
+            selectionMode="range"
+            :manualInput="true"
+            @date-select="onBirthdayRangeChange"
+            placeholder="Select birthday range"
+            class="w-100 w-md-auto"
+          />
         </div>
         <div v-else-if="selectedSearchColumn.field === 'subscribeToNewsletter'">
-          <Select v-model="newsletterFilter" :options="newsletterOptions" optionLabel="label" optionValue="value"
-            placeholder="Select Newsletter Status" class="w-100 w-md-auto" @change="onNewsletterFilterChange" />
+          <Select
+            v-model="newsletterFilter"
+            :options="newsletterOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select Newsletter Status"
+            class="w-100 w-md-auto"
+            @change="onNewsletterFilterChange"
+          />
         </div>
-        <div v-else-if="['creationTime', 'lastSignInTime', 'lastRefreshTime'].includes(selectedSearchColumn.field)">
-          <DatePicker v-model="currentDateRange" selectionMode="range" :manualInput="false"
-            @date-select="onDateRangeChange" :placeholder="`Select ${selectedSearchColumn.label} range`"
-            class="wide-date-picker" />
+        <div
+          v-else-if="
+            ['creationTime', 'lastSignInTime', 'lastRefreshTime'].includes(
+              selectedSearchColumn.field
+            )
+          "
+        >
+          <DatePicker
+            v-model="currentDateRange"
+            selectionMode="range"
+            :manualInput="false"
+            @date-select="onDateRangeChange"
+            :placeholder="`Select ${selectedSearchColumn.label} range`"
+            class="wide-date-picker"
+          />
         </div>
       </div>
       <div>
@@ -46,9 +108,21 @@
     </div>
 
     <!-- User List Table -->
-    <DataTable :value="users" v-model:selection="selectedUsers" :paginator="true" :rows="10"
-      :rowsPerPageOptions="[5, 10, 20, 50]" dataKey="userId" :filters="filters" filterDisplay="menu" :loading="loading"
-      @sort="onSort" :sortField="sortField" :sortOrder="sortOrder" removableSort>
+    <DataTable
+      :value="users"
+      v-model:selection="selectedUsers"
+      :paginator="true"
+      :rows="10"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
+      dataKey="userId"
+      :filters="filters"
+      filterDisplay="menu"
+      :loading="loading"
+      @sort="onSort"
+      :sortField="sortField"
+      :sortOrder="sortOrder"
+      removableSort
+    >
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
       <Column field="email" header="Email" :sortable="true"></Column>
       <Column field="username" header="Username" :sortable="true">
@@ -85,8 +159,18 @@
       </Column>
       <Column field="subscribeToNewsletter" header="Newsletter" :sortable="true">
         <template #body="slotProps">
-          <span v-if="newsletterOptions.find((option) => option.value === slotProps.data.subscribeToNewsletter)">
-            {{ newsletterOptions.find((option) => option.value === slotProps.data.subscribeToNewsletter).label }}
+          <span
+            v-if="
+              newsletterOptions.find(
+                (option) => option.value === slotProps.data.subscribeToNewsletter
+              )
+            "
+          >
+            {{
+              newsletterOptions.find(
+                (option) => option.value === slotProps.data.subscribeToNewsletter
+              ).label
+            }}
           </span>
           <span v-else class="text-muted fst-italic">No Record</span>
         </template>

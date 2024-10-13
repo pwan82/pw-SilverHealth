@@ -6,17 +6,21 @@
           <h1 class="text-center">Find Services Near You</h1>
           <p class="text-center">
             Search for SilverHealth locations in your community to visit service centres.
-            <br />Get navigation to the selected destination.
-            <br />Click the marker on the map to view location details.
-            <br /><br /><strong>Note: Please set the location permission to "Allow" to use the navigation
-              function.</strong>
+            <br />Get navigation to the selected destination. <br />Click the marker on the map to
+            view location details. <br /><br /><strong
+              >Note: Please set the location permission to "Allow" to use the navigation
+              function.</strong
+            >
           </p>
         </div>
       </div>
 
       <div class="map-container">
         <div class="search-overlay">
-          <MapSearchComponent @location-selected="flyToLocation" @locations-loaded="handleLocationsLoaded" />
+          <MapSearchComponent
+            @location-selected="flyToLocation"
+            @locations-loaded="handleLocationsLoaded"
+          />
         </div>
         <div id="map" ref="mapContainer" style="width: 100%; height: 100%"></div>
       </div>
@@ -65,29 +69,29 @@ function createPopupContent(location) {
 
 function navigateToLocation(coords) {
   if (directions && coords.lng && coords.lat) {
-    const destLng = parseFloat(coords.lng);
-    const destLat = parseFloat(coords.lat);
+    const destLng = parseFloat(coords.lng)
+    const destLat = parseFloat(coords.lat)
 
     if (!isNaN(destLng) && !isNaN(destLat)) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const userLng = position.coords.longitude;
-          const userLat = position.coords.latitude;
-          directions.setOrigin([userLng, userLat]);
-          directions.setDestination([destLng, destLat]);
+          const userLng = position.coords.longitude
+          const userLat = position.coords.latitude
+          directions.setOrigin([userLng, userLat])
+          directions.setDestination([destLng, destLat])
         },
         (error) => {
-          console.error('Error getting user location:', error);
-          directions.setDestination([destLng, destLat]);
+          console.error('Error getting user location:', error)
+          directions.setDestination([destLng, destLat])
         },
         {
           enableHighAccuracy: true,
           timeout: 5000,
           maximumAge: 0
         }
-      );
+      )
     } else {
-      console.error('Invalid destination coordinates:', coords);
+      console.error('Invalid destination coordinates:', coords)
     }
   }
 }
@@ -111,7 +115,6 @@ function addMarkersToMap() {
       .setLngLat([location.longitude, location.latitude])
       .setPopup(popup)
       .addTo(map)
-
 
     // Show popup on mouse enter
     marker.getElement().addEventListener('mouseenter', () => {
@@ -153,12 +156,15 @@ onMounted(() => {
 
   map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
 
-  map.addControl(new mapboxgl.GeolocateControl({
-    positionOptions: {
-      enableHighAccuracy: true
-    },
-    trackUserLocation: true
-  }), 'bottom-right')
+  map.addControl(
+    new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true
+      },
+      trackUserLocation: true
+    }),
+    'bottom-right'
+  )
 
   directions = new MapboxDirections({
     accessToken: mapboxToken,
@@ -186,7 +192,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (map) map.remove()
   document.removeEventListener('navigate', navigateToLocation)
-  window.removeEventListener('resize', () => { })
+  window.removeEventListener('resize', () => {})
 })
 
 function flyToLocation(location) {

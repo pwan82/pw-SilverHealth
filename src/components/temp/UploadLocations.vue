@@ -32,9 +32,7 @@ import { collection, addDoc } from 'firebase/firestore'
 import serviceLocations from '@/assets/json/serviceLocations.json'
 
 // Create an array of location files for extensibility
-const locationFiles = [
-  { name: 'serviceLocations.json', data: serviceLocations }
-]
+const locationFiles = [{ name: 'serviceLocations.json', data: serviceLocations }]
 
 // Selected files for uploading
 const selectedFiles = ref([])

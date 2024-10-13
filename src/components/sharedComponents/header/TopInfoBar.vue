@@ -58,13 +58,17 @@ onMounted(() => {
 
       <div class="col-12 col-md-6 text-center text-md-end">
         <p v-if="currentUser">
-          <span>🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'Guest' }} ({{
-            currentRole
-            }})</span>
+          <span
+            >🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'Guest' }} ({{
+              currentRole
+            }})</span
+          >
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/account" class="text-decoration-none">My Account</router-link>
           <span class="mx-2 non-selectable">|</span>
-          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer">Log out</span>
+          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer"
+            >Log out</span
+          >
         </p>
         <p v-else>
           <a href="#" @click.prevent="redirectToLogin" class="text-decoration-none">Log In</a>

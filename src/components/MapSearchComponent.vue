@@ -4,15 +4,25 @@
       <span class="input-group-text bg-white">
         <i class="bi bi-search"></i>
       </span>
-      <input v-model="searchQuery" @input="search" type="text" placeholder="Search SilverHealth locations..."
-        class="form-control" />
+      <input
+        v-model="searchQuery"
+        @input="search"
+        type="text"
+        placeholder="Search SilverHealth locations..."
+        class="form-control"
+      />
       <button v-if="searchQuery" @click="clearSearch" class="btn btn-secondary" type="button">
         <i class="bi bi-x"></i>
       </button>
     </div>
     <ul v-if="searchResults.length > 0" class="list-group search-results">
-      <li v-for="result in searchResults" :key="result.locationId" @click="selectLocation(result)"
-        class="list-group-item" style="cursor: pointer">
+      <li
+        v-for="result in searchResults"
+        :key="result.locationId"
+        @click="selectLocation(result)"
+        class="list-group-item"
+        style="cursor: pointer"
+      >
         {{ result.name }}
       </li>
     </ul>
@@ -43,7 +53,7 @@ const searchResults = computed(() => {
 async function fetchLocations() {
   try {
     const querySnapshot = await getDocs(collection(db, 'serviceLocations'))
-    locations.value = querySnapshot.docs.map(doc => ({
+    locations.value = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data()
     }))
