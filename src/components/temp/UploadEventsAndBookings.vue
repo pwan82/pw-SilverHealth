@@ -73,8 +73,6 @@ const uploadData = async () => {
           remainingCapacity: event.remainingCapacity,
           registrationStartTime: event.registrationStartTime,
           registrationEndTime: event.registrationEndTime,
-          isRegistrationOpen: event.isRegistrationOpen,
-          isEventEnded: event.isEventEnded,
           isVisible: event.isVisible
         }
 

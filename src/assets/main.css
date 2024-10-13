@@ -88,3 +88,7 @@ a,
 .mr-2 {
   margin-right: 0.5rem;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

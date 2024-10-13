@@ -66,8 +66,11 @@ onMounted(() => {
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/account" class="text-decoration-none">My Account</router-link>
           <span class="mx-2 non-selectable">|</span>
-          <span @click="handleLogout" class="text-decoration-none text-danger cursor-pointer"
-            >Log out</span
+          <a
+            href="#"
+            @click.prevent="handleLogout"
+            class="text-decoration-none text-danger cursor-pointer"
+            >Log out</a
           >
         </p>
         <p v-else>
