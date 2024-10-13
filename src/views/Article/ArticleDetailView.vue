@@ -60,7 +60,9 @@
                 Login to leave a comment
               </button>
               <Card v-else style="max-width: 30rem; overflow: hidden">
-                <template #title>Please rate this article</template>
+                <template #title>{{
+                  userRating ? 'Update your rating for this article' : 'Please rate this article'
+                }}</template>
                 <template #content>
                   <div class="mt-2 d-flex flex-column align-items-center">
                     <Rating
@@ -75,7 +77,21 @@
                       rows="3"
                       placeholder="Leave your comment (optional)"
                       :disabled="isSubmitting"
+                      :maxlength="maxCommentLength"
                     ></textarea>
+                    <small
+                      :class="[
+                        'mt-1',
+                        remainingChars > 100
+                          ? 'text-muted'
+                          : remainingChars > 30
+                            ? 'text-warning'
+                            : 'text-danger'
+                      ]"
+                    >
+                      {{ maxCommentLength - userComment.length }} /
+                      {{ maxCommentLength }} characters
+                    </small>
                     <p class="mt-2 text-muted fst-italic" v-if="!submissionMessage">
                       not submitted
                     </p>
@@ -96,10 +112,10 @@
                     @click="submitRatingAndComment"
                     class="btn"
                     :class="{
-                      'btn-primary': userRating !== null,
-                      'btn-secondary': userRating === null
+                      'btn-primary': isUpdatePossible,
+                      'btn-secondary': !isUpdatePossible
                     }"
-                    :disabled="userRating === null || isSubmitting"
+                    :disabled="!isUpdatePossible || isSubmitting"
                   >
                     <span
                       v-if="isSubmitting"
@@ -107,7 +123,7 @@
                       role="status"
                       aria-hidden="true"
                     ></span>
-                    {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+                    {{ isSubmitting ? 'Submitting...' : userRating ? 'Update' : 'Submit' }}
                   </button>
                 </template>
               </Card>
@@ -198,6 +214,8 @@ const submissionMessage = ref('')
 const submissionSuccess = ref(false)
 
 const hasComments = computed(() => ratings.value.length > 0)
+const maxCommentLength = 500
+const remainingChars = computed(() => maxCommentLength - userComment.value.length)
 
 const averageRating = (article) => {
   return article.averageRating ? article.averageRating : null
@@ -255,6 +273,16 @@ const fetchArticleData = async (token) => {
   }
 }
 
+const userInitialRating = ref(null)
+const userInitialComment = ref('')
+
+const isUpdatePossible = computed(() => {
+  return (
+    userRating.value !== null &&
+    (userRating.value !== userInitialRating.value || userComment.value !== userInitialComment.value)
+  )
+})
+
 // Fetch ratings and comments
 const fetchRatings = async (token) => {
   try {
@@ -263,13 +291,29 @@ const fetchRatings = async (token) => {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     }
     const response = await axios.get(
-      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleRatings/${articleId}`,
+      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleRatings?id=${articleId}`,
       config
     )
     ratings.value = response.data.map((rating) => ({
       ...rating,
       publicationTime: new Date(rating.publicationTime)
     }))
+
+    // Find the current user's rating
+    const currentUserRating = ratings.value.find(
+      (rating) => rating.userId === auth.currentUser?.uid
+    )
+    if (currentUserRating) {
+      userRating.value = currentUserRating.rating
+      userComment.value = currentUserRating.comment || ''
+      userInitialRating.value = currentUserRating.rating
+      userInitialComment.value = currentUserRating.comment || ''
+    } else {
+      userRating.value = null
+      userComment.value = ''
+      userInitialRating.value = null
+      userInitialComment.value = ''
+    }
   } catch (error) {
     console.error('Error fetching ratings:', error)
     ratings.value = []
@@ -285,6 +329,12 @@ const submitRatingAndComment = async () => {
     return
   }
 
+  if (userComment.value.length > maxCommentLength) {
+    submissionMessage.value = `Comment exceeds maximum length of ${maxCommentLength} characters.`
+    submissionSuccess.value = false
+    return
+  }
+
   isSubmitting.value = true
 
   try {
@@ -294,11 +344,12 @@ const submitRatingAndComment = async () => {
         headers: { Authorization: `Bearer ${token}` }
       }
       const payload = {
+        articleId: parseInt(articleId),
         rating: userRating.value,
         comment: userComment.value
       }
       await axios.post(
-        `https://us-central1-silverhealth-87f2a.cloudfunctions.net/publishArticleRating/${articleId}`,
+        `https://us-central1-silverhealth-87f2a.cloudfunctions.net/publishArticleRating`,
         payload,
         config
       )

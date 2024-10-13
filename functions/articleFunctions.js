@@ -106,7 +106,7 @@ exports.getArticles = onRequest(async (req, res) => {
   })
 })
 
-// GET /id={articleId} - Fetch specific article by ID
+// GET ?id={articleId} - Fetch specific article by ID
 exports.getArticleById = onRequest(async (req, res) => {
   return cors(req, res, async () => {
     console.log(`Full URL received: ${req.url}`)
@@ -198,11 +198,11 @@ exports.getArticleById = onRequest(async (req, res) => {
   })
 })
 
-// GET /{articleId}?limit={limit}&offset={offset} - Fetch ratings for a specific article
+// GET ?id={articleId}?limit={limit}&offset={offset} - Fetch ratings for a specific article
 exports.getArticleRatings = onRequest(async (req, res) => {
   return cors(req, res, async () => {
     console.log(`Full URL received: ${req.url}`)
-    const articleId = req.url.split('/')[1].split('?')[0]
+    const articleId = req.query.id
 
     const { limit = 0, offset = 0 } = req.query
 
@@ -299,21 +299,20 @@ const calculateAverageRating = async (articleDocRef) => {
   return parseFloat(averageRating.toFixed(2)) // Round to 2 decimal places
 }
 
-// POST /{articleId} - Publish rating and comment for a specific article
+// POST - Publish rating and comment for a specific article
 exports.publishArticleRating = onRequest((req, res) => {
   return cors(req, res, async () => {
     if (req.method !== 'POST') {
       return res.status(405).send('Method Not Allowed')
     }
 
-    const articleId = req.path.split('/')[1]
+    const { articleId, rating, comment } = req.body
+
     console.log(`Received request to publish rating for articleId: ${articleId}`)
 
     if (!articleId) {
-      return res.status(400).send('Missing articleId in path')
+      return res.status(400).send('Missing articleId in request')
     }
-
-    const { rating, comment } = req.body
 
     if (typeof rating !== 'number' || rating < 1 || rating > 5) {
       return res.status(400).send('Invalid rating. Must be a number between 1 and 5.')
