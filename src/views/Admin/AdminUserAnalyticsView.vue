@@ -1,105 +1,151 @@
 <template>
   <div class="container mt-5 mb-5">
-    <h1 class="text-center">Admin User Analytics</h1>
-    <p class="text-center">Manage all registered users.</p>
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="text-center">Admin User Analytics</h1>
+        <p class="text-center">
+          View information about registered users, or export to JSON for further analysis.
+        </p>
 
-    <!-- <table class="table table-striped table-bordered mt-4">
-      <thead>
-        <tr>
-          <th>User ID</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Password</th>
-          <th>Gender</th>
-          <th>Birthday</th>
-          <th>Role</th>
-          <th>Address</th>
-          <th>Registration Time</th>
-          <th>Last Login Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user in allUsers" :key="user.userId">
-          <td>{{ user.userId }}</td>
-          <td>{{ user.username }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.password }}</td>
-          <td>{{ user.gender }}</td>
-          <td>{{ user.birthday }}</td>
-          <td>{{ user.role }}</td>
-          <td>
-            {{ user.address.streetAddress }},
-            {{ user.address.building ? user.address.building + ',' : '' }}
-            {{ user.address.suburb }}, {{ user.address.state }},
-            {{ user.address.postcode }}
-          </td>
-          <td>{{ new Date(user.registrationTime).toLocaleString() }}</td>
-          <td>
-            {{ user.lastLoginTime ? new Date(user.lastLoginTime).toLocaleString() : 'Never' }}
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
+        <UserList
+          ref="userList"
+          :users="users"
+          :loading="loading"
+          v-model:selectedUsers="selectedUsers"
+        />
 
-    <DataTable :value="allUsers" class="p-datatable-striped">
-      <Column field="userId" header="User ID" sortable></Column>
-      <Column field="username" header="Username" sortable></Column>
-      <Column field="email" header="Email" sortable></Column>
-      <Column field="password" header="Password"></Column>
-      <Column field="gender" header="Gender" sortable></Column>
-      <Column field="birthday" header="Birthday" sortable></Column>
-      <Column field="role" header="Role" sortable></Column>
-      <Column header="Address">
-        <template #body="slotProps">
-          {{ formatAddress(slotProps.data) }}
-        </template>
-      </Column>
-      <Column header="Registration Time" sortable>
-        <template #body="slotProps">
-          {{ formatRegistrationTime(slotProps.data) }}
-        </template>
-      </Column>
-      <Column header="Last Login Time" sortable>
-        <template #body="slotProps">
-          {{ formatLastLoginTime(slotProps.data) }}
-        </template>
-      </Column>
-    </DataTable>
+        <div class="mt-3 d-flex justify-content-start gap-2">
+          <button
+            class="btn"
+            :class="{
+              'btn-primary': selectedUsers.length,
+              'btn-secondary': !selectedUsers.length
+            }"
+            @click="exportSelectedUsers"
+            :disabled="!selectedUsers.length"
+          >
+            <i class="bi bi-download mr-2"></i>
+            Export Selected Users ({{ selectedUsers.length }})
+          </button>
+          <button class="btn btn-outline-primary" @click="exportAllUsers" :disabled="!users.length">
+            <i class="bi bi-download mr-2"></i>
+            Export All Users ({{ users.length }})
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useAuthStore } from '@/stores/authStore'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import axios from 'axios'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '@/firebase/init'
+import UserList from '@/components/Admin/UserList.vue'
 
-const authStore = useAuthStore()
-const allUsers = computed(() => authStore.allMockUsers)
+// Component state
+const users = ref([])
+const selectedUsers = ref([])
+const loading = ref(true)
+const toast = useToast()
 
-const formatAddress = (user) => {
-  const { streetAddress, building, suburb, state, postcode } = user.address
-  return `${streetAddress}, ${building ? building + ',' : ''} ${suburb}, ${state}, ${postcode}`
+const userList = ref(null)
+
+// Fetch users data
+const fetchUsers = async (token) => {
+  try {
+    loading.value = true
+    const config = {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    }
+    const response = await axios.get(
+      'https://us-central1-silverhealth-87f2a.cloudfunctions.net/getAllUsers',
+      config
+    )
+    users.value = response.data
+
+    users.value.forEach((user) => {
+      user.email = user.email.toLowerCase()
+    })
+  } catch (error) {
+    console.error('Error fetching users:', error)
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch users', life: 3000 })
+  } finally {
+    loading.value = false
+  }
 }
 
-const formatRegistrationTime = (user) => {
-  return new Date(user.registrationTime).toLocaleString()
+// Export functions
+const exportToJson = (data, filename) => {
+  const jsonStr = JSON.stringify(data, null, 2)
+  const blob = new Blob([jsonStr], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
 }
 
-const formatLastLoginTime = (user) => {
-  return user.lastLoginTime ? new Date(user.lastLoginTime).toLocaleString() : 'Never'
+const exportSelectedUsers = () => {
+  if (selectedUsers.value.length === 0) {
+    toast.add({ severity: 'warn', summary: 'Warning', detail: 'No users selected', life: 3000 })
+    return
+  }
+  exportToJson(selectedUsers.value, 'selected_users.json')
+  toast.add({
+    severity: 'success',
+    summary: 'Success',
+    detail: 'Selected users exported successfully',
+    life: 3000
+  })
 }
+
+const exportAllUsers = () => {
+  if (users.value.length === 0) {
+    toast.add({ severity: 'warn', summary: 'Warning', detail: 'No users available', life: 3000 })
+    return
+  }
+  exportToJson(users.value, 'all_users.json')
+  toast.add({
+    severity: 'success',
+    summary: 'Success',
+    detail: 'All users exported successfully',
+    life: 3000
+  })
+}
+
+// Lifecycle hooks
+let unsubscribe
+onMounted(() => {
+  unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const token = await user.getIdToken()
+      userList.value.fetchUsers = async () => {
+        await fetchUsers(token)
+      }
+      userList.value.fetchUsers()
+    } else {
+      userList.value.fetchUsers = async () => {
+        await fetchUsers(null)
+      }
+      userList.value.fetchUsers()
+    }
+  })
+})
+
+onUnmounted(() => {
+  if (unsubscribe) unsubscribe()
+})
 </script>
 
 <style scoped>
-/* .container {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 90vw;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 10px;
+.gap-2 {
+  gap: 0.5rem;
 }
-
-.table {
-  width: 100%;
-} */
 </style>
-.

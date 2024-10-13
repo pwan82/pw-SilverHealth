@@ -39,9 +39,8 @@ import { useToast } from 'primevue/usetoast'
 import axios from 'axios'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
-import UserList from '@/components/Admin/UserList.vue' // Adjust the path as needed
-import EmailEditorDialog from '@/components/Admin/EmailEditorDialog.vue' // Adjust the path as needed
-import Button from 'primevue/button'
+import UserList from '@/components/Admin/UserList.vue'
+import EmailEditorDialog from '@/components/Admin/EmailEditorDialog.vue'
 
 // Component state
 const users = ref([])
@@ -86,8 +85,8 @@ const getAuthToken = async () => {
 }
 
 const handleEmailsSent = () => {
-  // Handle any post-email sending logic, such as refreshing the user list
-  userList.value.fetchUsers()
+  // Handle any post-email sending logic
+  userList.value.fetchUsers() // Refreshing the user list
 }
 
 // Lifecycle hooks
@@ -114,6 +113,4 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-/* You can keep any page-specific styles here */
-</style>
+<style scoped></style>
