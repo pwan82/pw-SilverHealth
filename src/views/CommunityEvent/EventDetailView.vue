@@ -54,16 +54,22 @@
                         <div class="text-start mb-3">
                           <strong>You registered at: </strong>
                           <br />{{
-                          new Date(communityEvent.userBooking.bookingTime).toLocaleString()
+                            new Date(communityEvent.userBooking.bookingTime).toLocaleString()
                           }}
                         </div>
-                        <button class="btn btn-primary custom-button" style="min-width: 100%"
-                          @click="generatePDFTicket">
+                        <button
+                          class="btn btn-primary custom-button"
+                          style="min-width: 100%"
+                          @click="generatePDFTicket"
+                        >
                           <i class="bi bi-file-earmark-pdf-fill mr-2"></i>
                           <div class="button-text">Download PDF ticket</div>
                         </button>
-                        <button @click="generateQRCode" class="btn btn-outline-primary mt-2 custom-button"
-                          style="min-width: 100%">
+                        <button
+                          @click="generateQRCode"
+                          class="btn btn-outline-primary mt-2 custom-button"
+                          style="min-width: 100%"
+                        >
                           <i class="bi bi-qr-code mr-2"></i>
                           <div class="button-text">
                             {{ (showQRCode ? 'Hide' : 'Show') + ' QR code for entry' }}
@@ -71,12 +77,21 @@
                         </button>
 
                         <div v-if="showQRCode" class="mt-4">
-                          <qrcode-vue :value="qrCodeText" :size="200" level="H" render-as="canvas" />
+                          <qrcode-vue
+                            :value="qrCodeText"
+                            :size="200"
+                            level="H"
+                            render-as="canvas"
+                          />
                         </div>
 
                         <div v-if="!isEventEnded">
                           <Divider align="center" class="mb-2">Change your mind?</Divider>
-                          <a href="#" @click.prevent="handleCancelRegistration" class="text-danger cursor-pointer">
+                          <a
+                            href="#"
+                            @click.prevent="handleCancelRegistration"
+                            class="text-danger cursor-pointer"
+                          >
                             Cancel Registration
                           </a>
                         </div>
@@ -84,23 +99,35 @@
 
                       <!-- Registration Button -->
                       <div v-else class="text-center mt-3 mb-2">
-                        <button v-if="!isLoggedIn && isRegistrationOpen" class="btn btn-outline-primary custom-button"
-                          style="min-width: 100%" @click="redirectToLogin">
+                        <button
+                          v-if="!isLoggedIn && isRegistrationOpen"
+                          class="btn btn-outline-primary custom-button"
+                          style="min-width: 100%"
+                          @click="redirectToLogin"
+                        >
                           <div class="button-text">Login to register</div>
                         </button>
 
-                        <button v-else class="btn btn-primary custom-button" :class="{
-                          'btn-primary': isRegistrationOpen,
-                          'btn-secondary': !isRegistrationOpen
-                        }" :disabled="!isRegistrationOpen || isSubmitting" style="min-width: 100%"
-                          @click="handleRegisterNewEvent">
-                          <i class="mr-2" :class="{
-                            'bi bi-person-plus': !isSubmitting,
-                            'spinner-border spinner-border-sm': isSubmitting,
-                          }"></i>
+                        <button
+                          v-else
+                          class="btn btn-primary custom-button"
+                          :class="{
+                            'btn-primary': isRegistrationOpen,
+                            'btn-secondary': !isRegistrationOpen
+                          }"
+                          :disabled="!isRegistrationOpen || isSubmitting"
+                          style="min-width: 100%"
+                          @click="handleRegisterNewEvent"
+                        >
+                          <i
+                            class="mr-2"
+                            :class="{
+                              'bi bi-person-plus': !isSubmitting,
+                              'spinner-border spinner-border-sm': isSubmitting
+                            }"
+                          ></i>
                           <div class="button-text">{{ registerButtonString }}</div>
                         </button>
-
                       </div>
                     </div>
                   </div>
@@ -155,12 +182,15 @@
                     <!-- Hidden Mapbox -->
                     <div v-if="isMapVisible" class="mt-3 mb-3">
                       <div class="card map-card-body">
-                        <EventLocationMapbox v-if="communityEvent" :latitude="communityEvent.address.latitude"
-                          :longitude="communityEvent.address.longitude" :placeName="communityEvent.address.placeName"
-                          :addressString="communityEvent.address.addressString" />
+                        <EventLocationMapbox
+                          v-if="communityEvent"
+                          :latitude="communityEvent.address.latitude"
+                          :longitude="communityEvent.address.longitude"
+                          :placeName="communityEvent.address.placeName"
+                          :addressString="communityEvent.address.addressString"
+                        />
                       </div>
                     </div>
-
                   </div>
                   <!-- Render Markdown content -->
                   <h2 class="mt-4 mb-3">About this event</h2>
@@ -177,17 +207,25 @@
   </div>
 
   <!-- Register Confirmation Modal -->
-  <div class="modal fade" id="registerConfirmModal" tabindex="-1" aria-labelledby="registerConfirmModalLabel"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="registerConfirmModal"
+    tabindex="-1"
+    aria-labelledby="registerConfirmModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="registerConfirmModalLabel">Confirm Registration</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-        <div class="modal-body">
-          Are you sure to register for this event?
-        </div>
+        <div class="modal-body">Are you sure to register for this event?</div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-primary" @click="confirmRegister">Confirm</button>
@@ -197,20 +235,32 @@
   </div>
 
   <!-- Cancel Registration Confirmation Modal -->
-  <div class="modal fade" id="cancelConfirmModal" tabindex="-1" aria-labelledby="cancelConfirmModalLabel"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="cancelConfirmModal"
+    tabindex="-1"
+    aria-labelledby="cancelConfirmModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="cancelConfirmModalLabel">Confirm Cancellation</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-        <div class="modal-body">
-          Are you sure to cancel your registration for this event?
-        </div>
+        <div class="modal-body">Are you sure to cancel your registration for this event?</div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Keep My Registration</button>
-          <button type="button" class="btn btn-danger" @click="confirmCancel">Yes, Cancel My Registration</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            No, Keep My Registration
+          </button>
+          <button type="button" class="btn btn-danger" @click="confirmCancel">
+            Yes, Cancel My Registration
+          </button>
         </div>
       </div>
     </div>
@@ -299,34 +349,33 @@ const generateQRCode = () => {
 }
 
 const formatDate = (timestamp) => {
-  const date = new Date(timestamp);
+  const date = new Date(timestamp)
   const options = {
     dateStyle: 'short',
     timeStyle: 'short'
-  };
-  const timeString = date.toLocaleString(undefined, options);
+  }
+  const timeString = date.toLocaleString(undefined, options)
 
   // Calculate GMT offset
-  const offsetMinutes = date.getTimezoneOffset();
-  const offsetHours = Math.abs(Math.floor(offsetMinutes / 60));
-  const offsetMinutesRemainder = Math.abs(offsetMinutes % 60);
-  const offsetSign = offsetMinutes > 0 ? '-' : '+';
-  const offsetString = `GMT ${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutesRemainder.toString().padStart(2, '0')}`;
+  const offsetMinutes = date.getTimezoneOffset()
+  const offsetHours = Math.abs(Math.floor(offsetMinutes / 60))
+  const offsetMinutesRemainder = Math.abs(offsetMinutes % 60)
+  const offsetSign = offsetMinutes > 0 ? '-' : '+'
+  const offsetString = `GMT ${offsetSign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutesRemainder.toString().padStart(2, '0')}`
 
-  return `${timeString} (${offsetString})`;
-};
-
+  return `${timeString} (${offsetString})`
+}
 
 const generatePDFTicket = () => {
-  const doc = new jsPDF();
-  let yPos = 20;
-  const lineHeight = 5;
+  const doc = new jsPDF()
+  let yPos = 20
+  const lineHeight = 5
 
   // Set title
-  doc.setFontSize(16);
-  doc.setFont(undefined, 'bold');
-  doc.text('EVENT TICKET\n\n' + communityEvent.value.title, 20, yPos);
-  yPos += lineHeight * 4;
+  doc.setFontSize(16)
+  doc.setFont(undefined, 'bold')
+  doc.text('EVENT TICKET\n\n' + communityEvent.value.title, 20, yPos)
+  yPos += lineHeight * 4
 
   // Function to add a table
   const addTable = (headers, data) => {
@@ -339,37 +388,46 @@ const generatePDFTicket = () => {
       headStyles: { fillColor: [13, 110, 253], textColor: 255, fontStyle: 'bold' },
       columnStyles: { 0: { fontStyle: 'bold' } },
       margin: { left: 20 }
-    });
-    yPos = doc.lastAutoTable.finalY + 10;
-  };
+    })
+    yPos = doc.lastAutoTable.finalY + 10
+  }
 
   // Event details table
   const eventDetails = [
     ['Organizer', communityEvent.value.organizerName],
-    ['Category', communityEvent.value.category.join(", ")],
+    ['Category', communityEvent.value.category.join(', ')],
     ['Venue', communityEvent.value.address.placeName],
     ['Address', communityEvent.value.address.addressString],
-    ['Event Duration', formatTimeDifference(communityEvent.value.startTime, communityEvent.value.endTime)],
-    ['Start & End Time', 'From ' + formatDate(communityEvent.value.startTime) + ' to ' + formatDate(communityEvent.value.endTime)],
+    [
+      'Event Duration',
+      formatTimeDifference(communityEvent.value.startTime, communityEvent.value.endTime)
+    ],
+    [
+      'Start & End Time',
+      'From ' +
+        formatDate(communityEvent.value.startTime) +
+        ' to ' +
+        formatDate(communityEvent.value.endTime)
+    ],
     ['Total Capacity', communityEvent.value.totalCapacity.toString()]
-  ];
-  addTable(['Attribute', 'Value'], eventDetails);
+  ]
+  addTable(['Attribute', 'Value'], eventDetails)
 
   // User Booking Information title
-  doc.setFontSize(14);
-  doc.setFont(undefined, 'bold');
-  doc.text("User Booking Information", 20, yPos);
-  yPos += lineHeight;
+  doc.setFontSize(14)
+  doc.setFont(undefined, 'bold')
+  doc.text('User Booking Information', 20, yPos)
+  yPos += lineHeight
 
   // User Booking Information table
   const bookingDetails = [
     ['Your Booking ID', communityEvent.value.userBooking.bookingId],
     ['Your Booking Time', formatDate(communityEvent.value.userBooking.bookingTime)],
     ['Status', communityEvent.value.userBooking.status]
-  ];
-  addTable(['Attribute', 'Value'], bookingDetails);
+  ]
+  addTable(['Attribute', 'Value'], bookingDetails)
 
-  doc.save('Event_Ticket.pdf');
+  doc.save('Event_Ticket.pdf')
 }
 
 const isSubmitting = ref(false)
@@ -481,8 +539,13 @@ onUnmounted(() => {
 
 const handleRegisterNewEvent = () => {
   if (!communityEvent.value || isUserRegistered.value || !isRegistrationOpen.value) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Unable to register for this event', life: 3000 });
-    return;
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Unable to register for this event',
+      life: 3000
+    })
+    return
   }
   registerModal.show()
 }
@@ -490,38 +553,57 @@ const handleRegisterNewEvent = () => {
 const confirmRegister = async () => {
   registerModal.hide()
   try {
-    isSubmitting.value = true;
+    isSubmitting.value = true
 
-    const response = await axios.post('https://manageeventbooking-s3vwdaiioq-uc.a.run.app', {
-      eventId: communityEvent.value.eventId,
-      action: 'book'
-    }, {
-      headers: {
-        'Authorization': `Bearer ${await auth.currentUser.getIdToken()}`
+    const response = await axios.post(
+      'https://manageeventbooking-s3vwdaiioq-uc.a.run.app',
+      {
+        eventId: communityEvent.value.eventId,
+        action: 'book'
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+        }
       }
-    });
+    )
 
     if (response.status === 200) {
-      toast.add({ severity: 'success', summary: 'Success', detail: 'Successfully registered for the event', life: 3000 });
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Successfully registered for the event',
+        life: 3000
+      })
 
       // Fetch updated event data
-      const token = await auth.currentUser.getIdToken();
-      await fetchEventData(token);
+      const token = await auth.currentUser.getIdToken()
+      await fetchEventData(token)
     } else {
-      throw new Error('Unexpected response from server');
+      throw new Error('Unexpected response from server')
     }
   } catch (error) {
-    console.error('Error registering for event:', error);
-    toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || error.message, life: 3000 });
+    console.error('Error registering for event:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error.response?.data || error.message,
+      life: 3000
+    })
   } finally {
-    isSubmitting.value = false;
+    isSubmitting.value = false
   }
 }
 
 const handleCancelRegistration = () => {
   if (!communityEvent.value || !communityEvent.value.userBooking) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'No booking found to cancel', life: 3000 });
-    return;
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'No booking found to cancel',
+      life: 3000
+    })
+    return
   }
   cancelModal.show()
 }
@@ -529,31 +611,45 @@ const handleCancelRegistration = () => {
 const confirmCancel = async () => {
   cancelModal.hide()
   try {
-    isSubmitting.value = true;
+    isSubmitting.value = true
 
-    const response = await axios.post('https://manageeventbooking-s3vwdaiioq-uc.a.run.app', {
-      eventId: communityEvent.value.eventId,
-      action: 'cancel'
-    }, {
-      headers: {
-        'Authorization': `Bearer ${await auth.currentUser.getIdToken()}`
+    const response = await axios.post(
+      'https://manageeventbooking-s3vwdaiioq-uc.a.run.app',
+      {
+        eventId: communityEvent.value.eventId,
+        action: 'cancel'
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+        }
       }
-    });
+    )
 
     if (response.status === 200) {
-      toast.add({ severity: 'success', summary: 'Success', detail: 'Booking cancelled successfully', life: 3000 });
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Booking cancelled successfully',
+        life: 3000
+      })
 
       // Fetch updated event data
-      const token = await auth.currentUser.getIdToken();
-      await fetchEventData(token);
+      const token = await auth.currentUser.getIdToken()
+      await fetchEventData(token)
     } else {
-      throw new Error('Unexpected response from server');
+      throw new Error('Unexpected response from server')
     }
   } catch (error) {
-    console.error('Error cancelling registration:', error);
-    toast.add({ severity: 'error', summary: 'Error', detail: error.response?.data || error.message, life: 3000 });
+    console.error('Error cancelling registration:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error.response?.data || error.message,
+      life: 3000
+    })
   } finally {
-    isSubmitting.value = false;
+    isSubmitting.value = false
   }
 }
 </script>

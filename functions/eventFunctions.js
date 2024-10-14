@@ -52,7 +52,6 @@ exports.getEvents = onRequest((req, res) => {
             eventId: doc.id,
             organizerName: eventData.organizerName,
             title: eventData.title,
-            description: eventData.description,
             category: eventData.category,
             address: eventData.address,
             startTime: eventData.startTime,
@@ -198,7 +197,7 @@ exports.getEventById = onRequest((req, res) => {
  * @param {boolean} [req.body.eventData.isVisible=true] - Whether the event is visible to users.
  * @param {Object} res - The response object from Firebase Functions.
  * @returns {Promise<void>} A promise that resolves when the operation is complete.
- * 
+ *
  * @throws {Error} If the user is not authenticated as an admin.
  * @throws {Error} If required fields are missing or invalid.
  * @throws {Error} If data validation fails.
@@ -347,7 +346,7 @@ exports.manageEvent = onRequest((req, res) => {
 /**
  * Cloud Function to get all event bookings for the current user.
  */
-exports.getEventBookings = onRequest((req, res) => {
+exports.getUserEventBookings = onRequest((req, res) => {
   return cors(req, res, async () => {
     try {
       // Check user authentication

@@ -130,8 +130,8 @@ const initializeMap = () => {
     // Prevent automatic zooming when route is updated
     directions.on('route', (e) => {
       const bounds = new mapboxgl.LngLatBounds()
-      e.route[0].legs[0].steps.forEach(step => {
-        step.maneuver.location.forEach(coord => {
+      e.route[0].legs[0].steps.forEach((step) => {
+        step.maneuver.location.forEach((coord) => {
           bounds.extend(coord)
         })
       })
@@ -154,7 +154,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (map) {
-    document.removeEventListener('navigate', () => { })
+    document.removeEventListener('navigate', () => {})
     map.remove()
     map = null
     marker = null
