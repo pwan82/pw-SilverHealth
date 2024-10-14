@@ -109,7 +109,7 @@
 
     <!-- User List Table -->
     <DataTable
-      :value="users"
+      :value="props.users"
       v-model:selection="selectedUsers"
       :paginator="true"
       :rows="10"
@@ -117,7 +117,7 @@
       dataKey="userId"
       :filters="filters"
       filterDisplay="menu"
-      :loading="loading"
+      :loading="props.loading"
       @sort="onSort"
       :sortField="sortField"
       :sortOrder="sortOrder"
