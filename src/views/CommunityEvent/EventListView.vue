@@ -18,49 +18,25 @@
         <div v-else>
           <!-- Search and filter controls -->
           <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"
-          >
+            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
             <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
               <div class="mb-2 mb-md-0 me-md-2">
-                <Select
-                  v-model="selectedSearchColumn"
-                  :options="searchColumns"
-                  optionLabel="label"
-                  placeholder="Select column"
-                  class="w-100 w-md-auto"
-                  @change="onSearchColumnChange"
-                />
+                <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
+                  placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
               </div>
               <div v-if="!['startTime', 'statusString'].includes(selectedSearchColumn.field)">
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
-                  <InputText
-                    v-model="searchValue"
-                    placeholder="Keyword Search"
-                    @input="onSearchInput"
-                    class="w-100"
-                  />
+                  <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
                 </span>
               </div>
               <div v-else-if="selectedSearchColumn.field === 'startTime'">
-                <DatePicker
-                  v-model="dateRange"
-                  selectionMode="range"
-                  :manualInput="false"
-                  @date-select="onDateRangeChange"
-                  placeholder="Select date range"
-                />
+                <DatePicker v-model="dateRange" selectionMode="range" :manualInput="false"
+                  @date-select="onDateRangeChange" placeholder="Select date range" />
               </div>
               <div v-else>
-                <Select
-                  v-model="statusFilter"
-                  :options="statusOptions"
-                  optionLabel="label"
-                  optionValue="value"
-                  placeholder="Select status"
-                  class="w-100 w-md-auto"
-                  @change="onStatusFilterChange"
-                />
+                <Select v-model="statusFilter" :options="statusOptions" optionLabel="label" optionValue="value"
+                  placeholder="Select status" class="w-100 w-md-auto" @change="onStatusFilterChange" />
               </div>
             </div>
             <div>
@@ -71,46 +47,32 @@
             </div>
           </div>
 
-          <DataTable
-            :value="formattedEvents"
-            :paginator="true"
-            :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
-            :filters="filters"
-            filterDisplay="menu"
-            removableSort
-            responsive-layout="scroll"
-          >
+          <DataTable :value="formattedEvents" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+            :filters="filters" filterDisplay="menu" removableSort responsive-layout="scroll">
             <Column field="title" header="Title" :sortable="true" filter>
               <template #body="slotProps">
-                <router-link
-                  class="fw-bold"
-                  :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }"
-                >
+                <router-link class="fw-bold" :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }">
                   {{ slotProps.data.title }}
                 </router-link>
               </template>
             </Column>
             <Column field="category" header="Category" :sortable="true" filter />
-            <Column
-              field="startTime"
-              header="Start Time"
-              :sortable="true"
-              filter
-              filterMatchMode="between"
-            >
+            <Column field="startTime" header="Start Time" :sortable="true" filter filterMatchMode="between">
               <template #body="slotProps">
                 {{ formatDate(slotProps.data.startTime) }}
               </template>
             </Column>
             <Column field="address.addressString" header="Location" :sortable="true" filter />
-            <Column
-              field="statusString"
-              header="Status"
-              :sortable="true"
-              filter
-              filterMatchMode="equals"
-            />
+            <Column field="statusString" header="Status" :sortable="true" filter filterMatchMode="equals" />
+
+            <!-- Empty state template -->
+            <template #empty>
+              <div class="text-center p-4">
+                <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                <p class="mt-3">No available community events.</p>
+                <p class="mt-3">Please contact administrator to add it.</p>
+              </div>
+            </template>
           </DataTable>
         </div>
       </div>
