@@ -265,6 +265,47 @@
       </div>
     </div>
   </div>
+
+  <!-- Conflict Modal -->
+  <div
+    class="modal fade"
+    id="conflictModal"
+    tabindex="-1"
+    aria-labelledby="conflictModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="conflictModalLabel">Booking Conflict</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>There is a conflict with an existing registered event:</p>
+          <p>
+            <strong>Event:</strong>
+            <a :href="'/event/' + conflictingBooking.eventId" target="_blank">
+              {{ conflictingBooking.eventTitle }}
+            </a>
+          </p>
+          <p><strong>Start Time:</strong> {{ formatDate(conflictingBooking.startTime) }}</p>
+          <p><strong>End Time:</strong> {{ formatDate(conflictingBooking.endTime) }}</p>
+          <p><strong>Book At:</strong> {{ formatDate(conflictingBooking.bookingTime) }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="/event/registered" target="_blank" class="btn btn-primary"
+            >View All Registered Events</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -516,6 +557,9 @@ const toggleMap = () => {
 let registerModal = null
 let cancelModal = null
 
+const conflictingBooking = ref({})
+let conflictModal = null
+
 // Set up auth state listener
 let unsubscribe
 onMounted(() => {
@@ -530,6 +574,7 @@ onMounted(() => {
   // Initialize modals
   registerModal = new Modal(document.getElementById('registerConfirmModal'))
   cancelModal = new Modal(document.getElementById('cancelConfirmModal'))
+  conflictModal = new Modal(document.getElementById('conflictModal'))
 })
 
 // Clean up auth state listener
@@ -584,12 +629,19 @@ const confirmRegister = async () => {
     }
   } catch (error) {
     console.error('Error registering for event:', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: error.response?.data || error.message,
-      life: 3000
-    })
+    if (error.response && error.response.status === 409) {
+      // If a 409 status code is received,
+      // store the conflicting booking information in conflictingBooking and display the conflicting modal.
+      conflictingBooking.value = error.response.data.conflictingBooking
+      conflictModal.show()
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data || error.message,
+        life: 3000
+      })
+    }
   } finally {
     isSubmitting.value = false
   }

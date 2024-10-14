@@ -307,7 +307,8 @@ exports.manageEvent = onRequest((req, res) => {
         }
 
         // Sanitize address text fields
-        ['placeName', 'addressString'].forEach((field) => {
+        let stringLables = ['placeName', 'addressString']
+        stringLables.forEach((field) => {
           if (typeof eventData.address[field] === 'string') {
             eventData.address[field] = sanitizeEmailHtml(eventData.address[field])
           } else {
@@ -387,7 +388,7 @@ exports.getUserEventBookings = onRequest((req, res) => {
 
 /**
  * Cloud Function to manage event bookings (book or cancel).
- * Includes user authentication, role check, visibility check, and capacity management.
+ * Includes user authentication, role check, visibility check, capacity management, and time conflict check.
  * { "eventId": "abc001", "action": "book" }
  * { "eventId": "abc001", "action": "cancel" }
  */
@@ -410,7 +411,7 @@ exports.manageEventBooking = onRequest((req, res) => {
 
     try {
       // Check user role and authentication
-      const authCheck = await checkUserRole(req.headers, null)
+      const authCheck = await checkUserRole(req.headers)
       if (authCheck.status !== 200) {
         return res.status(authCheck.status).send(authCheck.message)
       }
@@ -437,7 +438,7 @@ exports.manageEventBooking = onRequest((req, res) => {
           throw new Error('You do not have permission to book this event')
         }
 
-        // New time-based validation
+        // Time-based validation
         const currentTime = Date.now()
         if (
           currentTime < eventData.registrationStartTime ||
@@ -467,6 +468,32 @@ exports.manageEventBooking = onRequest((req, res) => {
             throw new Error('This event is fully booked')
           }
 
+          // Check for time conflicts
+          const conflictQuery = db
+            .collection('eventBookings')
+            .where('userId', '==', userId)
+            .where('endTime', '>', eventData.startTime)
+            .where('startTime', '<', eventData.endTime)
+            .orderBy('bookingTime', 'desc')
+            .limit(1)
+
+          const conflictDocs = await transaction.get(conflictQuery)
+
+          if (!conflictDocs.empty) {
+            const conflictBooking = conflictDocs.docs[0].data()
+            return {
+              status: 409,
+              message: 'Time conflict with existing booking',
+              conflictingBooking: {
+                eventId: conflictBooking.eventId,
+                eventTitle: conflictBooking.eventTitle,
+                startTime: conflictBooking.startTime,
+                endTime: conflictBooking.endTime,
+                bookingTime: conflictBooking.bookingTime
+              }
+            }
+          }
+
           // Create new booking
           const newBookingRef = db.collection('eventBookings').doc()
           transaction.set(newBookingRef, {
@@ -484,7 +511,7 @@ exports.manageEventBooking = onRequest((req, res) => {
             remainingCapacity: admin.firestore.FieldValue.increment(-1)
           })
 
-          return { message: 'Event booked successfully' }
+          return { status: 200, message: 'Event booked successfully' }
         } else if (action === 'cancel') {
           if (!bookingExists) {
             throw new Error('Booking not found')
@@ -498,12 +525,20 @@ exports.manageEventBooking = onRequest((req, res) => {
             remainingCapacity: admin.firestore.FieldValue.increment(1)
           })
 
-          return { message: 'Booking canceled successfully' }
+          return { status: 200, message: 'Booking canceled successfully' }
         }
       })
 
-      console.log(`Booking action ${action} completed for event ${eventId} by user ${userId}`)
-      res.status(200).send(result.message)
+      if (result.status === 409) {
+        console.log(`Booking conflict detected for event ${eventId} by user ${userId}`)
+        res.status(409).json({
+          message: result.message,
+          conflictingBooking: result.conflictingBooking
+        })
+      } else {
+        console.log(`Booking action ${action} completed for event ${eventId} by user ${userId}`)
+        res.status(result.status).send(result.message)
+      }
     } catch (error) {
       console.error(`Error managing event booking: ${error}`)
       res.status(400).send(error.message)

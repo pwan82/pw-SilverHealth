@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <h1 class="text-center">SilverHealth News</h1>
+        <p class="text-center">Check out all the news from SilverHealth.</p>
 
         <!-- Loading indicator -->
         <div v-if="loading" class="text-center my-4">

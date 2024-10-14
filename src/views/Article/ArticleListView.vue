@@ -3,6 +3,9 @@
     <div class="row">
       <div class="col-md-12">
         <h1 class="text-center">SilverHealth Articles</h1>
+        <p class="text-center">
+          Check out all the high-quality senior health articles from SilverHealth.
+        </p>
 
         <!-- Loading indicator -->
         <div v-if="loading" class="text-center my-4">

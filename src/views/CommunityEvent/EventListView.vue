@@ -3,6 +3,10 @@
     <div class="row">
       <div class="col-md-12">
         <h1 class="text-center">Community Events</h1>
+        <p class="text-center">
+          Find and join events in your community.
+          <br />Don't forget to register in advance for the ones you are interested in!
+        </p>
 
         <!-- Loading indicator -->
         <div v-if="loading" class="text-center my-4">
@@ -271,10 +275,6 @@ const onDateRangeChange = () => {
     filters.value.startTime.value = null
     filters.value.startTime.matchMode = 'between'
   }
-}
-
-const onColumnDateRangeChange = (event, filterModel) => {
-  filterModel.value = event
 }
 
 const onStatusFilterChange = () => {
