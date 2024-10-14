@@ -301,15 +301,7 @@ onUnmounted(() => {
   gap: 0.5rem;
 }
 
-.w-[200px] {
-  width: 200px;
-}
-
 .w-100 {
   width: 100%;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
 }
 </style>
