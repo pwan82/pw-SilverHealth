@@ -1,5 +1,5 @@
 <template>
-  <ArticleDetailView :articleId="5" class="custom-article-view" />
+  <ArticleDetailView :articleId="articleId" class="custom-article-view" />
   <div class="container">
     <div class="col-md-10 offset-md-1">
       <div class="row mt-2 mb-5 iframe-container">
@@ -25,6 +25,7 @@
 import { ref, onMounted } from 'vue'
 import ArticleDetailView from '@/views/Article/ArticleDetailView.vue'
 
+const articleId = 5
 const showIframe = ref(false)
 
 onMounted(() => {

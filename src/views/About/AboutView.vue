@@ -1,7 +1,9 @@
 <template>
-  <ArticleDetailView :articleId="1" />
+  <ArticleDetailView :articleId="articleId" />
 </template>
 
 <script setup>
 import ArticleDetailView from '@/views/Article/ArticleDetailView.vue'
+
+const articleId = 1
 </script>

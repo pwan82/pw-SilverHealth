@@ -2,7 +2,6 @@
   <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col-md-12">
-
         <h1 class="text-center">My Event Registrations</h1>
         <p class="text-center">Check your events calendar and the list of all registered events.</p>
 
@@ -17,31 +16,53 @@
           <!-- FullCalendar -->
           <div class="row mt-5">
             <div class="event-calendar-container mx-auto">
-              <UserRegisteredEventCalendar :events="formattedRegistrations" :downloadPDF="downloadPDF"
-                :showQRCode="showQRCode" :showCancelConfirmation="showCancelConfirmation" />
+              <UserRegisteredEventCalendar
+                :events="formattedRegistrations"
+                :downloadPDF="downloadPDF"
+                :showQRCode="showQRCode"
+                :showCancelConfirmation="showCancelConfirmation"
+              />
             </div>
           </div>
 
           <!-- Search and filter controls -->
           <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-2 mb-3">
+            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-2 mb-3"
+          >
             <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
               <div class="mb-2 mb-md-0 me-md-2">
-                <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
-                  placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
+                <Select
+                  v-model="selectedSearchColumn"
+                  :options="searchColumns"
+                  optionLabel="label"
+                  placeholder="Select column"
+                  class="w-100 w-md-auto"
+                  @change="onSearchColumnChange"
+                />
               </div>
               <div v-if="selectedSearchColumn.field === 'eventTitle'">
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
-                  <InputText v-model="searchValue" placeholder="Search Event Title" @input="onSearchInput"
-                    class="w-100" />
+                  <InputText
+                    v-model="searchValue"
+                    placeholder="Search Event Title"
+                    @input="onSearchInput"
+                    class="w-100"
+                  />
                 </span>
               </div>
-              <div v-else-if="
-                ['startTime', 'endTime', 'bookingTime'].includes(selectedSearchColumn.field)
-              ">
-                <DatePicker v-model="dateRange" selectionMode="range" :manualInput="false"
-                  @date-select="onDateRangeChange" placeholder="Select date range" />
+              <div
+                v-else-if="
+                  ['startTime', 'endTime', 'bookingTime'].includes(selectedSearchColumn.field)
+                "
+              >
+                <DatePicker
+                  v-model="dateRange"
+                  selectionMode="range"
+                  :manualInput="false"
+                  @date-select="onDateRangeChange"
+                  placeholder="Select date range"
+                />
               </div>
             </div>
             <div>
@@ -52,21 +73,44 @@
             </div>
           </div>
 
-          <DataTable :value="formattedRegistrations" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
-            :filters="filters" filterDisplay="menu" removableSort responsive-layout="scroll">
+          <DataTable
+            :value="formattedRegistrations"
+            :paginator="true"
+            :rows="10"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+            :filters="filters"
+            filterDisplay="menu"
+            removableSort
+            responsive-layout="scroll"
+          >
             <Column field="eventTitle" header="Event Title" :sortable="true" filter>
               <template #body="slotProps">
-                <router-link class="fw-bold" :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }">
+                <router-link
+                  class="fw-bold"
+                  :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }"
+                >
                   {{ slotProps.data.eventTitle }}
                 </router-link>
               </template>
             </Column>
-            <Column field="startTime" header="Start Time" :sortable="true" filter filterMatchMode="between">
+            <Column
+              field="startTime"
+              header="Start Time"
+              :sortable="true"
+              filter
+              filterMatchMode="between"
+            >
               <template #body="slotProps">
                 {{ formatDate(slotProps.data.startTime) }}
               </template>
             </Column>
-            <Column field="endTime" header="End Time" :sortable="true" filter filterMatchMode="between">
+            <Column
+              field="endTime"
+              header="End Time"
+              :sortable="true"
+              filter
+              filterMatchMode="between"
+            >
               <template #body="slotProps">
                 {{ formatDate(slotProps.data.endTime) }}
               </template>
@@ -76,7 +120,13 @@
                 {{ formatDuration(slotProps.data.duration) }}
               </template>
             </Column>
-            <Column field="bookingTime" header="Booked At" :sortable="true" filter filterMatchMode="between">
+            <Column
+              field="bookingTime"
+              header="Booked At"
+              :sortable="true"
+              filter
+              filterMatchMode="between"
+            >
               <template #body="slotProps">
                 {{ formatDate(slotProps.data.bookingTime) }}
               </template>
@@ -90,16 +140,27 @@
                       <span class="visually-hidden">Loading...</span>
                     </div>
                   </div>
-                  <button class="btn btn-sm btn-primary" @click="downloadPDF(slotProps.data)"
-                    :disabled="slotProps.data.isLoading">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click="downloadPDF(slotProps.data)"
+                    :disabled="slotProps.data.isLoading"
+                  >
                     <i class="bi bi-file-earmark-pdf-fill"></i>
                   </button>
-                  <button class="btn btn-sm btn-outline-primary" @click="showQRCode(slotProps.data)"
-                    :disabled="slotProps.data.isLoading">
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    @click="showQRCode(slotProps.data)"
+                    :disabled="slotProps.data.isLoading"
+                  >
                     <i class="bi bi-qr-code"></i>
                   </button>
-                  <button class="btn btn-sm btn-danger" @click="showCancelConfirmation(slotProps.data)"
-                    :disabled="new Date(slotProps.data.endTime) <= new Date() || slotProps.data.isLoading">
+                  <button
+                    class="btn btn-sm btn-danger"
+                    @click="showCancelConfirmation(slotProps.data)"
+                    :disabled="
+                      new Date(slotProps.data.endTime) <= new Date() || slotProps.data.isLoading
+                    "
+                  >
                     <i class="bi bi-x-circle"></i>
                   </button>
                 </div>
@@ -107,7 +168,8 @@
             </Column>
 
             <!-- Empty state template -->
-            clearFilters <template #empty>
+            clearFilters
+            <template #empty>
               <div class="text-center p-4">
                 <template v-if="userRegistrations.length === 0">
                   <i class="bi bi-calendar-x fs-1 text-muted"></i>
@@ -123,7 +185,10 @@
                   <i class="bi bi-search fs-1 text-muted"></i>
                   <p class="mt-3">No events match your current search criteria.</p>
                   <div class="d-flex justify-content-center">
-                    <button @click="clearFilters" class="btn btn-outline-primary custom-button  mt-2">
+                    <button
+                      @click="clearFilters"
+                      class="btn btn-outline-primary custom-button mt-2"
+                    >
                       <i class="bi bi-x-lg mr-2"></i>
                       <div class="button-text">Clear Search</div>
                     </button>
@@ -138,12 +203,23 @@
   </div>
 
   <!-- QR Code Modal -->
-  <div class="modal fade" id="qrCodeModal" tabindex="-1" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
+  <div
+    class="modal fade"
+    id="qrCodeModal"
+    tabindex="-1"
+    aria-labelledby="qrCodeModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="qrCodeModalLabel">QR Code for Event Entry</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body text-center">
           <qrcode-vue :value="qrCodeText" :size="200" level="H" render-as="canvas" />
@@ -156,13 +232,23 @@
   </div>
 
   <!-- Cancel Confirmation Modal -->
-  <div class="modal fade" id="cancelConfirmModal" tabindex="-1" aria-labelledby="cancelConfirmModalLabel"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="cancelConfirmModal"
+    tabindex="-1"
+    aria-labelledby="cancelConfirmModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="cancelConfirmModalLabel">Confirm Cancellation</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body">
           <p>Are you sure you want to cancel your registration for this event?</p>
@@ -172,8 +258,12 @@
           <p><strong>Booked At:</strong> {{ formatDate(selectedEvent?.bookingTime) }}</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Keep My Registration</button>
-          <button type="button" class="btn btn-danger" @click="confirmCancel">Yes, Cancel My Registration</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            No, Keep My Registration
+          </button>
+          <button type="button" class="btn btn-danger" @click="confirmCancel">
+            Yes, Cancel My Registration
+          </button>
         </div>
       </div>
     </div>
@@ -230,13 +320,16 @@ const formatRegistrations = (registrations) => {
 }
 
 // Watch for changes in userRegistrations and update formattedRegistrations
-watch(userRegistrations, (newRegistrations) => {
-  formattedRegistrations.value = formatRegistrations(newRegistrations)
-}, { deep: true })
-
+watch(
+  userRegistrations,
+  (newRegistrations) => {
+    formattedRegistrations.value = formatRegistrations(newRegistrations)
+  },
+  { deep: true }
+)
 
 const setRegistrationLoading = (eventId, isLoading) => {
-  const index = formattedRegistrations.value.findIndex(reg => reg.eventId === eventId)
+  const index = formattedRegistrations.value.findIndex((reg) => reg.eventId === eventId)
   if (index !== -1) {
     formattedRegistrations.value[index].isLoading = isLoading
   }
@@ -329,11 +422,14 @@ const downloadPDF = async (event) => {
   try {
     setRegistrationLoading(event.eventId, true)
 
-    const response = await axios.get(`https://geteventbyid-s3vwdaiioq-uc.a.run.app?id=${event.eventId}`, {
-      headers: {
-        Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+    const response = await axios.get(
+      `https://geteventbyid-s3vwdaiioq-uc.a.run.app?id=${event.eventId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+        }
       }
-    })
+    )
     const eventDetails = response.data
 
     const doc = new jsPDF()
@@ -368,7 +464,10 @@ const downloadPDF = async (event) => {
       ['Venue', eventDetails.address.placeName],
       ['Address', eventDetails.address.addressString],
       ['Event Duration', formatTimeDifference(eventDetails.startTime, eventDetails.endTime)],
-      ['Start & End Time', 'From ' + formatDate(eventDetails.startTime) + ' to ' + formatDate(eventDetails.endTime)],
+      [
+        'Start & End Time',
+        'From ' + formatDate(eventDetails.startTime) + ' to ' + formatDate(eventDetails.endTime)
+      ],
       ['Total Capacity', eventDetails.totalCapacity.toString()]
     ]
     addTable(['Attribute', 'Value'], eventData)

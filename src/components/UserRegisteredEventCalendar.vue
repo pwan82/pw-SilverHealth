@@ -3,13 +3,23 @@
     <div ref="calendarEl" class="event-calendar"></div>
 
     <!-- Bootstrap Modal -->
-    <div class="modal fade" id="eventActionModal" tabindex="-1" aria-labelledby="eventActionModalLabel"
-      aria-hidden="true">
+    <div
+      class="modal fade"
+      id="eventActionModal"
+      tabindex="-1"
+      aria-labelledby="eventActionModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="eventActionModalLabel">Event Actions</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <p>
@@ -22,16 +32,25 @@
             <p><strong>End Time:</strong> {{ formatDate(selectedEvent?.endTime) }}</p>
             <p><strong>Booked At:</strong> {{ formatDate(selectedEvent?.bookingTime) }}</p>
             <div class="d-grid gap-2">
-              <button class="btn btn-primary custom-button" @click="handleModalAction('downloadPDF')">
+              <button
+                class="btn btn-primary custom-button"
+                @click="handleModalAction('downloadPDF')"
+              >
                 <i class="bi bi-file-earmark-pdf-fill"></i>
                 <div class="button-text">Download PDF ticket</div>
               </button>
-              <button class="btn btn-outline-primary custom-button" @click="handleModalAction('showQRCode')">
+              <button
+                class="btn btn-outline-primary custom-button"
+                @click="handleModalAction('showQRCode')"
+              >
                 <i class="bi bi-qr-code"></i>
                 <div class="button-text">Show QR Code for entry</div>
               </button>
-              <button class="btn btn-danger custom-button" @click="handleModalAction('showCancelConfirmation')"
-                :disabled="isEventPast">
+              <button
+                class="btn btn-danger custom-button"
+                @click="handleModalAction('showCancelConfirmation')"
+                :disabled="isEventPast"
+              >
                 <i class="bi bi-x-circle"></i>
                 <div class="button-text">Cancel Registration</div>
               </button>
@@ -130,15 +149,19 @@ onUnmounted(() => {
   }
 })
 
-watch(() => props.events, (newEvents) => {
-  if (calendar) {
-    calendar.removeAllEvents()
-    calendar.addEventSource(formatEvents(newEvents))
-  }
-}, { deep: true })
+watch(
+  () => props.events,
+  (newEvents) => {
+    if (calendar) {
+      calendar.removeAllEvents()
+      calendar.addEventSource(formatEvents(newEvents))
+    }
+  },
+  { deep: true }
+)
 
 const formatEvents = (events) => {
-  return events.map(event => ({
+  return events.map((event) => ({
     id: event.bookingId,
     title: event.eventTitle,
     start: event.startTime,
@@ -151,7 +174,7 @@ const formatEvents = (events) => {
 }
 
 const handleEventClick = (info) => {
-  const event = props.events.find(e => e.bookingId === info.event.id)
+  const event = props.events.find((e) => e.bookingId === info.event.id)
   if (event) {
     selectedEvent.value = event
     eventActionModal.show()
