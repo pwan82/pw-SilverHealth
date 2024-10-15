@@ -1,12 +1,46 @@
 <template>
-  <div class="book-by-phone">
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-8 offset-md-2">
-          <h1 class="text-center">Book Services by Telephone</h1>
-          <p class="text-center">Guidelines to book services by telephone.</p>
-        </div>
+  <ArticleDetailView :articleId="7" class="custom-article-view" />
+  <div class="container">
+    <div class="col-md-10 offset-md-1">
+      <div class="button-container">
+        <router-link :to="{ name: 'Donate' }" class="btn btn-primary btn-lg custom-lg-button">
+          <i class="bi bi-geo-alt-fill"></i>
+          <span class="button-lg-text">Find Nearby Service Centres</span>
+        </router-link>
+        <a :href="telLink" class="btn btn-outline-primary btn-lg custom-lg-button">
+          <i class="bi bi-telephone-fill"></i>
+          <span class="button-lg-text">Call Our Main Booking Line</span>
+        </a>
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+import ArticleDetailView from '@/views/Article/ArticleDetailView.vue'
+const telLink = 'tel:+61312345678'
+</script>
+
+<style scoped>
+.custom-article-view {
+  margin-bottom: 0 !important;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .button-container {
+    flex-direction: row;
+  }
+}
+
+.custom-lg-button {
+  flex: 1;
+}
+</style>

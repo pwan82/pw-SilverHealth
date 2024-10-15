@@ -63,11 +63,6 @@
               >
             </li>
             <li>
-              <router-link to="/event/calendar" class="dropdown-item" active-class="active"
-                >My Event Calendar</router-link
-              >
-            </li>
-            <li>
               <router-link to="/event/registered" class="dropdown-item" active-class="active"
                 >My Event Registrations</router-link
               >
@@ -256,7 +251,7 @@ const activeParent = computed(() => {
     return 'home'
   } else if (['ArticleDetail', 'ArticleList', 'NewsList'].includes(route.name)) {
     return 'info'
-  } else if (['EventList', 'MyEventCalendar', 'MyEventRegistrations'].includes(route.name)) {
+  } else if (['EventList', 'MyEventRegistrations'].includes(route.name)) {
     return 'events'
   } else if (
     [

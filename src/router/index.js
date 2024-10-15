@@ -40,12 +40,12 @@ const routes = [
     name: 'EventDetail',
     component: () => import('../views/CommunityEvent/EventDetailView.vue')
   },
-  {
-    path: '/event/calendar',
-    name: 'MyEventCalendar',
-    component: () => import('../views/CommunityEvent/MyEventCalendarView.vue'),
-    meta: { requiresAuth: true }
-  },
+  // {
+  //   path: '/event/calendar',
+  //   name: 'MyEventCalendar',
+  //   component: () => import('../views/CommunityEvent/MyEventCalendarView.vue'),
+  //   meta: { requiresAuth: true }
+  // },
   {
     path: '/event/registered',
     name: 'MyEventRegistrations',

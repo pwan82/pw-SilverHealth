@@ -35,10 +35,10 @@
               </div>
             </div>
             <div>
-              <Button type="button" outlined @click="clearFilters" class="w-100 w-md-auto">
+              <button @click="clearFilters" class="btn btn-outline-primary custom-button">
                 <i class="bi bi-x-lg mr-2"></i>
-                Clear Search
-              </Button>
+                <div class="button-text">Clear Search</div>
+              </button>
             </div>
           </div>
 

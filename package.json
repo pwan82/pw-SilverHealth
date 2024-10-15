@@ -12,10 +12,18 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@fullcalendar/bootstrap5": "^6.1.15",
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/list": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
     "@mapbox/mapbox-gl-directions": "^4.3.1",
     "@primevue/themes": "^4.0.5",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "cors": "^2.8.5",
     "dompurify": "^3.1.6",
     "express": "^4.21.0",

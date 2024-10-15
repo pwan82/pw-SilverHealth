@@ -2,8 +2,9 @@
   <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col-md-12">
+
         <h1 class="text-center">My Event Registrations</h1>
-        <p class="text-center">View and manage your event registrations.</p>
+        <p class="text-center">Check your events calendar and the list of all registered events.</p>
 
         <!-- Loading indicator -->
         <div v-if="loading" class="text-center my-4">
@@ -13,9 +14,17 @@
         </div>
 
         <div v-else>
+          <!-- FullCalendar -->
+          <div class="row mt-5">
+            <div class="event-calendar-container mx-auto">
+              <UserRegisteredEventCalendar :events="formattedRegistrations" :downloadPDF="downloadPDF"
+                :showQRCode="showQRCode" :showCancelConfirmation="showCancelConfirmation" />
+            </div>
+          </div>
+
           <!-- Search and filter controls -->
           <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-2 mb-3">
             <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
               <div class="mb-2 mb-md-0 me-md-2">
                 <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
@@ -36,10 +45,10 @@
               </div>
             </div>
             <div>
-              <Button type="button" outlined @click="clearFilters" class="w-100 w-md-auto">
+              <button @click="clearFilters" class="btn btn-outline-primary custom-button">
                 <i class="bi bi-x-lg mr-2"></i>
-                Clear Search
-              </Button>
+                <div class="button-text">Clear Search</div>
+              </button>
             </div>
           </div>
 
@@ -98,13 +107,28 @@
             </Column>
 
             <!-- Empty state template -->
-            <template #empty>
+            clearFilters <template #empty>
               <div class="text-center p-4">
-                <i class="bi bi-calendar-x fs-1 text-muted"></i>
-                <p class="mt-3">You haven't registered for any events yet.</p>
-                <router-link to="/event" class="btn btn-primary mt-2">
-                  Browse Events
-                </router-link>
+                <template v-if="userRegistrations.length === 0">
+                  <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                  <p class="mt-3">You haven't registered for any events yet.</p>
+                  <div class="d-flex justify-content-center">
+                    <router-link to="/event" class="btn btn-primary custom-button mt-2">
+                      <i class="bi bi-list-task mr-2"></i>
+                      <div class="button-text">Browse All Events</div>
+                    </router-link>
+                  </div>
+                </template>
+                <template v-else>
+                  <i class="bi bi-search fs-1 text-muted"></i>
+                  <p class="mt-3">No events match your current search criteria.</p>
+                  <div class="d-flex justify-content-center">
+                    <button @click="clearFilters" class="btn btn-outline-primary custom-button  mt-2">
+                      <i class="bi bi-x-lg mr-2"></i>
+                      <div class="button-text">Clear Search</div>
+                    </button>
+                  </div>
+                </template>
               </div>
             </template>
           </DataTable>
@@ -118,7 +142,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="qrCodeModalLabel">Event QR Code</h5>
+          <h5 class="modal-title" id="qrCodeModalLabel">QR Code for Event Entry</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
@@ -164,9 +188,10 @@ import axios from 'axios'
 import { jsPDF } from 'jspdf'
 import 'jspdf-autotable'
 import { useToast } from 'primevue/usetoast'
-import { useAuthStore } from '@/stores/authStore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
+
+import UserRegisteredEventCalendar from '@/components/UserRegisteredEventCalendar.vue'
 
 const toast = useToast()
 
@@ -479,6 +504,11 @@ const formatTimeDifference = (startTimestamp, endTimestamp) => {
 </script>
 
 <style scoped>
+.event-calendar-container {
+  margin-bottom: 2rem;
+  max-width: 1000px;
+}
+
 .search-controls {
   margin-bottom: 1rem;
 }

@@ -90,6 +90,21 @@
     "isRatable": false
   },
   {
+    "articleId": 7,
+    "author": "SilverHealth Team",
+    "publicationTime": 1716018600000,
+    "modificationTime": 1729804800000,
+    "category": ["document"],
+    "title": "Book Services by Telephone: Guidelines",
+    "body": "To book services by telephone, please have the following information ready:\n\n- **Personal Details**: Name, address, and contact information.\n- **Condition/Issue**: Describe your health condition or symptoms.\n- **Type of Assistance**: Specify the type of service or support you require.\n\n---\n\n1. **Find Nearby Service Centres**: Use our [Find Services Map](/get-support/find-services) to locate the closest SilverHealth Service Centre and call them to schedule in-home assistance or support.\n2. **Call Our Main Booking Line**: Alternatively, you can call the SilverHealth main booking line for assistance with scheduling a service: [+61 3 1234 5678](tel:+61312345678).",
+    "requireAuth": false,
+    "isVisible": true,
+    "showInList": false,
+    "showMetadata": false,
+    "showCategory": false,
+    "isRatable": false
+  },
+  {
     "articleId": 10,
     "author": "SilverHealth Team",
     "publicationTime": 1716028600000,

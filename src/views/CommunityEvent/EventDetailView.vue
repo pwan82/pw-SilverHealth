@@ -39,7 +39,7 @@
                     <div class="card-body">
                       <h4 class="card-title mt-2">{{ registerCardTitle }}</h4>
                       <div v-if="isRegistrationOpen">
-                        <h6 class="card-subtitle mb-2 text-muted">free</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">for free</h6>
                       </div>
 
                       <!-- Show Capacity -->
