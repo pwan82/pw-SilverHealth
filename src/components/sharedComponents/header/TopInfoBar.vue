@@ -27,7 +27,7 @@ const redirectToLogin = () => {
 
 const currentUser = ref(null)
 const currentRole = computed(() => authStore.role)
-const currentEmail = computed(() => authStore.email)
+// const currentEmail = computed(() => authStore.email)
 const currentUserInfo = computed(() => authStore.userInfo)
 
 onMounted(() => {
@@ -64,7 +64,7 @@ onMounted(() => {
             }})</span
           >
           <span class="mx-2 non-selectable">|</span>
-          <router-link to="/account" class="text-decoration-none">My Account</router-link>
+          <router-link to="/profile" class="text-decoration-none">My Profile</router-link>
           <span class="mx-2 non-selectable">|</span>
           <a
             href="#"

@@ -31,18 +31,19 @@ console.log('cloudFunctionsLocation: ', region)
 // });
 
 // authFunctions
-const { assignUserRole, onAdminUserChanged } = require('./authFunctions')
+const { assignUserRole } = require('./authFunctions')
 // Set custom claims for the user (default role is 'user')
 exports.assignUserRole = assignUserRole
-// Triggered when there is a change in the adminUsers collection
-exports.onAdminUserChanged = onAdminUserChanged
 
 // userFunctions
-const { updateUserInfo } = require('./userFunctions')
+const { getUserInfo, updateUserInfo } = require('./userFunctions')
+exports.getUserInfo = getUserInfo
 exports.updateUserInfo = updateUserInfo
 
 // adminFunctions
-const { getAllUsers } = require('./adminFunctions')
+const { onAdminUserChanged, getAllUsers } = require('./adminFunctions')
+// Triggered when there is a change in the adminUsers collection
+exports.onAdminUserChanged = onAdminUserChanged
 exports.getAllUsers = getAllUsers
 
 // articleFunctions

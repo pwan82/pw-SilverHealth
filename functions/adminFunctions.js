@@ -1,3 +1,4 @@
+const functions = require('firebase-functions')
 const { onRequest } = require('firebase-functions/v2/https')
 const admin = require('firebase-admin')
 const cors = require('cors')({ origin: true }) // Enable CORS with any origin
@@ -6,6 +7,46 @@ const db = admin.firestore()
 
 const { checkUserRole } = require('./authFunctions')
 const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
+
+// Triggered when there is a change in the adminUsers collection
+exports.onAdminUserChanged = functions.firestore
+  .document('adminUsers/{userId}')
+  .onWrite(async (change, context) => {
+    const userId = context.params.userId
+    const newValue = change.after.exists ? change.after.data() : null
+    // const previousValue = change.before.exists ? change.before.data() : null
+
+    // If the document is deleted, remove the admin role from the user
+    if (!newValue) {
+      try {
+        await admin.auth().setCustomUserClaims(userId, { role: 'user' })
+        console.log(`Admin role removed from user ${userId}`)
+      } catch (error) {
+        console.error('Error removing admin role:', error)
+      }
+      return
+    }
+
+    // If isAdmin is true, assign the admin role to the user
+    if (newValue.isAdmin === true) {
+      try {
+        await admin.auth().setCustomUserClaims(userId, { role: 'admin' })
+        console.log(`Admin role assigned to user ${userId}`)
+      } catch (error) {
+        console.error('Error assigning admin role:', error)
+      }
+      return
+    }
+    // If the user was previously an admin and isAdmin is now false, remove the admin role
+    else {
+      try {
+        await admin.auth().setCustomUserClaims(userId, { role: 'user' })
+        console.log(`Admin role removed from user ${userId}, set to user role.`)
+      } catch (error) {
+        console.error('Error setting user role:', error)
+      }
+    }
+  })
 
 exports.getAllUsers = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {

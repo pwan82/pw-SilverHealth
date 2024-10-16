@@ -4,23 +4,16 @@
       <div class="col-md-8 offset-md-2">
         <h1 class="text-center">Sign Up</h1>
         <p class="text-center">
-          Join SilverHealth today.<br />
-          Fill in the details to create an account.
+          Join SilverHealth today.
+          <br />Fill in the details to create an account.
         </p>
         <form @submit.prevent="handleRegister">
           <div class="row">
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email *</label>
-              <input
-                type="text"
-                class="form-control"
-                id="email"
-                v-model="formData.email"
-                @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)"
-                placeholder="Enter email"
-              />
+              <input type="text" class="form-control" id="email" v-model="formData.email"
+                @blur="() => validateEmail(true)" @input="() => validateEmail(false)" placeholder="Enter email" />
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Username Input -->
@@ -28,55 +21,30 @@
                 <div class="fw-bold">Username *</div>
                 <div>Length from 3 to 30 characters.</div>
               </label>
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                v-model="formData.username"
-                @blur="() => validateUsername(true)"
-                @input="() => validateUsername(false)"
-                placeholder="Enter username"
-                maxlength="30"
-              />
+              <input type="text" class="form-control" id="username" v-model="formData.username"
+                @blur="() => validateUsername(true)" @input="() => validateUsername(false)" placeholder="Enter username"
+                maxlength="30" />
               <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
 
               <!-- Password Input -->
               <label for="password" class="form-label mt-3 fw-bold">Password *</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                v-model="formData.password"
-                @blur="() => validatePassword(true)"
-                @input="() => validatePassword(false)"
-                placeholder="Enter password"
-              />
+              <input type="password" class="form-control" id="password" v-model="formData.password"
+                @blur="() => validatePassword(true)" @input="() => validatePassword(false)"
+                placeholder="Enter password" />
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
 
               <!-- Confirm Password Input -->
-              <label for="confirmPassword" class="form-label mt-3 fw-bold"
-                >Confirm Password *</label
-              >
-              <input
-                type="password"
-                class="form-control"
-                id="confirmPassword"
-                v-model="formData.confirmPassword"
-                @blur="() => validateConfirmPassword(true)"
-                @input="() => validateConfirmPassword(false)"
-                placeholder="Confirm password"
-              />
+              <label for="confirmPassword" class="form-label mt-3 fw-bold">Confirm Password *</label>
+              <input type="password" class="form-control" id="confirmPassword" v-model="formData.confirmPassword"
+                @blur="() => validateConfirmPassword(true)" @input="() => validateConfirmPassword(false)"
+                placeholder="Confirm password" />
               <div v-if="errors.confirmPassword" class="text-danger">
                 {{ errors.confirmPassword }}
               </div>
 
               <!-- Gender Selection -->
               <label for="gender" class="form-label mt-3 fw-bold">Gender *</label>
-              <select
-                class="form-select"
-                @blur="() => validateGender(true)"
-                v-model="formData.gender"
-              >
+              <select class="form-select" @blur="() => validateGender(true)" v-model="formData.gender">
                 <option value="" disabled selected>Select your gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -90,26 +58,37 @@
                 <div class="fw-bold">Birthday *</div>
                 <div>You should be older than 13 to sign up.</div>
               </label>
-              <input
-                type="date"
-                class="form-control"
-                v-model="formData.birthday"
-                placeholder="Select your birthday"
-                @blur="() => validateBirthday(true)"
-                @input="() => validateBirthday(false)"
-              />
+              <input type="date" class="form-control" v-model="formData.birthday" placeholder="Select your birthday"
+                @blur="() => validateBirthday(true)" @input="() => validateBirthday(false)" />
               <!-- :max="maxDate" -->
               <div v-if="errors.birthday" class="text-danger">{{ errors.birthday }}</div>
+
+              <!-- Terms and Policy Checkbox -->
+              <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" id="agreeToTerms" v-model="formData.agreeToTerms"
+                  @blur="() => validateAgreeToTerms(true)" @input="() => validateAgreeToTerms(false)">
+                <label class="form-check-label" for="agreeToTerms">
+                  I agree to the
+                  <a href="/about/terms-and-policy" target="_blank" rel="noopener noreferrer">
+                    terms and policy</a> *
+                </label>
+              </div>
+              <div v-if="errors.agreeToTerms" class="text-danger">{{ errors.agreeToTerms }}</div>
+
+              <!-- Newsletter Subscription Checkbox -->
+              <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" id="subscribeToNewsletter"
+                  v-model="formData.subscribeToNewsletter">
+                <label class="form-check-label" for="subscribeToNewsletter">
+                  Subscribe to our newsletter
+                </label>
+              </div>
 
               <!-- Register Button -->
               <div class="mt-3 d-grid gap-2">
                 <button type="submit" class="btn btn-primary button-text" :disabled="isSubmitting">
-                  <span
-                    v-if="isSubmitting"
-                    class="spinner-border spinner-border-sm me-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
+                  <i v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
+                    aria-hidden="true"></i>
                   Register Now
                 </button>
               </div>
@@ -119,7 +98,7 @@
 
         <div class="row mb-3">
           <div class="col-sm-6 offset-sm-3">
-            <!-- Login with Google Button -->
+            <!-- Back to Login Button -->
             <div class="position-relative my-4">
               <Divider align="center">
                 <b>Already have an account?</b>
@@ -140,7 +119,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/firebase/init'
 import axios from 'axios'
 import {
   validateInputEmail,
@@ -150,6 +130,9 @@ import {
   validateInputBirthday
 } from '@/utils/inputValidators'
 import DOMPurify from 'dompurify' // Import DOMPurify for sanitizing input
+
+import { useToast } from 'primevue/usetoast'
+const toast = useToast()
 
 const router = useRouter()
 
@@ -167,7 +150,8 @@ const formData = ref({
     state: '',
     postcode: ''
   },
-  subscribeToNewsletter: true
+  subscribeToNewsletter: false,
+  agreeToTerms: false
 })
 
 const errors = ref({
@@ -176,17 +160,18 @@ const errors = ref({
   password: null,
   confirmPassword: null,
   gender: null,
-  birthday: null
+  birthday: null,
+  agreeToTerms: null
 })
 
 // Helper function to sanitize inputs using DOMPurify
 const sanitizeInput = (input) => DOMPurify.sanitize(input)
 
 // Calculate the max date allowed for birthday (13 years ago from today)
-const today = new Date()
-const maxDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate())
-  .toISOString()
-  .split('T')[0]
+// const today = new Date()
+// const maxDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate())
+//   .toISOString()
+//   .split('T')[0]
 
 const isSubmitting = ref(false)
 
@@ -205,6 +190,7 @@ const handleRegister = () => {
   validateConfirmPassword(true)
   validateGender(true)
   validateBirthday(true)
+  validateAgreeToTerms(true)
 
   if (
     !errors.value.email &&
@@ -212,24 +198,22 @@ const handleRegister = () => {
     !errors.value.password &&
     !errors.value.confirmPassword &&
     !errors.value.gender &&
-    !errors.value.birthday
+    !errors.value.birthday &&
+    !errors.value.agreeToTerms
   ) {
     isSubmitting.value = true
 
     // Register the user with Firebase Authentication
-    const auth = getAuth()
     createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password)
       .then((userCredential) => {
-        const user = userCredential.user
-        console.log('User registered successfully!', user.uid)
-
+        const user = userCredential.user;
+        console.log('User registered successfully!', user.uid);
         // Get a fresh token
-        return user.getIdToken(true)
+        return Promise.all([user.getIdToken(true), user.email]);
       })
-      .then((freshToken) => {
+      .then(([freshToken, email]) => {
         // Prepare the data for updating user information
         const userData = {
-          email: formData.value.email,
           username: formData.value.username,
           gender: formData.value.gender,
           birthday: formData.value.birthday,
@@ -242,7 +226,16 @@ const handleRegister = () => {
         }
 
         // Call the updateUserInfo API
-        return axios.post('https://updateuserinfo-s3vwdaiioq-ts.a.run.app', userData, config)
+        const response = axios.post('https://updateuserinfo-s3vwdaiioq-ts.a.run.app', userData, config)
+
+        toast.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `Welcome to SilverHealth!\n\nYou logged in as: ${email}`,
+          life: 3000
+        })
+
+        return response
       })
       .then((response) => {
         console.log('User information updated successfully:', response.data)
@@ -314,12 +307,19 @@ const validateBirthday = (blur) => {
   const birthday = formData.value.birthday
   errors.value.birthday = validateInputBirthday(blur, birthday).message
 }
+
+const validateAgreeToTerms = (blur) => {
+  if (!formData.value.agreeToTerms) {
+    errors.value.agreeToTerms = blur ? 'You must agree to the terms and policy to register' : null
+  } else {
+    errors.value.agreeToTerms = null
+  }
+}
 </script>
 
 <style scoped>
 .container {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 80vw;
+  max-width: 90%;
   margin: 0 auto;
   padding: 20px;
   border-radius: 10px;

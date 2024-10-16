@@ -95,9 +95,9 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/account',
-    name: 'MyAccount',
-    component: () => import('../views/Account/AccountView.vue'),
+    path: '/profile',
+    name: 'MyProfile',
+    component: () => import('../views/Account/MyProfileView.vue'),
     meta: { requiresAuth: true }
   },
   // {

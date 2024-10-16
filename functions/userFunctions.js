@@ -3,7 +3,7 @@ const admin = require('firebase-admin')
 const cors = require('cors')({ origin: true }) // Enable CORS with any origin
 
 const {
-  isValidEmail,
+  // isValidEmail,
   isValidUsername,
   isValidGender,
   isValidBirthday,
@@ -25,7 +25,6 @@ const db = admin.firestore()
  * @name updateUserInfo
  * @param {Object} req - The request object from Firebase Functions.
  * @param {Object} req.body - The body of the request containing user information to update.
- * @param {string} [req.body.email] - The user's email address.
  * @param {string} [req.body.username] - The user's username.
  * @param {string} [req.body.gender] - The user's gender.
  * @param {string} [req.body.birthday] - The user's birthday.
@@ -81,14 +80,9 @@ exports.updateUserInfo = onRequest({ region: region }, (req, res) => {
       // Initialize an object to hold the fields to be updated
       const updateData = {}
 
-      // Validate email
-      if (sanitizedData.email) {
-        if (isValidEmail(sanitizedData.email)) {
-          updateData.email = sanitizedData.email
-        } else {
-          return res.status(400).send('Invalid email format.')
-        }
-      }
+      // Fetch the user's email from Firebase Auth
+      const userRecord = await admin.auth().getUser(userId)
+      updateData.email = userRecord.email
 
       // Validate username
       if (sanitizedData.username) {
@@ -153,6 +147,70 @@ exports.updateUserInfo = onRequest({ region: region }, (req, res) => {
     } catch (error) {
       console.error(`Error updating user information: ${error}`)
       res.status(500).send('Failed to update user information')
+    }
+  })
+})
+
+/**
+ * Cloud Function to get user information.
+ * This function uses GET method and requires authentication.
+ * Users can only retrieve their own profile information.
+ * If the user document doesn't exist, it returns an empty object.
+ *
+ * @function
+ * @name getUserInfo
+ * @param {Object} req - The request object from Firebase Functions.
+ * @param {Object} res - The response object from Firebase Functions.
+ * @returns {Promise<void>} A promise that resolves when the operation is complete.
+ *
+ * @throws {Error} If the user is not authenticated.
+ * @throws {Error} If there's an error retrieving the user information.
+ */
+exports.getUserInfo = onRequest({ region: region }, (req, res) => {
+  return cors(req, res, async () => {
+    // Check if the request method is GET
+    if (req.method !== 'GET') {
+      return res.status(405).send('Method Not Allowed')
+    }
+
+    try {
+      // Check user authentication and role
+      const authCheck = await checkUserRole(req.headers, null)
+      if (!authCheck.isLoggedIn) {
+        return res.status(401).send('User must be logged in to retrieve profile')
+      }
+
+      const { userId } = authCheck
+
+      // Retrieve user information from Firestore
+      const userRef = db.collection('users').doc(userId)
+      const userDoc = await userRef.get()
+
+      let userData = {}
+
+      if (userDoc.exists) {
+        const data = userDoc.data()
+        userData = {
+          email: data.email || '',
+          gender: data.gender || '',
+          birthday: data.birthday || '',
+          address: {
+            streetAddress: data.address?.streetAddress || '',
+            building: data.address?.building || '',
+            suburb: data.address?.suburb || '',
+            state: data.address?.state || '',
+            postcode: data.address?.postcode || ''
+          },
+          username: data.username || '',
+          subscribeToNewsletter: data.subscribeToNewsletter || false
+        }
+      }
+
+      console.log(`User information retrieved for user ${userId}`)
+      res.status(200).json(userData)
+    } catch (error) {
+      console.error(`Error retrieving user information: ${error}`)
+      res.status(500).send('Failed to retrieve user information')
     }
   })
 })

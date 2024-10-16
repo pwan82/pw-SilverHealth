@@ -149,3 +149,57 @@ export const validateInputBirthday = (blur, value) => {
     return { isValid: true, message: null }
   }
 }
+
+/**
+ * Validate address input
+ * @param {boolean} blur - Whether the validation is triggered on blur
+ * @param {Object} address - The address object to validate
+ * @param {string} address.building - Building name or number
+ * @param {string} address.postcode - Postcode
+ * @param {string} address.state - State
+ * @param {string} address.streetAddress - Street address
+ * @param {string} address.suburb - Suburb
+ * @returns {Object} - Returns the validation result and error messages
+ */
+export const validateInputAddress = (blur, address) => {
+  const errors = {}
+  let isValid = true
+
+  // Helper function to validate a single field
+  const validateField = (field, name, required = false, maxLength = 150, regex = null) => {
+    if (required && (!field || field.trim() === '')) {
+      errors[name] = `${name} is required.`
+      isValid = false
+    } else if (field && field.length > maxLength) {
+      errors[name] = `${name} must be ${maxLength} characters or less.`
+      isValid = false
+    } else if (field && regex && !regex.test(field)) {
+      errors[name] = `Invalid ${name} format.`
+      isValid = false
+    }
+  }
+
+  // Validate Street Address
+  validateField(address.streetAddress, 'Street Address', true, 150)
+
+  // Validate Building
+  validateField(address.building, 'Building', false, 50)
+
+  // Validate Suburb
+  validateField(address.suburb, 'Suburb', true, 50)
+
+  // Validate State
+  const stateRegex = /^[A-Za-z\s]{2,50}$/
+  validateField(address.state, 'State', true, 50, stateRegex)
+
+  // Validate Postcode
+  const postcodeRegex = /^\d{4,10}$/
+  validateField(address.postcode, 'Postcode', true, 10, postcodeRegex)
+
+  // If it's not a blur event and there are no errors, return valid
+  if (!blur && isValid) {
+    return { isValid: true, errors: {} }
+  }
+
+  return { isValid, errors: blur ? errors : {} }
+}

@@ -12,21 +12,18 @@
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)"
-                v-model="email"
-                placeholder="Enter email"
-              />
+              <input type="email" class="form-control" id="email" @blur="() => validateEmail(true)"
+                @input="() => validateEmail(false)" v-model="email" placeholder="Enter email" />
               <div v-if="errorMessage" class="text-danger mt-2">{{ errorMessage }}</div>
               <div v-if="successMessage" class="text-success mt-2">{{ successMessage }}</div>
 
               <!-- Submit Button -->
               <div class="mt-3 d-grid gap-2">
-                <button type="submit" class="btn btn-primary button-text">Send Reset Link</button>
+                <button type="submit" class="btn btn-primary button-text" :disabled="isSubmitting">
+                  <i v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
+                    aria-hidden="true"></i>
+                  Send Reset Link
+                </button>
                 <router-link :to="{ name: 'Login' }" class="btn btn-outline-primary button-text">
                   Back to Login
                 </router-link>
@@ -44,12 +41,17 @@ import { ref } from 'vue'
 import { auth } from '@/firebase/init'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import DOMPurify from 'dompurify'
-import * as inputValidators from '@/utils/inputValidators'
+import { validateInputEmail } from '@/utils/inputValidators'
+
+import { useToast } from 'primevue/usetoast'
+const toast = useToast()
 
 const email = ref('')
 const errorMessage = ref(null)
 const successMessage = ref(null)
 const sanitizeInput = (input) => DOMPurify.sanitize(input)
+
+const isSubmitting = ref(false)
 
 const handleResetPassword = async () => {
   errorMessage.value = null
@@ -60,8 +62,16 @@ const handleResetPassword = async () => {
 
   if (!errorMessage.value) {
     try {
+      isSubmitting.value = true
+
       await sendPasswordResetEmail(auth, filteredEmail)
       successMessage.value = 'Password reset link sent to your email!'
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `Password reset link sent to your email!`,
+        life: 3000
+      })
     } catch (error) {
       console.error('Error sending reset email:', error)
       // switch (error.code) {
@@ -74,12 +84,14 @@ const handleResetPassword = async () => {
       //   default:
       //     errorMessage.value = 'Error occurred. Please try again later.'
       // }
+    } finally {
+      isSubmitting.value = false
     }
   }
 }
 
 const validateEmail = (blur) => {
-  errorMessage.value = inputValidators.validateInputEmail(blur, email.value).message
+  errorMessage.value = validateInputEmail(blur, email.value).message
   if (!blur) {
     successMessage.value = null
   }

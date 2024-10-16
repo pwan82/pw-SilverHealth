@@ -6,14 +6,10 @@
         <!-- <div class="col-12 col-md-6 d-flex flex-column flex-md-row align-items-start mb-3 mb-md-0 gap-4"> -->
         <div class="col-12 col-md-6">
           <div class="row">
-            <div
-              class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center mb-md-0 mb-2"
-            >
+            <div class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center mb-md-0 mb-2">
               <FirstAidGuideButton class="w-100" />
             </div>
-            <div
-              class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center mb-md-0 mb-2"
-            >
+            <div class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center mb-md-0 mb-2">
               <DonateButton class="w-100" />
             </div>
           </div>
@@ -21,16 +17,9 @@
 
         <!-- Subscribe section -->
         <div class="col-12 col-md-6 d-flex flex-column align-items-md-end align-items-start">
-          <span class="mb-2"
-            >Subscribe to our newsletter. Get the latest elderly health knowledge.</span
-          >
+          <span class="mb-2">Subscribe to our newsletter. Get the latest elderly health knowledge.</span>
           <div class="d-flex w-100 justify-content-md-end gap-2">
-            <input
-              type="email"
-              class="form-control flex-grow-1"
-              placeholder="Email Address"
-              style="max-width: 300px"
-            />
+            <input type="email" class="form-control flex-grow-1" placeholder="Email Address" style="max-width: 300px" />
             <button type="button" class="btn btn-dark">Subscribe</button>
           </div>
         </div>
@@ -38,7 +27,7 @@
 
       <!-- Link and copyright section -->
       <div class="row align-items-end">
-        <div class="col-md-8 d-flex align-items-end">
+        <div class="col-md-7 d-flex align-items-end">
           <ul class="list-inline mb-0">
             <li class="list-inline-item">
               <router-link to="/get-involved/become-a-volunteer">Become a volunteer</router-link>
@@ -57,9 +46,9 @@
             </li>
           </ul>
         </div>
-        <div class="col-md-4 d-flex align-items-end justify-content-end text-end">
+        <div class="col-md-5 d-flex align-items-end justify-content-end text-end">
           <p class="mb-0" style="font-size: small">
-            © SilverHealth Australia Ltd. All rights reserved.<br />ABN 10 000 000 000.
+            © SilverHealth Australia Ltd (a fictitious organization). All rights reserved.<br />ABN 10 000 000 000.
           </p>
         </div>
       </div>
