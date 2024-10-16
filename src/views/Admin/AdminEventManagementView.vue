@@ -5,7 +5,7 @@
         <h1 class="text-center">Admin Event Management</h1>
         <p class="text-center">
           Add or edit community events.
-          <br />Export event registration records.
+          <br />Export event registration records as .CSV file.
         </p>
 
         <!-- Loading indicator -->
@@ -16,27 +16,60 @@
         </div>
 
         <div v-else>
+          <!-- Add Event Button -->
+
+          <div class="d-flex justify-content-center mt-4 mb-4">
+            <button @click="openAddModal" class="btn btn-primary custom-button">
+              <i class="bi bi-plus-lg mr-2"></i>
+              <div class="button-text">Add New Event</div>
+            </button>
+          </div>
+
           <!-- Search and filter controls -->
           <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"
+          >
             <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
               <div class="mb-2 mb-md-0 me-md-2">
-                <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
-                  placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
+                <Select
+                  v-model="selectedSearchColumn"
+                  :options="searchColumns"
+                  optionLabel="label"
+                  placeholder="Select column"
+                  class="w-100 w-md-auto"
+                  @change="onSearchColumnChange"
+                />
               </div>
               <div v-if="!['startTime', 'statusString'].includes(selectedSearchColumn.field)">
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
-                  <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
+                  <InputText
+                    v-model="searchValue"
+                    placeholder="Keyword Search"
+                    @input="onSearchInput"
+                    class="w-100"
+                  />
                 </span>
               </div>
               <div v-else-if="selectedSearchColumn.field === 'startTime'">
-                <DatePicker v-model="dateRange" selectionMode="range" :manualInput="false"
-                  @date-select="onDateRangeChange" placeholder="Select date range" />
+                <DatePicker
+                  v-model="dateRange"
+                  selectionMode="range"
+                  :manualInput="false"
+                  @date-select="onDateRangeChange"
+                  placeholder="Select date range"
+                />
               </div>
               <div v-else>
-                <Select v-model="statusFilter" :options="statusOptions" optionLabel="label" optionValue="value"
-                  placeholder="Select status" class="w-100 w-md-auto" @change="onStatusFilterChange" />
+                <Select
+                  v-model="statusFilter"
+                  :options="statusOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select status"
+                  class="w-100 w-md-auto"
+                  @change="onStatusFilterChange"
+                />
               </div>
             </div>
             <div>
@@ -47,23 +80,46 @@
             </div>
           </div>
 
-          <DataTable :value="formattedEvents" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
-            :filters="filters" filterDisplay="menu" removableSort responsive-layout="scroll">
+          <DataTable
+            :value="formattedEvents"
+            :paginator="true"
+            :rows="10"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+            :filters="filters"
+            filterDisplay="menu"
+            removableSort
+            responsive-layout="scroll"
+          >
             <Column field="title" header="Title" :sortable="true" filter>
               <template #body="slotProps">
-                <router-link class="fw-bold" :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }">
+                <router-link
+                  class="fw-bold"
+                  :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }"
+                >
                   {{ slotProps.data.title }}
                 </router-link>
               </template>
             </Column>
             <Column field="category" header="Category" :sortable="true" filter />
-            <Column field="startTime" header="Start Time" :sortable="true" filter filterMatchMode="between">
+            <Column
+              field="startTime"
+              header="Start Time"
+              :sortable="true"
+              filter
+              filterMatchMode="between"
+            >
               <template #body="slotProps">
                 {{ formatDate(slotProps.data.startTime) }}
               </template>
             </Column>
             <Column field="address.addressString" header="Location" :sortable="true" filter />
-            <Column field="statusString" header="Status" :sortable="true" filter filterMatchMode="equals" />
+            <Column
+              field="statusString"
+              header="Status"
+              :sortable="true"
+              filter
+              filterMatchMode="equals"
+            />
 
             <Column field="manage" header="Manage" :sortable="false">
               <template #body="slotProps">
@@ -74,14 +130,20 @@
                     </div>
                   </div>
 
-                  <button class="btn btn-sm btn-secondary custom-button button-text" @click="openEditModal(slotProps.data)"
-                    :disabled="slotProps.data.isLoading">
-                    <i class="bi bi-pencil mr-2"></i> Edit
+                  <button
+                    class="btn btn-sm btn-secondary custom-button button-text"
+                    @click="openEditModal(slotProps.data)"
+                    :disabled="slotProps.data.isLoading"
+                  >
+                    <i class="bi bi-pencil mr-2"></i>Edit
                   </button>
 
-                  <button class="btn btn-sm btn-outline-primary custom-button button-text"
-                    @click="exportBookings(slotProps.data)" :disabled="slotProps.data.isLoading">
-                    <i class="bi bi-download mr-2"></i> Export
+                  <button
+                    class="btn btn-sm btn-outline-primary custom-button"
+                    @click="exportBookings(slotProps.data)"
+                    :disabled="slotProps.data.isLoading"
+                  >
+                    <i class="bi bi-download mr-2"></i>Export
                   </button>
                 </div>
               </template>
@@ -90,9 +152,29 @@
             <!-- Empty state template -->
             <template #empty>
               <div class="text-center p-4">
-                <i class="bi bi-calendar-x fs-1 text-muted"></i>
-                <p class="mt-3">No available community events.</p>
-                <p class="mt-3">Please contact administrator to add it.</p>
+                <template v-if="formattedEvents.length === 0">
+                  <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                  <p class="mt-3">No available events.</p>
+                  <div class="d-flex justify-content-center">
+                    <button @click="openAddModal" class="btn btn-primary custom-button">
+                      <i class="bi bi-plus-lg mr-2"></i>
+                      <div class="button-text">Add New Event</div>
+                    </button>
+                  </div>
+                </template>
+                <template v-else>
+                  <i class="bi bi-search fs-1 text-muted"></i>
+                  <p class="mt-3">No events match your current search criteria.</p>
+                  <div class="d-flex justify-content-center">
+                    <button
+                      @click="clearFilters"
+                      class="btn btn-outline-primary custom-button mt-2"
+                    >
+                      <i class="bi bi-x-lg mr-2"></i>
+                      <div class="button-text">Clear Search</div>
+                    </button>
+                  </div>
+                </template>
               </div>
             </template>
           </DataTable>
@@ -102,7 +184,13 @@
   </div>
 
   <!-- Edit Event Modal -->
-  <EditEventModal :event="selectedEvent" v-model:show="showEditModal" @event-updated="fetchEvents" />
+  <!-- Edit Event Modal -->
+  <EditEventModal
+    :event="selectedEvent"
+    v-model:show="showEditModal"
+    @event-updated="fetchEvents"
+    :is-new-event="isNewEvent"
+  />
 </template>
 
 <script setup>
@@ -229,14 +317,19 @@ const fetchEvents = async (token) => {
 
 const selectedEvent = ref({})
 const showEditModal = ref(false)
+const isNewEvent = ref(false)
 
 const openEditModal = async (event) => {
+  isNewEvent.value = false
   try {
-    const response = await axios.get(`https://geteventbyid-s3vwdaiioq-ts.a.run.app?id=${event.eventId}`, {
-      headers: {
-        Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+    const response = await axios.get(
+      `https://geteventbyid-s3vwdaiioq-ts.a.run.app?id=${event.eventId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+        }
       }
-    })
+    )
 
     selectedEvent.value = response.data
     showEditModal.value = true
@@ -249,6 +342,30 @@ const openEditModal = async (event) => {
       life: 3000
     })
   }
+}
+
+const openAddModal = () => {
+  isNewEvent.value = true
+  selectedEvent.value = {
+    title: '',
+    organizerName: 'SilverHealth Team',
+    description: '',
+    category: [],
+    address: {
+      placeName: '',
+      addressString: '',
+      latitude: null,
+      longitude: null
+    },
+    startTime: null,
+    endTime: null,
+    totalCapacity: null,
+    remainingCapacity: null,
+    registrationStartTime: null,
+    registrationEndTime: null,
+    isVisible: true
+  }
+  showEditModal.value = true
 }
 
 const exportBookings = async (event) => {
