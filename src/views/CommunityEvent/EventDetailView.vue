@@ -511,7 +511,7 @@ const fetchEventData = async (token) => {
       }
     )
 
-    const response = await axios.get(`https://geteventbyid-s3vwdaiioq-uc.a.run.app?id=${eventId}`)
+    const response = await axios.get(`https://geteventbyid-s3vwdaiioq-ts.a.run.app?id=${eventId}`)
     console.log('response.data', response.data)
     communityEvent.value = response.data
 
@@ -607,7 +607,7 @@ const confirmRegister = async () => {
     isSubmitting.value = true
 
     const response = await axios.post(
-      'https://manageeventbooking-s3vwdaiioq-uc.a.run.app',
+      'https://manageeventbooking-s3vwdaiioq-ts.a.run.app',
       {
         eventId: communityEvent.value.eventId,
         action: 'book'
@@ -672,7 +672,7 @@ const confirmCancel = async () => {
     isSubmitting.value = true
 
     const response = await axios.post(
-      'https://manageeventbooking-s3vwdaiioq-uc.a.run.app',
+      'https://manageeventbooking-s3vwdaiioq-ts.a.run.app',
       {
         eventId: communityEvent.value.eventId,
         action: 'cancel'

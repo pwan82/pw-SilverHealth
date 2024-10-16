@@ -5,9 +5,10 @@ const cors = require('cors')({ origin: true }) // Enable CORS with any origin
 const db = admin.firestore()
 
 const { checkUserRole } = require('./authFunctions')
+const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
 
 // GET ?limit={limit}&offset={offset}&category={category1}&category={category2} - Fetch article list with pagination and category filter
-exports.getArticles = onRequest(async (req, res) => {
+exports.getArticles = onRequest({ region: region }, async (req, res) => {
   return cors(req, res, async () => {
     const { limit = 0, offset = 0 } = req.query
     const categories = req.query.category // This will return either a string or an array
@@ -107,7 +108,7 @@ exports.getArticles = onRequest(async (req, res) => {
 })
 
 // GET ?id={articleId} - Fetch specific article by ID
-exports.getArticleById = onRequest(async (req, res) => {
+exports.getArticleById = onRequest({ region: region }, async (req, res) => {
   return cors(req, res, async () => {
     console.log(`Full URL received: ${req.url}`)
     const articleId = req.query.id
@@ -199,7 +200,7 @@ exports.getArticleById = onRequest(async (req, res) => {
 })
 
 // GET ?id={articleId}?limit={limit}&offset={offset} - Fetch ratings for a specific article
-exports.getArticleRatings = onRequest(async (req, res) => {
+exports.getArticleRatings = onRequest({ region: region }, async (req, res) => {
   return cors(req, res, async () => {
     console.log(`Full URL received: ${req.url}`)
     const articleId = req.query.id
@@ -300,7 +301,7 @@ const calculateAverageRating = async (articleDocRef) => {
 }
 
 // POST - Publish rating and comment for a specific article
-exports.publishArticleRating = onRequest((req, res) => {
+exports.publishArticleRating = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     if (req.method !== 'POST') {
       return res.status(405).send('Method Not Allowed')

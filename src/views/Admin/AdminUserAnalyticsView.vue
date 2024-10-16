@@ -60,10 +60,7 @@ const fetchUsers = async (token) => {
     const config = {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     }
-    const response = await axios.get(
-      'https://us-central1-silverhealth-87f2a.cloudfunctions.net/getAllUsers',
-      config
-    )
+    const response = await axios.get('https://getallusers-s3vwdaiioq-ts.a.run.app', config)
     users.value = response.data
 
     users.value.forEach((user) => {

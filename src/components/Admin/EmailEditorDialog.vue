@@ -190,7 +190,7 @@ const sendEmails = async () => {
     }
 
     const response = await axios.post(
-      'https://sendbulkemails-s3vwdaiioq-uc.a.run.app',
+      'https://sendbulkemails-s3vwdaiioq-ts.a.run.app',
       payload,
       config
     )

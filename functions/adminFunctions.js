@@ -5,8 +5,9 @@ const cors = require('cors')({ origin: true }) // Enable CORS with any origin
 const db = admin.firestore()
 
 const { checkUserRole } = require('./authFunctions')
+const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
 
-exports.getAllUsers = onRequest((req, res) => {
+exports.getAllUsers = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     if (req.method !== 'GET') {
       return res.status(405).send('Method Not Allowed')

@@ -6,12 +6,13 @@ const db = admin.firestore()
 
 const { checkUserRole } = require('./authFunctions')
 const { sanitizeEmailHtml } = require('./helpers')
+const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
 
 /**
  * // GET ?limit={limit}&offset={offset}&category={category1}&category={category2}
  * Fetch event list with pagination and category filter
  */
-exports.getEvents = onRequest((req, res) => {
+exports.getEvents = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     const { limit, offset = 0 } = req.query
     const categories = req.query.category
@@ -79,7 +80,7 @@ exports.getEvents = onRequest((req, res) => {
  * Fetch a single event by ID from Firestore using a transaction.
  * If user is logged in and has booked the event, include booking information.
  */
-exports.getEventById = onRequest((req, res) => {
+exports.getEventById = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     const eventId = req.query.id
 
@@ -202,7 +203,7 @@ exports.getEventById = onRequest((req, res) => {
  * @throws {Error} If required fields are missing or invalid.
  * @throws {Error} If data validation fails.
  */
-exports.manageEvent = onRequest((req, res) => {
+exports.manageEvent = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     if (req.method !== 'POST') {
       return res.status(405).send('Method Not Allowed')
@@ -347,7 +348,7 @@ exports.manageEvent = onRequest((req, res) => {
 /**
  * Cloud Function to get all event bookings for the current user.
  */
-exports.getUserEventBookings = onRequest((req, res) => {
+exports.getUserEventBookings = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     try {
       // Check user authentication
@@ -392,7 +393,7 @@ exports.getUserEventBookings = onRequest((req, res) => {
  * { "eventId": "abc001", "action": "book" }
  * { "eventId": "abc001", "action": "cancel" }
  */
-exports.manageEventBooking = onRequest((req, res) => {
+exports.manageEventBooking = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     // Check if the request method is POST
     if (req.method !== 'POST') {

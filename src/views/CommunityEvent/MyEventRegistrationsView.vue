@@ -352,7 +352,7 @@ const fetchUserRegistrations = async (token) => {
       }
     )
 
-    const response = await axios.get('https://getusereventbookings-s3vwdaiioq-uc.a.run.app')
+    const response = await axios.get('https://getusereventbookings-s3vwdaiioq-ts.a.run.app')
     userRegistrations.value = response.data
   } catch (err) {
     console.error('Error fetching user registrations:', err)
@@ -423,7 +423,7 @@ const downloadPDF = async (event) => {
     setRegistrationLoading(event.eventId, true)
 
     const response = await axios.get(
-      `https://geteventbyid-s3vwdaiioq-uc.a.run.app?id=${event.eventId}`,
+      `https://geteventbyid-s3vwdaiioq-ts.a.run.app?id=${event.eventId}`,
       {
         headers: {
           Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
@@ -521,7 +521,7 @@ const confirmCancel = async () => {
     setRegistrationLoading(selectedEvent.value.eventId, true)
 
     const response = await axios.post(
-      'https://manageeventbooking-s3vwdaiioq-uc.a.run.app',
+      'https://manageeventbooking-s3vwdaiioq-ts.a.run.app',
       {
         eventId: selectedEvent.value.eventId,
         action: 'cancel'

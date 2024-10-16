@@ -103,7 +103,15 @@
 
               <!-- Register Button -->
               <div class="mt-3 d-grid gap-2">
-                <button type="submit" class="btn btn-primary button-text">Register Now</button>
+                <button type="submit" class="btn btn-primary button-text" :disabled="isSubmitting">
+                  <span
+                    v-if="isSubmitting"
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Register Now
+                </button>
               </div>
             </div>
           </div>
@@ -133,10 +141,14 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-import { getFunctions, httpsCallable } from 'firebase/functions'
-import { doc, setDoc } from 'firebase/firestore'
-import { db } from '@/firebase/init.js' // Firestore initialization
-import * as inputValidators from '@/utils/inputValidators'
+import axios from 'axios'
+import {
+  validateInputEmail,
+  validateInputPassword,
+  validateInputConfirmPassword,
+  validateInputName,
+  validateInputBirthday
+} from '@/utils/inputValidators'
 import DOMPurify from 'dompurify' // Import DOMPurify for sanitizing input
 
 const router = useRouter()
@@ -176,6 +188,8 @@ const maxDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDa
   .toISOString()
   .split('T')[0]
 
+const isSubmitting = ref(false)
+
 const handleRegister = () => {
   // Sanitize input data
   formData.value.email = sanitizeInput(formData.value.email)
@@ -200,62 +214,83 @@ const handleRegister = () => {
     !errors.value.gender &&
     !errors.value.birthday
   ) {
+    isSubmitting.value = true
+
     // Register the user with Firebase Authentication
     const auth = getAuth()
     createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password)
-      .then(async (userCredential) => {
+      .then((userCredential) => {
         const user = userCredential.user
         console.log('User registered successfully!', user.uid)
 
-        // Call the Cloud Function to store user information in Firestore
-        const functions = getFunctions()
-        const addOrUpdateUserInfo = httpsCallable(functions, 'addOrUpdateUserInfo')
-
-        try {
-          await addOrUpdateUserInfo({
-            email: formData.value.email,
-            username: formData.value.username,
-            gender: formData.value.gender,
-            birthday: formData.value.birthday,
-            address: formData.value.address, // Address must be an object {streetAddress, building, suburb, state, postcode}
-            subscribeToNewsletter: true
-          })
-
-          console.log('User information stored successfully in Firestore.')
-          router.push('/') // Redirect after successful registration and data storage
-        } catch (error) {
-          console.error('Error storing user information:', error.message)
-          // Handle any errors related to Cloud Function execution
+        // Get a fresh token
+        return user.getIdToken(true)
+      })
+      .then((freshToken) => {
+        // Prepare the data for updating user information
+        const userData = {
+          email: formData.value.email,
+          username: formData.value.username,
+          gender: formData.value.gender,
+          birthday: formData.value.birthday,
+          address: formData.value.address,
+          subscribeToNewsletter: formData.value.subscribeToNewsletter
         }
+
+        const config = {
+          headers: { Authorization: `Bearer ${freshToken}` }
+        }
+
+        // Call the updateUserInfo API
+        return axios.post('https://updateuserinfo-s3vwdaiioq-ts.a.run.app', userData, config)
+      })
+      .then((response) => {
+        console.log('User information updated successfully:', response.data)
+        router.push('/') // Redirect after successful registration and data update
       })
       .catch((error) => {
-        // Capture Firebase errors and display them in the form
-        if (error.code === 'auth/email-already-in-use') {
-          errors.value.email = 'This email is already in use. Please try another one.'
-        } else if (error.code === 'auth/invalid-email') {
-          errors.value.email = 'The email address is not valid.'
+        // Handle errors
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error('Error response:', error.response.data)
+          errors.value.email = error.response.data
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error('Error request:', error.request)
+          errors.value.email = 'No response received from server. Please try again.'
         } else {
-          errors.value.email = 'An error occurred during registration. Please try again.'
+          // Something happened in setting up the request that triggered an Error
+          console.error('Error:', error.message)
+          if (error.code === 'auth/email-already-in-use') {
+            errors.value.email = 'This email is already in use. Please try another one.'
+          } else if (error.code === 'auth/invalid-email') {
+            errors.value.email = 'The email address is not valid.'
+          } else {
+            errors.value.email = 'An error occurred during registration. Please try again.'
+          }
         }
-        console.error('Error during registration:', error)
+      })
+      .finally(() => {
+        isSubmitting.value = false
       })
   }
 }
 
 const validateEmail = (blur) => {
   const email = formData.value.email
-  errors.value.email = inputValidators.validateNewEmail(blur, email).message
+  errors.value.email = validateInputEmail(blur, email).message
 }
 
 const validatePassword = (blur) => {
   const password = formData.value.password
-  errors.value.password = inputValidators.validateInputPassword(blur, password).message
+  errors.value.password = validateInputPassword(blur, password).message
 }
 
 const validateConfirmPassword = (blur) => {
   const password = formData.value.password
   const confirmPassword = formData.value.confirmPassword
-  errors.value.confirmPassword = inputValidators.validateInputConfirmPassword(
+  errors.value.confirmPassword = validateInputConfirmPassword(
     blur,
     password,
     confirmPassword
@@ -264,7 +299,7 @@ const validateConfirmPassword = (blur) => {
 
 const validateUsername = (blur) => {
   const username = formData.value.username
-  errors.value.username = inputValidators.validateInputName(blur, username).message
+  errors.value.username = validateInputName(blur, username).message
 }
 
 const validateGender = (blur) => {
@@ -277,7 +312,7 @@ const validateGender = (blur) => {
 
 const validateBirthday = (blur) => {
   const birthday = formData.value.birthday
-  errors.value.birthday = inputValidators.validateInputBirthday(blur, birthday).message
+  errors.value.birthday = validateInputBirthday(blur, birthday).message
 }
 </script>
 

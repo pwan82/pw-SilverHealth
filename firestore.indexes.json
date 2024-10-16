@@ -15,6 +15,24 @@
         { "fieldPath": "category", "arrayConfig": "CONTAINS" },
         { "fieldPath": "startTime", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "eventBookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "bookingTime", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "eventBookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "bookingTime", "order": "DESCENDING" },
+        { "fieldPath": "endTime", "order": "DESCENDING" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

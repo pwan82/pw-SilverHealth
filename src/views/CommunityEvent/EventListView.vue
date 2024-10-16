@@ -213,7 +213,7 @@ const fetchEvents = async (token) => {
       }
     )
 
-    const response = await axios.get('https://getevents-s3vwdaiioq-uc.a.run.app')
+    const response = await axios.get('https://getevents-s3vwdaiioq-ts.a.run.app')
     communityEvents.value = response.data.map((event) => ({
       ...event,
       startTime: new Date(event.startTime)

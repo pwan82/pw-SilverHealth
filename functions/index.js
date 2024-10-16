@@ -19,6 +19,9 @@ if (admin.apps.length === 0) {
   admin.initializeApp()
 }
 
+const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
+console.log('cloudFunctionsLocation: ', region)
+
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
@@ -27,7 +30,7 @@ if (admin.apps.length === 0) {
 //   response.send("Hello from Firebase!");
 // });
 
-//authFunctions
+// authFunctions
 const { assignUserRole, onAdminUserChanged } = require('./authFunctions')
 // Set custom claims for the user (default role is 'user')
 exports.assignUserRole = assignUserRole
@@ -35,8 +38,8 @@ exports.assignUserRole = assignUserRole
 exports.onAdminUserChanged = onAdminUserChanged
 
 // userFunctions
-const { addOrUpdateUserInfo } = require('./userFunctions')
-exports.addOrUpdateUserInfo = addOrUpdateUserInfo
+const { updateUserInfo } = require('./userFunctions')
+exports.updateUserInfo = updateUserInfo
 
 // adminFunctions
 const { getAllUsers } = require('./adminFunctions')

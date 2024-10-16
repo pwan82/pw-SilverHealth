@@ -6,12 +6,13 @@ const cors = require('cors')({ origin: true })
 
 const { checkUserRole } = require('./authFunctions')
 const { sanitizeEmailHtml } = require('./helpers')
+const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
 
 const bulkEmailSendGridApiKey = defineString('BULK_EMAIL_SENDGRID_API_KEY')
 const sendgridFromEmail = defineString('SENDGRID_FROM_EMAIL')
 const defaultTemplateId = defineString('SENDGRID_TEMPLATE_ID')
 
-exports.sendBulkEmails = onRequest((req, res) => {
+exports.sendBulkEmails = onRequest({ region: region }, (req, res) => {
   return cors(req, res, async () => {
     if (req.method !== 'POST') {
       return res.status(405).send('Method Not Allowed')

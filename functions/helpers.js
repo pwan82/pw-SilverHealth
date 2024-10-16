@@ -67,6 +67,22 @@ const sanitizeEmailHtml = (dirtyHtml) => {
   return cleanHtml
 }
 
+const sanitizeAllHtml = (dirtyHtml) => {
+  // Config sanitize-html
+  const config = {
+    allowedTags: [],
+    allowedAttributes: {},
+    textFilter: function (text) {
+      return text.replace(/&nbsp;/g, ' ') // Replace &nbsp; as normal space
+    }
+  }
+
+  // Clean HTML
+  const cleanText = sanitizeHtml(dirtyHtml.trim(), config)
+  console.log(`sanitizeAllHtml: cleanText: `, cleanText)
+  return cleanText
+}
+
 // Export validation functions
 module.exports = {
   isValidEmail,
@@ -74,5 +90,6 @@ module.exports = {
   isValidGender,
   isValidBirthday,
   isValidAddress,
-  sanitizeEmailHtml
+  sanitizeEmailHtml,
+  sanitizeAllHtml
 }

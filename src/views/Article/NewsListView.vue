@@ -266,9 +266,7 @@ const fetchArticles = async (token) => {
       }
     )
 
-    const response = await axios.get(
-      'https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticles?category=news'
-    )
+    const response = await axios.get('https://getarticles-s3vwdaiioq-ts.a.run.app?category=news')
     articles.value = response.data.map((article) => ({
       ...article,
       publicationTime: new Date(article.publicationTime)

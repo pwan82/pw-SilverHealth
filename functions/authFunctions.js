@@ -1,4 +1,3 @@
-// Set custom claims for the user (default role is 'user')
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
@@ -12,20 +11,32 @@ exports.checkUserRole = async (reqHeaders, expectedRole) => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(token)
     console.log(`checkUserRole: decodedToken: ${decodedToken}`)
-    const role = decodedToken.role
 
-    let isLoggedIn = role ? true : false
-    let isAdmin = role === 'admin'
+    const role = decodedToken.role
+    // User is considered logged in if the token is successfully verified
+    const isLoggedIn = true
+
+    // Check if the user has an admin role
+    const isAdmin = role === 'admin'
 
     if (expectedRole && role !== expectedRole) {
       return { status: 403, message: 'Forbidden', isLoggedIn: isLoggedIn, isAdmin: isAdmin }
     }
-    return { status: 200, userId: decodedToken.uid, isLoggedIn: isLoggedIn, isAdmin: isAdmin }
+
+    return {
+      status: 200,
+      userId: decodedToken.uid,
+      isLoggedIn: isLoggedIn,
+      isAdmin: isAdmin,
+      role: decodedToken.role
+    }
   } catch (error) {
+    console.error('Error verifying token:', error)
     return { status: 401, message: 'Unauthorized', isLoggedIn: false, isAdmin: false }
   }
 }
 
+// Set custom claims for the user (default role is 'user')
 exports.assignUserRole = functions.auth.user().onCreate(async (user) => {
   return admin.auth().setCustomUserClaims(user.uid, { role: 'user' })
 

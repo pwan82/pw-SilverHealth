@@ -267,7 +267,7 @@ const fetchArticleData = async (token) => {
     )
 
     const response = await axios.get(
-      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleById?id=${articleId}`
+      `https://getarticlebyid-s3vwdaiioq-ts.a.run.app?id=${articleId}`
     )
     console.log('response.data', response.data)
     article.value = response.data
@@ -297,7 +297,7 @@ const fetchRatings = async (token) => {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     }
     const response = await axios.get(
-      `https://us-central1-silverhealth-87f2a.cloudfunctions.net/getArticleRatings?id=${articleId}`,
+      `https://getarticleratings-s3vwdaiioq-ts.a.run.app?id=${articleId}`,
       config
     )
     ratings.value = response.data.map((rating) => ({
@@ -354,11 +354,7 @@ const submitRatingAndComment = async () => {
         rating: userRating.value,
         comment: userComment.value
       }
-      await axios.post(
-        `https://us-central1-silverhealth-87f2a.cloudfunctions.net/publishArticleRating`,
-        payload,
-        config
-      )
+      await axios.post(`https://publisharticlerating-s3vwdaiioq-ts.a.run.app`, payload, config)
       submissionMessage.value = 'Submitted successfully!'
       submissionSuccess.value = true
       userRating.value = null

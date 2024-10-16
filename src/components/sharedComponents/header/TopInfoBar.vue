@@ -59,7 +59,7 @@ onMounted(() => {
       <div class="col-12 col-md-6 text-center text-md-end">
         <p v-if="currentUser">
           <span
-            >🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'Guest' }} ({{
+            >🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'new user' }} ({{
               currentRole
             }})</span
           >
