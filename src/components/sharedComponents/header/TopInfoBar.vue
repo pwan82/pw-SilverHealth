@@ -3,7 +3,7 @@ import { computed, ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { auth } from '@/firebase/init'
 import { onAuthStateChanged } from 'firebase/auth'
-import { redirectToLogin as baseRedirectToLogin } from '@/helpers/helpers'
+import { redirectToLogin as baseRedirectToLogin } from '@/helpers/redirect'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -58,20 +58,13 @@ onMounted(() => {
 
       <div class="col-12 col-md-6 text-center text-md-end">
         <p v-if="currentUser">
-          <span
-            >🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'new user' }} ({{
-              currentRole
-            }})</span
-          >
+          <span>🌞 Hi, {{ currentUserInfo ? currentUserInfo.username : 'new user' }} ({{
+            currentRole
+          }})</span>
           <span class="mx-2 non-selectable">|</span>
           <router-link to="/profile" class="text-decoration-none">My Profile</router-link>
           <span class="mx-2 non-selectable">|</span>
-          <a
-            href="#"
-            @click.prevent="handleLogout"
-            class="text-decoration-none text-danger cursor-pointer"
-            >Log out</a
-          >
+          <a href="#" @click.prevent="handleLogout" class="text-decoration-none text-danger cursor-pointer">Log out</a>
         </p>
         <p v-else>
           <a href="#" @click.prevent="redirectToLogin" class="text-decoration-none">Log In</a>

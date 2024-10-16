@@ -57,19 +57,13 @@
                             new Date(communityEvent.userBooking.bookingTime).toLocaleString()
                           }}
                         </div>
-                        <button
-                          class="btn btn-primary custom-button"
-                          style="min-width: 100%"
-                          @click="generatePDFTicket"
-                        >
+                        <button class="btn btn-primary custom-button" style="min-width: 100%"
+                          @click="generatePDFTicket">
                           <i class="bi bi-file-earmark-pdf-fill mr-2"></i>
                           <div class="button-text">Download PDF ticket</div>
                         </button>
-                        <button
-                          @click="generateQRCode"
-                          class="btn btn-outline-primary mt-2 custom-button"
-                          style="min-width: 100%"
-                        >
+                        <button @click="generateQRCode" class="btn btn-outline-primary mt-2 custom-button"
+                          style="min-width: 100%">
                           <i class="bi bi-qr-code mr-2"></i>
                           <div class="button-text">
                             {{ (showQRCode ? 'Hide' : 'Show') + ' QR code for entry' }}
@@ -77,21 +71,12 @@
                         </button>
 
                         <div v-if="showQRCode" class="mt-4">
-                          <qrcode-vue
-                            :value="qrCodeText"
-                            :size="200"
-                            level="H"
-                            render-as="canvas"
-                          />
+                          <qrcode-vue :value="qrCodeText" :size="200" level="H" render-as="canvas" />
                         </div>
 
                         <div v-if="!isEventEnded">
                           <Divider align="center" class="mb-2">Change your mind?</Divider>
-                          <a
-                            href="#"
-                            @click.prevent="handleCancelRegistration"
-                            class="text-danger cursor-pointer"
-                          >
+                          <a href="#" @click.prevent="handleCancelRegistration" class="text-danger cursor-pointer">
                             Cancel Registration
                           </a>
                         </div>
@@ -99,33 +84,20 @@
 
                       <!-- Registration Button -->
                       <div v-else class="text-center mt-3 mb-2">
-                        <button
-                          v-if="!isLoggedIn && isRegistrationOpen"
-                          class="btn btn-outline-primary custom-button"
-                          style="min-width: 100%"
-                          @click="redirectToLogin"
-                        >
+                        <button v-if="!isLoggedIn && isRegistrationOpen" class="btn btn-outline-primary custom-button"
+                          style="min-width: 100%" @click="redirectToLogin">
                           <div class="button-text">Login to register</div>
                         </button>
 
-                        <button
-                          v-else
-                          class="btn btn-primary custom-button"
-                          :class="{
-                            'btn-primary': isRegistrationOpen,
-                            'btn-secondary': !isRegistrationOpen
-                          }"
-                          :disabled="!isRegistrationOpen || isSubmitting"
-                          style="min-width: 100%"
-                          @click="handleRegisterNewEvent"
-                        >
-                          <i
-                            class="mr-2"
-                            :class="{
-                              'bi bi-person-plus': !isSubmitting,
-                              'spinner-border spinner-border-sm': isSubmitting
-                            }"
-                          ></i>
+                        <button v-else class="btn btn-primary custom-button" :class="{
+                          'btn-primary': isRegistrationOpen,
+                          'btn-secondary': !isRegistrationOpen
+                        }" :disabled="!isRegistrationOpen || isSubmitting" style="min-width: 100%"
+                          @click="handleRegisterNewEvent">
+                          <i class="mr-2" :class="{
+                            'bi bi-person-plus': !isSubmitting,
+                            'spinner-border spinner-border-sm': isSubmitting
+                          }"></i>
                           <div class="button-text">{{ registerButtonString }}</div>
                         </button>
                       </div>
@@ -182,13 +154,9 @@
                     <!-- Hidden Mapbox -->
                     <div v-if="isMapVisible" class="mt-3 mb-3">
                       <div class="card map-card-body">
-                        <EventLocationMapbox
-                          v-if="communityEvent"
-                          :latitude="communityEvent.address.latitude"
-                          :longitude="communityEvent.address.longitude"
-                          :placeName="communityEvent.address.placeName"
-                          :addressString="communityEvent.address.addressString"
-                        />
+                        <EventLocationMapbox v-if="communityEvent" :latitude="communityEvent.address.latitude"
+                          :longitude="communityEvent.address.longitude" :placeName="communityEvent.address.placeName"
+                          :addressString="communityEvent.address.addressString" />
                       </div>
                     </div>
                   </div>
@@ -207,23 +175,13 @@
   </div>
 
   <!-- Register Confirmation Modal -->
-  <div
-    class="modal fade"
-    id="registerConfirmModal"
-    tabindex="-1"
-    aria-labelledby="registerConfirmModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="registerConfirmModal" tabindex="-1" aria-labelledby="registerConfirmModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="registerConfirmModalLabel">Confirm Registration</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">Are you sure to register for this event?</div>
         <div class="modal-footer">
@@ -235,23 +193,13 @@
   </div>
 
   <!-- Cancel Confirmation Modal -->
-  <div
-    class="modal fade"
-    id="cancelConfirmModal"
-    tabindex="-1"
-    aria-labelledby="cancelConfirmModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="cancelConfirmModal" tabindex="-1" aria-labelledby="cancelConfirmModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="cancelConfirmModalLabel">Confirm Cancellation</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <p>Are you sure you want to cancel your registration for this event?</p>
@@ -273,23 +221,12 @@
   </div>
 
   <!-- Conflict Modal -->
-  <div
-    class="modal fade"
-    id="conflictModal"
-    tabindex="-1"
-    aria-labelledby="conflictModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="conflictModal" tabindex="-1" aria-labelledby="conflictModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="conflictModalLabel">Booking Conflict</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <p>There is a conflict with an existing registered event:</p>
@@ -305,9 +242,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <a href="/event/registered" target="_blank" class="btn btn-primary"
-            >View All Registered Events</a
-          >
+          <a href="/event/registered" target="_blank" class="btn btn-primary">View All Registered Events</a>
         </div>
       </div>
     </div>
@@ -328,7 +263,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { onAuthStateChanged } from 'firebase/auth'
 
 import { auth } from '@/firebase/init'
-import { redirectToLogin as baseRedirectToLogin } from '@/helpers/helpers'
+import { redirectToLogin as baseRedirectToLogin } from '@/helpers/redirect'
 import EventLocationMapbox from '@/components/EventLocationMapbox.vue'
 
 const route = useRoute()
@@ -452,9 +387,9 @@ const generatePDFTicket = () => {
     [
       'Start & End Time',
       'From ' +
-        formatDate(communityEvent.value.startTime) +
-        ' to ' +
-        formatDate(communityEvent.value.endTime)
+      formatDate(communityEvent.value.startTime) +
+      ' to ' +
+      formatDate(communityEvent.value.endTime)
     ],
     ['Total Capacity', communityEvent.value.totalCapacity.toString()]
   ]

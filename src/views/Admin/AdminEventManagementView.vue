@@ -18,49 +18,25 @@
         <div v-else>
           <!-- Search and filter controls -->
           <div
-            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"
-          >
+            class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
             <div class="d-flex flex-column flex-md-row mb-2 mb-md-0">
               <div class="mb-2 mb-md-0 me-md-2">
-                <Select
-                  v-model="selectedSearchColumn"
-                  :options="searchColumns"
-                  optionLabel="label"
-                  placeholder="Select column"
-                  class="w-100 w-md-auto"
-                  @change="onSearchColumnChange"
-                />
+                <Select v-model="selectedSearchColumn" :options="searchColumns" optionLabel="label"
+                  placeholder="Select column" class="w-100 w-md-auto" @change="onSearchColumnChange" />
               </div>
               <div v-if="!['startTime', 'statusString'].includes(selectedSearchColumn.field)">
                 <span class="p-input-icon-left w-100">
                   <i class="bi bi-search"></i>
-                  <InputText
-                    v-model="searchValue"
-                    placeholder="Keyword Search"
-                    @input="onSearchInput"
-                    class="w-100"
-                  />
+                  <InputText v-model="searchValue" placeholder="Keyword Search" @input="onSearchInput" class="w-100" />
                 </span>
               </div>
               <div v-else-if="selectedSearchColumn.field === 'startTime'">
-                <DatePicker
-                  v-model="dateRange"
-                  selectionMode="range"
-                  :manualInput="false"
-                  @date-select="onDateRangeChange"
-                  placeholder="Select date range"
-                />
+                <DatePicker v-model="dateRange" selectionMode="range" :manualInput="false"
+                  @date-select="onDateRangeChange" placeholder="Select date range" />
               </div>
               <div v-else>
-                <Select
-                  v-model="statusFilter"
-                  :options="statusOptions"
-                  optionLabel="label"
-                  optionValue="value"
-                  placeholder="Select status"
-                  class="w-100 w-md-auto"
-                  @change="onStatusFilterChange"
-                />
+                <Select v-model="statusFilter" :options="statusOptions" optionLabel="label" optionValue="value"
+                  placeholder="Select status" class="w-100 w-md-auto" @change="onStatusFilterChange" />
               </div>
             </div>
             <div>
@@ -71,60 +47,40 @@
             </div>
           </div>
 
-          <DataTable
-            :value="formattedEvents"
-            :paginator="true"
-            :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
-            :filters="filters"
-            filterDisplay="menu"
-            removableSort
-            responsive-layout="scroll"
-          >
+          <DataTable :value="formattedEvents" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+            :filters="filters" filterDisplay="menu" removableSort responsive-layout="scroll">
             <Column field="title" header="Title" :sortable="true" filter>
               <template #body="slotProps">
-                <router-link
-                  class="fw-bold"
-                  :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }"
-                >
+                <router-link class="fw-bold" :to="{ name: 'EventDetail', params: { eventId: slotProps.data.eventId } }">
                   {{ slotProps.data.title }}
                 </router-link>
               </template>
             </Column>
             <Column field="category" header="Category" :sortable="true" filter />
-            <Column
-              field="startTime"
-              header="Start Time"
-              :sortable="true"
-              filter
-              filterMatchMode="between"
-            >
+            <Column field="startTime" header="Start Time" :sortable="true" filter filterMatchMode="between">
               <template #body="slotProps">
                 {{ formatDate(slotProps.data.startTime) }}
               </template>
             </Column>
             <Column field="address.addressString" header="Location" :sortable="true" filter />
-            <Column
-              field="statusString"
-              header="Status"
-              :sortable="true"
-              filter
-              filterMatchMode="equals"
-            />
+            <Column field="statusString" header="Status" :sortable="true" filter filterMatchMode="equals" />
 
             <Column field="manage" header="Manage" :sortable="false">
               <template #body="slotProps">
-                <div class="manage-buttons-container">
+                <div class="manage-buttons-container gap-2">
                   <div v-if="slotProps.data.isLoading" class="loading-overlay">
                     <div class="spinner-border spinner-border-sm text-light" role="status">
                       <span class="visually-hidden">Loading...</span>
                     </div>
                   </div>
-                  <button
-                    class="btn btn-sm btn-primary button-text"
-                    @click="exportBookings(slotProps.data)"
-                    :disabled="slotProps.data.isLoading"
-                  >
+
+                  <button class="btn btn-sm btn-secondary custom-button button-text" @click="openEditModal(slotProps.data)"
+                    :disabled="slotProps.data.isLoading">
+                    <i class="bi bi-pencil mr-2"></i> Edit
+                  </button>
+
+                  <button class="btn btn-sm btn-outline-primary custom-button button-text"
+                    @click="exportBookings(slotProps.data)" :disabled="slotProps.data.isLoading">
                     <i class="bi bi-download mr-2"></i> Export
                   </button>
                 </div>
@@ -144,6 +100,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit Event Modal -->
+  <EditEventModal :event="selectedEvent" v-model:show="showEditModal" @event-updated="fetchEvents" />
 </template>
 
 <script setup>
@@ -152,6 +111,8 @@ import axios from 'axios'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
 import { useToast } from 'primevue/usetoast'
+
+import EditEventModal from '@/components/Admin/EditEventModal.vue'
 
 const toast = useToast()
 
@@ -222,7 +183,7 @@ const formattedEvents = computed(() => {
 const setEventLoading = (eventId, isLoading) => {
   const index = formattedEvents.value.findIndex((event) => event.eventId === eventId)
   if (index !== -1) {
-    formattedEvents.value[index].isLoading = isLoading
+    formattedEvents.value[index].isLoading = !isLoading
   }
 }
 
@@ -263,6 +224,30 @@ const fetchEvents = async (token) => {
     error.value = 'Failed to load events. Please try again later.'
   } finally {
     loading.value = false
+  }
+}
+
+const selectedEvent = ref({})
+const showEditModal = ref(false)
+
+const openEditModal = async (event) => {
+  try {
+    const response = await axios.get(`https://geteventbyid-s3vwdaiioq-ts.a.run.app?id=${event.eventId}`, {
+      headers: {
+        Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+      }
+    })
+
+    selectedEvent.value = response.data
+    showEditModal.value = true
+  } catch (error) {
+    console.error('Error fetching event details:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to fetch event details',
+      life: 3000
+    })
   }
 }
 
@@ -450,5 +435,31 @@ const formatDate = (value) => {
   .w-md-auto {
     width: auto !important;
   }
+}
+
+.manage-buttons-container {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.25rem;
+  z-index: 1;
+}
+
+.manage-buttons-container button {
+  position: relative;
+  z-index: 0;
 }
 </style>

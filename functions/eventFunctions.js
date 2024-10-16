@@ -217,6 +217,8 @@ exports.manageEvent = onRequest({ region: region }, (req, res) => {
 
       const { eventId, action, ...eventData } = req.body
 
+      console.log('Received request body:', JSON.stringify(req.body))
+
       // Handle delete action
       if (action === 'delete') {
         if (!eventId) {

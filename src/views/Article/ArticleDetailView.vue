@@ -25,28 +25,16 @@
           </p>
 
           <!-- Categories display -->
-          <div
-            v-if="article.showCategory && article.category"
-            class="d-flex justify-content-center flex-wrap gap-2 mb-3"
-          >
+          <div v-if="article.showCategory && article.category"
+            class="d-flex justify-content-center flex-wrap gap-2 mb-3">
             <Chip v-for="category in article.category" :key="category" :label="category" />
           </div>
 
           <!-- Show average rating -->
-          <div
-            v-if="article.isRatable"
-            class="d-flex justify-content-center align-items-center mb-3"
-          >
+          <div v-if="article.isRatable" class="d-flex justify-content-center align-items-center mb-3">
             <span class="me-2 fw-bold">Rating:</span>
-            <span v-if="averageRating(article)" class="me-2 fw-bold"
-              >{{ averageRating(article).toFixed(1) }}/5</span
-            >
-            <Rating
-              v-if="averageRating(article)"
-              v-model="article.averageRating"
-              readonly
-              :stars="5"
-            />
+            <span v-if="averageRating(article)" class="me-2 fw-bold">{{ averageRating(article).toFixed(1) }}/5</span>
+            <Rating v-if="averageRating(article)" v-model="article.averageRating" readonly :stars="5" />
             <span v-else class="text-muted fst-italic">No rating given</span>
           </div>
           <Divider />
@@ -62,67 +50,42 @@
               <Card v-else style="max-width: 30rem; overflow: hidden">
                 <template #title>{{
                   userRating ? 'Update your rating for this article' : 'Please rate this article'
-                }}</template>
+                  }}</template>
                 <template #content>
                   <div class="mt-2 d-flex flex-column align-items-center">
-                    <Rating
-                      v-model.number="userRating"
-                      :stars="5"
-                      :cancel="true"
-                      :disabled="isSubmitting"
-                    />
-                    <textarea
-                      v-model="userComment"
-                      class="form-control mt-3"
-                      rows="3"
-                      placeholder="Leave your comment (optional)"
-                      :disabled="isSubmitting"
-                      :maxlength="maxCommentLength"
-                    ></textarea>
-                    <small
-                      :class="[
-                        'mt-1',
-                        remainingChars > 100
-                          ? 'text-muted'
-                          : remainingChars > 30
-                            ? 'text-warning'
-                            : 'text-danger'
-                      ]"
-                    >
+                    <Rating v-model.number="userRating" :stars="5" :cancel="true" :disabled="isSubmitting" />
+                    <textarea v-model="userComment" class="form-control mt-3" rows="3"
+                      placeholder="Leave your comment (optional)" :disabled="isSubmitting"
+                      :maxlength="maxCommentLength"></textarea>
+                    <small :class="[
+                      'mt-1',
+                      remainingChars > 100
+                        ? 'text-muted'
+                        : remainingChars > 30
+                          ? 'text-warning'
+                          : 'text-danger'
+                    ]">
                       {{ maxCommentLength - userComment.length }} /
                       {{ maxCommentLength }} characters
                     </small>
                     <p class="mt-2 text-muted fst-italic" v-if="!submissionMessage">
                       not submitted
                     </p>
-                    <p
-                      class="mt-2"
-                      :class="{
-                        'text-success': submissionSuccess,
-                        'text-danger': !submissionSuccess
-                      }"
-                      v-else
-                    >
+                    <p class="mt-2" :class="{
+                      'text-success': submissionSuccess,
+                      'text-danger': !submissionSuccess
+                    }" v-else>
                       {{ submissionMessage }}
                     </p>
                   </div>
                 </template>
                 <template #footer>
-                  <button
-                    @click="submitRatingAndComment"
-                    class="btn"
-                    :class="{
-                      'btn-primary': isUpdatePossible,
-                      'btn-secondary': !isUpdatePossible
-                    }"
-                    :disabled="!isUpdatePossible || isSubmitting"
-                  >
-                    <span
-                      v-if="isSubmitting"
-                      class="spinner-border spinner-border-sm me-2"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
+                  <button @click="submitRatingAndComment" class="btn" :class="{
+                    'btn-primary': isUpdatePossible,
+                    'btn-secondary': !isUpdatePossible
+                  }" :disabled="!isUpdatePossible || isSubmitting">
+                    <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
+                      aria-hidden="true"></span>
                     {{ isSubmitting ? 'Submitting...' : userRating ? 'Update' : 'Submit' }}
                   </button>
                 </template>
@@ -137,16 +100,10 @@
             </Divider>
             <!-- <h4 class="mt-5">Ratings and Comments</h4> -->
             <div v-if="hasComments" class="">
-              <DataTable
-                :value="ratings"
-                :paginator="true"
-                :rows="10"
-                :rowsPerPageOptions="[5, 10, 20, 50]"
-                sortMode="multiple"
-                :loading="ratingsLoading"
+              <DataTable :value="ratings" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+                sortMode="multiple" :loading="ratingsLoading"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink  RowsPerPageDropdown"
-                removableSort
-              >
+                removableSort>
                 <Column field="rating" header="Rating" sortable>
                   <template #body="slotProps">
                     <Rating v-model="slotProps.data.rating" :cancel="false" disabled />
@@ -156,7 +113,7 @@
                   <template #body="slotProps">
                     <span v-if="slotProps.data.comment && slotProps.data.comment.trim()">{{
                       slotProps.data.comment
-                    }}</span>
+                      }}</span>
                     <span v-else class="text-muted fst-italic">No comment provided</span>
                   </template>
                 </Column>
@@ -186,7 +143,7 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
-import { redirectToLogin as baseRedirectToLogin } from '@/helpers/helpers'
+import { redirectToLogin as baseRedirectToLogin } from '@/helpers/redirect'
 
 const route = useRoute()
 const router = useRouter()
@@ -241,10 +198,10 @@ const formatDate = (timestamp) => {
   return timestamp === -1
     ? 'Never modified'
     : new Date(timestamp).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      })
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
 }
 
 // Fetch article data from API

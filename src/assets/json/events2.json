@@ -1,0 +1,21 @@
+[
+  {
+    "organizerName": "SilverHealth Team",
+    "title": "Test content",
+    "description": "Welcome to our **Health and Wellness Workshop - Clayton**, designed to promote the well-being of elderly individuals through engaging activities, expert talks, and practical tips on maintaining a healthy lifestyle. This workshop is organized by the SilverHealth Team, who are dedicated to supporting senior citizens in living healthier, more fulfilling lives.\n\n---\n\n### Key Insights\n\n- **Holistic Health**: Our workshop covers both physical and mental health, recognizing that well-being comes from a balance of both.\n- **Senior-Focused**: All activities and discussions are tailored specifically for the elderly, addressing common concerns like mobility, nutrition, and mental wellness.\n- **Expert Guidance**: Hear from healthcare professionals and wellness experts who will share valuable advice on how to stay healthy in later years.\n\n---\n\n### Workshop Flow\n\n1. **Welcome and Introduction** (10 minutes)\n   - Brief introduction of the SilverHealth Team and the workshop’s purpose.\n   \n2. **Health Talk: Nutrition for the Elderly** (30 minutes)\n   - An expert-led discussion on the importance of nutrition and how to maintain a balanced diet as we age.\n   \n3. **Group Exercise: Gentle Stretching** (20 minutes)\n   - A certified fitness trainer will guide the group through simple, gentle stretches to improve flexibility and mobility.\n   \n4. **Mental Health Session** (30 minutes)\n   - Learn about mindfulness practices, stress management, and maintaining cognitive health with our mental health specialist.\n   \n5. **Break and Refreshments** (15 minutes)\n   - Enjoy a light snack and refreshments while engaging in informal discussions with other attendees.\n\n6. **Interactive Q&A Session** (20 minutes)\n   - Open floor for questions to be answered by the experts.\n\n7. **Closing Remarks and Thank You** (10 minutes)\n   - Summary of key takeaways and information on how to stay connected with SilverHealth.\n\n---\n\n### FAQs\n\n**1. Who can attend the workshop?**  \nThis workshop is open to all elderly individuals who are looking to improve their health and wellness. Family members and caregivers are also welcome.\n\n**2. What should I bring?**  \nYou don’t need to bring anything specific, but comfortable clothing is recommended for the exercise session. A notepad and pen may be helpful for taking notes during the talks.\n\n**3. Will there be any follow-up materials?**  \nYes, participants will receive a digital copy of the workshop's main points, including nutrition tips, exercise guides, and mindfulness practices.\n\n**4. How can I ask more questions after the event?**  \nFeel free to reach out to the SilverHealth Team via email at **contact@silverhealth.org.au** for any follow-up questions or additional resources.\n\n---\n\nWe look forward to seeing you at the **Health and Wellness Workshop**! Let’s work together to promote healthier lifestyles and greater well-being for our senior community.",
+    "category": ["health", "wellness"],
+    "address": {
+      "placeName": "SilverHealth Clayton Service Centre",
+      "addressString": "21 Chancellors Walk, Clayton VIC 3168",
+      "latitude": -37.9132538,
+      "longitude": 145.1303405
+    },
+    "startTime": 1678905600000,
+    "endTime": 1678912800000,
+    "totalCapacity": 50,
+    "remainingCapacity": 25,
+    "registrationStartTime": 1678500000000,
+    "registrationEndTime": 1678800000000,
+    "isVisible": true
+  }
+]
