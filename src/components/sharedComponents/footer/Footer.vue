@@ -20,7 +20,7 @@
         </div>
 
         <!-- Subscribe section -->
-        <div class="col-12 col-md-6 d-flex flex-column align-items-md-end align-items-start">
+        <!-- <div class="col-12 col-md-6 d-flex flex-column align-items-md-end align-items-start">
           <span class="mb-2"
             >Subscribe to our newsletter. Get the latest elderly health knowledge.</span
           >
@@ -32,6 +32,19 @@
               style="max-width: 300px"
             />
             <button type="button" class="btn btn-dark">Subscribe</button>
+          </div>
+        </div> -->
+
+        <!-- Social Media Icons section -->
+        <div class="col-12 col-md-6 d-flex flex-column align-items-md-end align-items-start">
+          <div class="mb-2 fw-medium">Follow us on social media</div>
+          <div class="d-flex justify-content-md-end gap-3">
+            <a href="#" class="text-dark fs-4"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-dark fs-4"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-dark fs-4"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-dark fs-4"><i class="bi bi-wechat"></i></a>
+            <a href="#" class="text-dark fs-4"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="text-dark fs-4"><i class="bi bi-youtube"></i></a>
           </div>
         </div>
       </div>
@@ -59,8 +72,9 @@
         </div>
         <div class="col-md-5 d-flex align-items-end justify-content-end text-end">
           <p class="mb-0" style="font-size: small">
-            © SilverHealth Australia Ltd (a fictitious organization). All rights reserved.<br />ABN
-            10 000 000 000.
+            © SilverHealth Australia Ltd (a fictitious organization).
+            <span class="d-block d-md-inline">All rights reserved.</span>
+            <br class="d-none d-md-inline" />ABN 10 000 000 000.
           </p>
         </div>
       </div>
@@ -77,7 +91,7 @@ import DonateButton from '@/components/sharedComponents/buttons/DonateButton.vue
 .footer-container {
   border-top: 1px solid #dee2e6;
   width: 100%;
-  padding-top: 10px;
+  padding-top: 0px;
 }
 
 .list-inline-item a {
@@ -86,5 +100,11 @@ import DonateButton from '@/components/sharedComponents/buttons/DonateButton.vue
 
 .list-inline-item a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 767.98px) {
+  .text-end p {
+    text-align: end;
+  }
 }
 </style>

@@ -5,6 +5,8 @@
         <h1 class="text-center">My Event Registrations</h1>
         <p class="text-center">
           Check your events calendar and the list of your registered events.
+          <br />You can also download PDF tickets, view the QR code for entrance, or cancel your
+          registration.
         </p>
 
         <!-- Loading indicator -->

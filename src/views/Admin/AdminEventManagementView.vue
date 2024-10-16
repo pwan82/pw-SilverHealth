@@ -131,19 +131,19 @@
                   </div>
 
                   <button
-                    class="btn btn-sm btn-secondary custom-button button-text"
+                    class="btn btn-sm btn-primary"
                     @click="openEditModal(slotProps.data)"
                     :disabled="slotProps.data.isLoading"
                   >
-                    <i class="bi bi-pencil mr-2"></i>Edit
+                    <i class="bi bi-pencil"></i>
                   </button>
 
                   <button
-                    class="btn btn-sm btn-outline-primary custom-button"
+                    class="btn btn-sm btn-outline-primary"
                     @click="exportBookings(slotProps.data)"
                     :disabled="slotProps.data.isLoading"
                   >
-                    <i class="bi bi-download mr-2"></i>Export
+                    <i class="bi bi-download"></i>
                   </button>
                 </div>
               </template>

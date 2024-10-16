@@ -52,12 +52,12 @@ const routes = [
     component: () => import('../views/CommunityEvent/MyEventRegistrationsView.vue'),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/get-support',
-    name: 'GetSupport',
-    component: () => import('../views/GetSupport/GetSupportView.vue'),
-    meta: { requiresAuth: false }
-  },
+  // {
+  //   path: '/get-support',
+  //   name: 'GetSupport',
+  //   component: () => import('../views/GetSupport/GetSupportView.vue'),
+  //   meta: { requiresAuth: false }
+  // },
   {
     path: '/get-support/first-aid-guide',
     name: 'FirstAidGuide',
@@ -106,12 +106,12 @@ const routes = [
   //   component: () => import('../views/Account/SettingsView.vue'),
   //   meta: { requiresAuth: true }
   // },
-  {
-    path: '/get-involved',
-    name: 'GetInvolved',
-    component: () => import('../views/GetInvolved/GetInvolvedView.vue'),
-    meta: { requiresAuth: false }
-  },
+  // {
+  //   path: '/get-involved',
+  //   name: 'GetInvolved',
+  //   component: () => import('../views/GetInvolved/GetInvolvedView.vue'),
+  //   meta: { requiresAuth: false }
+  // },
   {
     path: '/get-involved/become-a-volunteer',
     name: 'BecomeVolunteer',

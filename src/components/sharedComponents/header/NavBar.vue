@@ -17,17 +17,24 @@
           @mouseover="showDropdown('infoDropdown')"
           @mouseleave="hideDropdown('infoDropdown')"
         >
-          <router-link
-            to="/article"
+          <span
             class="nav-link dropdown-toggle"
             id="infoDropdown"
             role="button"
-            aria-expanded="false"
-            @click.prevent="navigateTo('/article')"
+            tabindex="0"
+            aria-haspopup="true"
+            :aria-expanded="dropdownStates.infoDropdown"
+            @click="toggleDropdown('infoDropdown')"
+            @keydown.enter="toggleDropdown('infoDropdown')"
+            @keydown.space="toggleDropdown('infoDropdown')"
           >
             Information & Advice
-          </router-link>
-          <ul class="dropdown-menu" aria-labelledby="infoDropdown">
+          </span>
+          <ul
+            class="dropdown-menu"
+            :class="{ show: dropdownStates.infoDropdown }"
+            aria-labelledby="infoDropdown"
+          >
             <li>
               <router-link to="/article" class="dropdown-item" active-class="active"
                 >Articles</router-link
@@ -46,17 +53,24 @@
           @mouseover="showDropdown('eventsDropdown')"
           @mouseleave="hideDropdown('eventsDropdown')"
         >
-          <router-link
-            to="/event"
+          <span
             class="nav-link dropdown-toggle"
             id="eventsDropdown"
             role="button"
-            aria-expanded="false"
-            @click.prevent="navigateTo('/event')"
+            tabindex="0"
+            aria-haspopup="true"
+            :aria-expanded="dropdownStates.eventsDropdown"
+            @click="toggleDropdown('eventsDropdown')"
+            @keydown.enter="toggleDropdown('eventsDropdown')"
+            @keydown.space="toggleDropdown('eventsDropdown')"
           >
             Community Events
-          </router-link>
-          <ul class="dropdown-menu" aria-labelledby="eventsDropdown">
+          </span>
+          <ul
+            class="dropdown-menu"
+            :class="{ show: dropdownStates.eventsDropdown }"
+            aria-labelledby="eventsDropdown"
+          >
             <li>
               <router-link to="/event" class="dropdown-item" active-class="active"
                 >All Events</router-link
@@ -77,17 +91,24 @@
           @mouseover="showDropdown('supportDropdown')"
           @mouseleave="hideDropdown('supportDropdown')"
         >
-          <router-link
-            to="/get-support"
+          <span
             class="nav-link dropdown-toggle"
             id="supportDropdown"
             role="button"
-            aria-expanded="false"
-            @click.prevent="navigateTo('/get-support')"
+            tabindex="0"
+            aria-haspopup="true"
+            :aria-expanded="dropdownStates.supportDropdown"
+            @click="toggleDropdown('supportDropdown')"
+            @keydown.enter="toggleDropdown('supportDropdown')"
+            @keydown.space="toggleDropdown('supportDropdown')"
           >
             Get Support
-          </router-link>
-          <ul class="dropdown-menu" aria-labelledby="supportDropdown">
+          </span>
+          <ul
+            class="dropdown-menu"
+            :class="{ show: dropdownStates.supportDropdown }"
+            aria-labelledby="supportDropdown"
+          >
             <li>
               <router-link
                 to="/get-support/first-aid-guide"
@@ -104,10 +125,6 @@
                 >Find Services Near You</router-link
               >
             </li>
-            <!-- <li>
-              <router-link to="/get-support/book-online" class="dropdown-item" active-class="active">Book
-                Online</router-link>
-            </li> -->
             <li>
               <router-link
                 to="/get-support/book-by-phone"
@@ -116,10 +133,6 @@
                 >Book by Telephone</router-link
               >
             </li>
-            <!-- <li>
-              <router-link to="/get-support/my-bookings" class="dropdown-item" active-class="active">My
-                Bookings</router-link>
-            </li> -->
           </ul>
         </li>
 
@@ -130,17 +143,24 @@
           @mouseover="showDropdown('involvedDropdown')"
           @mouseleave="hideDropdown('involvedDropdown')"
         >
-          <router-link
-            to="/get-involved"
+          <span
             class="nav-link dropdown-toggle"
             id="involvedDropdown"
             role="button"
-            aria-expanded="false"
-            @click.prevent="navigateTo('/get-involved')"
+            tabindex="0"
+            aria-haspopup="true"
+            :aria-expanded="dropdownStates.involvedDropdown"
+            @click="toggleDropdown('involvedDropdown')"
+            @keydown.enter="toggleDropdown('involvedDropdown')"
+            @keydown.space="toggleDropdown('involvedDropdown')"
           >
             Get Involved
-          </router-link>
-          <ul class="dropdown-menu" aria-labelledby="involvedDropdown">
+          </span>
+          <ul
+            class="dropdown-menu"
+            :class="{ show: dropdownStates.involvedDropdown }"
+            aria-labelledby="involvedDropdown"
+          >
             <li>
               <router-link
                 to="/get-involved/become-a-volunteer"
@@ -165,20 +185,27 @@
           @mouseover="showDropdown('adminDropdown')"
           @mouseleave="hideDropdown('adminDropdown')"
         >
-          <router-link
-            to="/admin"
+          <span
             class="nav-link dropdown-toggle"
             id="adminDropdown"
             role="button"
-            aria-expanded="false"
-            @click.prevent="navigateTo('/admin')"
+            tabindex="0"
+            aria-haspopup="true"
+            :aria-expanded="dropdownStates.adminDropdown"
+            @click="toggleDropdown('adminDropdown')"
+            @keydown.enter="toggleDropdown('adminDropdown')"
+            @keydown.space="toggleDropdown('adminDropdown')"
           >
             Admin
-          </router-link>
-          <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+          </span>
+          <ul
+            class="dropdown-menu"
+            :class="{ show: dropdownStates.adminDropdown }"
+            aria-labelledby="adminDropdown"
+          >
             <li>
               <router-link to="/admin" class="dropdown-item" active-class="active"
-                >Admin AdminDashboard</router-link
+                >Admin Dashboard</router-link
               >
             </li>
             <li>
@@ -215,7 +242,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -227,23 +254,27 @@ const authStore = useAuthStore()
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 const isAdmin = computed(() => authStore.isAdmin)
 
+const dropdownStates = reactive({
+  infoDropdown: false,
+  eventsDropdown: false,
+  supportDropdown: false,
+  involvedDropdown: false,
+  adminDropdown: false
+})
+
 // Show the dropdown menu
 const showDropdown = (dropdownId) => {
-  const dropdownElement = document.getElementById(dropdownId)
-  dropdownElement.classList.add('show')
-  const menu = dropdownElement.nextElementSibling
-  if (menu) menu.classList.add('show')
+  dropdownStates[dropdownId] = true
 }
 
+// Hide the dropdown menu
 const hideDropdown = (dropdownId) => {
-  const dropdownElement = document.getElementById(dropdownId)
-  dropdownElement.classList.remove('show')
-  const menu = dropdownElement.nextElementSibling
-  if (menu) menu.classList.remove('show')
+  dropdownStates[dropdownId] = false
 }
 
-const navigateTo = (path) => {
-  router.push(path)
+// Toggle the dropdown menu
+const toggleDropdown = (dropdownId) => {
+  dropdownStates[dropdownId] = !dropdownStates[dropdownId]
 }
 
 const activeParent = computed(() => {
@@ -254,17 +285,12 @@ const activeParent = computed(() => {
   } else if (['EventList', 'MyEventRegistrations'].includes(route.name)) {
     return 'events'
   } else if (
-    [
-      'GetSupport',
-      'FirstAidGuide',
-      'FindServices',
-      'BookOnline',
-      'BookByTelephone',
-      'MyBookings'
-    ].includes(route.name)
+    ['FirstAidGuide', 'FindServices', 'BookOnline', 'BookByTelephone', 'MyBookings'].includes(
+      route.name
+    )
   ) {
     return 'support'
-  } else if (['GetInvolved', 'BecomeVolunteer', 'Donate'].includes(route.name)) {
+  } else if (['BecomeVolunteer', 'Donate'].includes(route.name)) {
     return 'involved'
   } else if (
     [
@@ -293,5 +319,9 @@ const activeParent = computed(() => {
 
 .dropdown-menu {
   position: absolute;
+}
+
+.nav-link {
+  cursor: pointer;
 }
 </style>

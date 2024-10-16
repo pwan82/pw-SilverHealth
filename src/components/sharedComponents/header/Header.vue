@@ -13,17 +13,17 @@ import NabBar from '@/components/sharedComponents/header/NavBar.vue'
 
     <!-- Logo, Search Bar, and First Aid Guide Button -->
     <div class="row align-items-center mx-2 py-4">
-      <div class="col-12 col-md-4 py-1 text-center text-md-start">
+      <div class="col-12 col-md-6 py-1 text-center text-md-start">
         <router-link to="/" class="logo">
           <img :src="logo" alt="SilverHealth Logo" class="logo-img" />
         </router-link>
       </div>
 
-      <div class="col-12 col-md-4 py-1 justify-content-center">
+      <!-- <div class="col-12 col-md-4 py-1 justify-content-center">
         <SearchBar />
-      </div>
+      </div> -->
       <div
-        class="col-12 col-md-4 mt-2 mt-md-0 py-1 d-flex justify-content-md-end justify-content-center"
+        class="col-12 col-md-6 mt-2 mt-md-0 py-1 d-flex justify-content-md-end justify-content-center"
       >
         <FirstAidGuideButton />
       </div>
