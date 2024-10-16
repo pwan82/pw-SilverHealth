@@ -38,7 +38,7 @@ export const useAuthStore = defineStore('user', {
       if (user) {
         // Fetch the user's token with custom claims (including role)
         const idTokenResult = await user.getIdTokenResult()
-        const userRole = idTokenResult.claims.role || 'unknown' // Default role to 'user' if not defined
+        const userRole = idTokenResult.claims.role || 'new user' // Default role to 'new user' if not defined
 
         this.setUser(user.uid, userRole, user.email)
         this.fetchUserData(user.uid)

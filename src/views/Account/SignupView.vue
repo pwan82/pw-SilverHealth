@@ -297,7 +297,9 @@ const handleRegister = () => {
       })
       .then((response) => {
         console.log('User information updated successfully:', response.data)
-        router.push('/') // Redirect after successful registration and data update
+        // Redirect after successful registration and data update
+        // router.push('/')
+        window.location.href = '/'
       })
       .catch((error) => {
         // Handle errors
