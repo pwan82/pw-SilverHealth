@@ -12,16 +12,27 @@
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email</label>
-              <input type="email" class="form-control" id="email" @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)" v-model="email" placeholder="Enter email" />
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                @blur="() => validateEmail(true)"
+                @input="() => validateEmail(false)"
+                v-model="email"
+                placeholder="Enter email"
+              />
               <div v-if="errorMessage" class="text-danger mt-2">{{ errorMessage }}</div>
               <div v-if="successMessage" class="text-success mt-2">{{ successMessage }}</div>
 
               <!-- Submit Button -->
               <div class="mt-3 d-grid gap-2">
                 <button type="submit" class="btn btn-primary button-text" :disabled="isSubmitting">
-                  <i v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                    aria-hidden="true"></i>
+                  <i
+                    v-if="isSubmitting"
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></i>
                   Send Reset Link
                 </button>
                 <router-link :to="{ name: 'Login' }" class="btn btn-outline-primary button-text">

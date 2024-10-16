@@ -4,6 +4,8 @@ const cors = require('cors')({ origin: true }) // Enable CORS with any origin
 
 const db = admin.firestore()
 
+const { sanitizeAllHtml } = require('./helpers') // Import validation and sanitization functions
+
 const { checkUserRole } = require('./authFunctions')
 const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
 
@@ -365,7 +367,7 @@ exports.publishArticleRating = onRequest({ region: region }, (req, res) => {
       const ratingData = {
         userId: userId,
         rating: rating,
-        comment: comment,
+        comment: sanitizeAllHtml(comment),
         publicationTime: Date.now()
       }
 

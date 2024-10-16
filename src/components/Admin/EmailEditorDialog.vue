@@ -1,11 +1,8 @@
 <template>
   <Dialog v-model:visible="visible" header="Compose Email" :modal="true">
     <div class="mb-3 field">
-      <h5>Recipients</h5>
-      <div
-        class="p-inputtext p-component p-inputtext-sm"
-        style="max-height: 100px; overflow-y: auto"
-      >
+      <h5>{{ `Recipients (${selectedUsers.length})`}}</h5>
+      <div class="p-inputtext p-component p-inputtext-sm" style="max-height: 100px; overflow-y: auto; max-width: 700px;">
         <Chip v-for="user in selectedUsers" :key="user.userId" :label="user.email" />
       </div>
     </div>
@@ -13,14 +10,8 @@
     <div class="p-fluid">
       <div class="mb-3 field">
         <h5>Subject</h5>
-        <InputText
-          id="subject"
-          v-model="subject"
-          required="true"
-          autofocus
-          placeholder="Enter email subject"
-          :disabled="sending"
-        />
+        <InputText id="subject" v-model="subject" required="true" autofocus placeholder="Enter email subject"
+          :disabled="sending" />
       </div>
 
       <div class="mb-3 field">
@@ -31,20 +22,9 @@
       <div class="mb-3 field">
         <h5>Attachment</h5>
         <p>Up to 5 files, maximum 10MB each.</p>
-        <FileUpload
-          mode="advanced"
-          :multiple="true"
-          :maxFileSize="10000000"
-          @select="onFileSelect"
-          @remove="onFileRemove"
-          :auto="true"
-          chooseLabel="Choose Files"
-          :showUploadButton="false"
-          :showCancelButton="false"
-          :fileLimit="5"
-          @error="onError"
-          :disabled="sending"
-        >
+        <FileUpload mode="advanced" :multiple="true" :maxFileSize="10000000" @select="onFileSelect"
+          @remove="onFileRemove" :auto="true" chooseLabel="Choose Files" :showUploadButton="false"
+          :showCancelButton="false" :fileLimit="5" @error="onError" :disabled="sending">
           <template #empty>
             <p>Drag and drop files here to upload.</p>
           </template>
@@ -53,26 +33,15 @@
     </div>
     <template #footer>
       <Button @click="sendEmails" :disabled="!selectedUsers.length || sending" :loading="sending">
-        <span
-          v-if="sending"
-          class="spinner-border spinner-border-sm me-2"
-          role="status"
-          aria-hidden="true"
-        ></span>
+        <span v-if="sending" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
         <i v-else class="bi bi-send mr-2"></i>
         {{
-          (sending ? `Sending` : `Send`) +
-          ` to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
+        (sending ? `Sending` : `Send`) +
+        ` to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
         ${selectedUsers.length > 1 ? 'Users' : 'User'}`
         }}
       </Button>
-      <Button
-        label="Cancel"
-        icon="bi bi-x-lg"
-        @click="closeDialog"
-        class="p-button-text"
-        :disabled="sending"
-      />
+      <Button label="Cancel" icon="bi bi-x-lg" @click="closeDialog" class="p-button-text" :disabled="sending" />
     </template>
   </Dialog>
 </template>
@@ -199,7 +168,7 @@ const sendEmails = async () => {
       toast.add({
         severity: 'success',
         summary: 'Success',
-        detail: `Sent ${response.data.count} emails successfully`,
+        detail: `Successfully sent ${payload.emails.length} emails`,
         life: 3000
       })
       emit('emailsSent')

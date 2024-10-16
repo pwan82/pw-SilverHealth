@@ -24,14 +24,25 @@
                   <div class="fw-bold">Username *</div>
                   <div>Length from 3 to 30 characters.</div>
                 </label>
-                <input type="text" class="form-control" id="username" v-model="formData.username"
-                  @blur="() => validateUsername(true)" @input="() => validateUsername(false)"
-                  placeholder="Enter username" maxlength="30" />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  v-model="formData.username"
+                  @blur="() => validateUsername(true)"
+                  @input="() => validateUsername(false)"
+                  placeholder="Enter username"
+                  maxlength="30"
+                />
                 <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
 
                 <!-- Gender Selection -->
                 <label for="gender" class="form-label mt-3 fw-bold">Gender *</label>
-                <select class="form-select" @blur="() => validateGender(true)" v-model="formData.gender">
+                <select
+                  class="form-select"
+                  @blur="() => validateGender(true)"
+                  v-model="formData.gender"
+                >
                   <option value="" disabled>Select your gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -45,8 +56,14 @@
                   <div class="fw-bold">Birthday *</div>
                   <div>You should be older than 13.</div>
                 </label>
-                <input type="date" class="form-control" v-model="formData.birthday" placeholder="Select your birthday"
-                  @blur="() => validateBirthday(true)" @input="() => validateBirthday(false)" />
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="formData.birthday"
+                  placeholder="Select your birthday"
+                  @blur="() => validateBirthday(true)"
+                  @input="() => validateBirthday(false)"
+                />
                 <div v-if="errors.birthday" class="text-danger">{{ errors.birthday }}</div>
 
                 <!-- Address Inputs -->
@@ -62,31 +79,61 @@
                   </div>
                   <div v-if="isAddressSectionExpanded" class="mt-2">
                     <label for="streetAddress" class="form-label">Street Address</label>
-                    <input type="text" id="streetAddress" class="form-control mb-2"
-                      v-model="formData.address.streetAddress" placeholder="e.g., 123 Main St"
-                      @blur="() => validateAddress(true)" @input="() => validateAddress(false)" />
+                    <input
+                      type="text"
+                      id="streetAddress"
+                      class="form-control mb-2"
+                      v-model="formData.address.streetAddress"
+                      placeholder="e.g., 123 Main St"
+                      @blur="() => validateAddress(true)"
+                      @input="() => validateAddress(false)"
+                    />
 
                     <label for="building" class="form-label">Building (Optional)</label>
-                    <input type="text" id="building" class="form-control mb-2" v-model="formData.address.building"
-                      placeholder="e.g., Apt 4B" @blur="() => validateAddress(true)"
-                      @input="() => validateAddress(false)" />
+                    <input
+                      type="text"
+                      id="building"
+                      class="form-control mb-2"
+                      v-model="formData.address.building"
+                      placeholder="e.g., Apt 4B"
+                      @blur="() => validateAddress(true)"
+                      @input="() => validateAddress(false)"
+                    />
 
                     <label for="suburb" class="form-label">Suburb</label>
-                    <input type="text" id="suburb" class="form-control mb-2" v-model="formData.address.suburb"
-                      placeholder="e.g., Clayton" @blur="() => validateAddress(true)"
-                      @input="() => validateAddress(false)" />
+                    <input
+                      type="text"
+                      id="suburb"
+                      class="form-control mb-2"
+                      v-model="formData.address.suburb"
+                      placeholder="e.g., Clayton"
+                      @blur="() => validateAddress(true)"
+                      @input="() => validateAddress(false)"
+                    />
 
                     <label for="state" class="form-label">State</label>
-                    <input type="text" id="state" class="form-control mb-2" v-model="formData.address.state"
-                      placeholder="2-50 characters, letters only" @blur="() => validateAddress(true)"
-                      @input="() => validateAddress(false)" />
+                    <input
+                      type="text"
+                      id="state"
+                      class="form-control mb-2"
+                      v-model="formData.address.state"
+                      placeholder="2-50 characters, letters only"
+                      @blur="() => validateAddress(true)"
+                      @input="() => validateAddress(false)"
+                    />
 
                     <label for="postcode" class="form-label">Postcode</label>
-                    <input type="text" id="postcode" class="form-control mb-2" v-model="formData.address.postcode"
-                      placeholder="4-10 digits" @blur="() => validateAddress(true)"
-                      @input="() => validateAddress(false)" />
+                    <input
+                      type="text"
+                      id="postcode"
+                      class="form-control mb-2"
+                      v-model="formData.address.postcode"
+                      placeholder="4-10 digits"
+                      @blur="() => validateAddress(true)"
+                      @input="() => validateAddress(false)"
+                    />
                   </div>
-                  
+
                   <div v-if="errors.address" class="text-danger">
                     <div v-for="(error, field) in errors.address" :key="field">{{ error }}</div>
                   </div>
@@ -94,8 +141,12 @@
 
                 <!-- Newsletter Subscription Checkbox -->
                 <div class="form-check mt-3">
-                  <input class="form-check-input" type="checkbox" id="subscribeToNewsletter"
-                    v-model="formData.subscribeToNewsletter">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="subscribeToNewsletter"
+                    v-model="formData.subscribeToNewsletter"
+                  />
                   <label class="form-check-label" for="subscribeToNewsletter">
                     Subscribe to our newsletter
                   </label>
@@ -103,13 +154,22 @@
 
                 <!-- Update Button -->
                 <div class="mt-3 d-grid gap-2">
-                  <button type="submit" class="btn  button-text" :class="{
-                    'btn-primary': isFormChanged,
-                    'btn-secondary': !isFormChanged
-                  }" :disabled="!isFormChanged || isSubmitting">
-                    <i v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                      aria-hidden="true"></i>
-                    Update Information
+                  <button
+                    type="submit"
+                    class="btn button-text"
+                    :class="{
+                      'btn-primary': isFormChanged,
+                      'btn-secondary': !isFormChanged
+                    }"
+                    :disabled="!isFormChanged || isSubmitting"
+                  >
+                    <i
+                      v-if="isSubmitting"
+                      class="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></i>
+                    {{ isFormChanged ? 'Update Information' : 'Information Unchanged' }}
                   </button>
                 </div>
               </div>
@@ -219,7 +279,7 @@ const handleUpdate = async () => {
   formData.value.username = sanitizeInput(formData.value.username)
   formData.value.gender = sanitizeInput(formData.value.gender)
   formData.value.birthday = sanitizeInput(formData.value.birthday)
-  Object.keys(formData.value.address).forEach(key => {
+  Object.keys(formData.value.address).forEach((key) => {
     formData.value.address[key] = sanitizeInput(formData.value.address[key])
   })
 
@@ -228,10 +288,12 @@ const handleUpdate = async () => {
   validateBirthday(true)
   validateAddress(true)
 
-  if (!errors.value.username
-    && !errors.value.gender
-    && !errors.value.birthday
-    && Object.keys(errors.value.address).length === 0) {
+  if (
+    !errors.value.username &&
+    !errors.value.gender &&
+    !errors.value.birthday &&
+    Object.keys(errors.value.address).length === 0
+  ) {
     isSubmitting.value = true
 
     try {
@@ -242,7 +304,11 @@ const handleUpdate = async () => {
           headers: { Authorization: `Bearer ${token}` }
         }
 
-        const response = await axios.post('https://updateuserinfo-s3vwdaiioq-ts.a.run.app', formData.value, config)
+        const response = await axios.post(
+          'https://updateuserinfo-s3vwdaiioq-ts.a.run.app',
+          formData.value,
+          config
+        )
         console.log('User information updated successfully:', response.data)
         // Update originalFormData to reflect the new state
         originalFormData.value = JSON.parse(JSON.stringify(formData.value))
@@ -284,7 +350,7 @@ const validateBirthday = (blur) => {
 const validateAddress = (blur) => {
   const address = formData.value.address
   const addressFields = Object.values(address)
-  const isAnyFieldFilled = addressFields.some(field => field.trim() !== '')
+  const isAnyFieldFilled = addressFields.some((field) => field.trim() !== '')
 
   if (isAnyFieldFilled) {
     // If any field is filled, validate all fields

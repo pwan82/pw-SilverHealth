@@ -12,24 +12,44 @@
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email</label>
-              <input type="text " class="form-control" id="email" @blur="() => validateEmail(true)"
-                @input="() => validateEmail(false)" v-model="formData.email" placeholder="Enter email" />
+              <input
+                type="text "
+                class="form-control"
+                id="email"
+                @blur="() => validateEmail(true)"
+                @input="() => validateEmail(false)"
+                v-model="formData.email"
+                placeholder="Enter email"
+              />
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Password Input -->
               <label for="password" class="form-label mt-3 fw-bold">Password</label>
-              <input type="password" class="form-control" id="password" @blur="() => validatePassword(true)"
-                @input="() => validatePassword(false)" v-model="formData.password" placeholder="Enter password" />
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                @blur="() => validatePassword(true)"
+                @input="() => validatePassword(false)"
+                v-model="formData.password"
+                placeholder="Enter password"
+              />
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
 
               <!-- Login and Register Button -->
               <div class="mt-3 d-grid gap-2">
                 <button type="submit" class="btn btn-primary button-text">
-                  <i v-if="isLogging" class="spinner-border spinner-border-sm me-2" role="status"
-                    aria-hidden="true"></i>
+                  <i
+                    v-if="isLogging"
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></i>
                   Log In
                 </button>
-                <router-link :to="{ name: 'Signup' }" class="btn btn-outline-primary button-text">Sign Up</router-link>
+                <router-link :to="{ name: 'Signup' }" class="btn btn-outline-primary button-text"
+                  >Sign Up</router-link
+                >
                 <div class="mt-1 text-center">
                   <router-link :to="{ name: 'ForgotPassword' }" class="text-muted">
                     Forgot password?
@@ -49,8 +69,12 @@
             </div>
             <div class="mt-3 d-grid gap-2">
               <button @click="handleLoginWithGoogle" class="btn btn-outline-dark custom-button">
-                <i v-if="isLoggingWithGoogle" class="spinner-border spinner-border-sm me-2" role="status"
-                  aria-hidden="true"></i>
+                <i
+                  v-if="isLoggingWithGoogle"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></i>
                 <i v-else class="bi bi-google"></i>
                 <div class="button-text">Login with Google</div>
               </button>
@@ -70,10 +94,7 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 
 import { getDoc, doc } from 'firebase/firestore'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
-import {
-  validateInputEmail,
-  validateInputPassword
-} from '@/utils/inputValidators'
+import { validateInputEmail, validateInputPassword } from '@/utils/inputValidators'
 import DOMPurify from 'dompurify'
 
 import { useToast } from 'primevue/usetoast'
@@ -225,7 +246,7 @@ const handleLoginWithGoogle = async () => {
       toast.add({
         severity: 'success',
         summary: 'Success',
-        detail: `Welcome to SilverHealth!\nYou logged in with Google: ${user.email}`,
+        detail: `Welcome to SilverHealth!\n\nYou logged in with Google: ${user.email}`,
         life: 3000
       })
     }

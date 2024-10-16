@@ -346,6 +346,57 @@ exports.manageEvent = onRequest({ region: region }, (req, res) => {
 })
 
 /**
+ * Cloud Function to get all bookings for a specific event.
+ * This function is restricted to admin users only.
+ *
+ * @function
+ * @name getEventBookings
+ * @param {Object} req - The request object from Firebase Functions.
+ * @param {Object} req.query - The query parameters.
+ * @param {string} req.query.eventId - The ID of the event to fetch bookings for.
+ * @param {Object} res - The response object from Firebase Functions.
+ * @returns {Promise<void>} A promise that resolves when the operation is complete.
+ */
+exports.getEventBookings = onRequest({ region: region }, (req, res) => {
+  return cors(req, res, async () => {
+    const { eventId } = req.query
+
+    if (!eventId) {
+      return res.status(400).send('Event ID is required')
+    }
+
+    try {
+      // Check if the user is an admin
+      const authCheck = await checkUserRole(req.headers, 'admin')
+      if (!authCheck.isAdmin) {
+        return res.status(403).send('Only admins can access event bookings')
+      }
+
+      // Fetch bookings for the specified event
+      const bookingsSnapshot = await db
+        .collection('eventBookings')
+        .where('eventId', '==', eventId)
+        .orderBy('bookingTime', 'desc')
+        .get()
+
+      const bookings = []
+      bookingsSnapshot.forEach((doc) => {
+        bookings.push({
+          bookingId: doc.id,
+          ...doc.data()
+        })
+      })
+
+      console.log(`Returning ${bookings.length} bookings for event ${eventId}`)
+      res.status(200).json(bookings)
+    } catch (error) {
+      console.error(`Error fetching event bookings: ${error}`)
+      res.status(500).send('Error fetching event bookings')
+    }
+  })
+})
+
+/**
  * Cloud Function to get all event bookings for the current user.
  */
 exports.getUserEventBookings = onRequest({ region: region }, (req, res) => {

@@ -195,11 +195,11 @@ exports.getUserInfo = onRequest({ region: region }, (req, res) => {
           gender: data.gender || '',
           birthday: data.birthday || '',
           address: {
-            streetAddress: data.address?.streetAddress || '',
-            building: data.address?.building || '',
-            suburb: data.address?.suburb || '',
-            state: data.address?.state || '',
-            postcode: data.address?.postcode || ''
+            streetAddress: data.address ? data.address.streetAddress : '',
+            building: data.address ? data.address.building : '',
+            suburb: data.address ? data.address.suburb : '',
+            state: data.address ? data.address.state : '',
+            postcode: data.address ? data.address.postcode : ''
           },
           username: data.username || '',
           subscribeToNewsletter: data.subscribeToNewsletter || false

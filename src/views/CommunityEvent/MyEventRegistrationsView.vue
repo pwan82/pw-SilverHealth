@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <h1 class="text-center">My Event Registrations</h1>
-        <p class="text-center">Check your events calendar and the list of all registered events.</p>
+        <p class="text-center">Check your events calendar and the list of your registered events.</p>
 
         <!-- Loading indicator -->
         <div v-if="loading" class="text-center my-4">
@@ -168,7 +168,6 @@
             </Column>
 
             <!-- Empty state template -->
-            clearFilters
             <template #empty>
               <div class="text-center p-4">
                 <template v-if="userRegistrations.length === 0">

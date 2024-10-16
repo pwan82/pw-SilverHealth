@@ -66,12 +66,14 @@ exports.sendBulkEmails = sendBulkEmails
 const {
   getEvents,
   getEventById,
+  getEventBookings,
   getUserEventBookings,
   manageEventBooking,
   manageEvent
 } = require('./eventFunctions')
 exports.getEvents = getEvents
 exports.getEventById = getEventById
+exports.getEventBookings = getEventBookings
 exports.getUserEventBookings = getUserEventBookings
 exports.manageEventBooking = manageEventBooking
 exports.manageEvent = manageEvent

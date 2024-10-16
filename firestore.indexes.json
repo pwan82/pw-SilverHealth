@@ -33,6 +33,14 @@
         { "fieldPath": "endTime", "order": "DESCENDING" },
         { "fieldPath": "startTime", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "eventBookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "eventId", "order": "ASCENDING" },
+        { "fieldPath": "bookingTime", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

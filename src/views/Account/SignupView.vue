@@ -12,8 +12,15 @@
             <div class="col-sm-6 offset-sm-3">
               <!-- Email Input -->
               <label for="email" class="form-label mt-3 fw-bold">Email *</label>
-              <input type="text" class="form-control" id="email" v-model="formData.email"
-                @blur="() => validateEmail(true)" @input="() => validateEmail(false)" placeholder="Enter email" />
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                v-model="formData.email"
+                @blur="() => validateEmail(true)"
+                @input="() => validateEmail(false)"
+                placeholder="Enter email"
+              />
               <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
 
               <!-- Username Input -->
@@ -21,30 +28,55 @@
                 <div class="fw-bold">Username *</div>
                 <div>Length from 3 to 30 characters.</div>
               </label>
-              <input type="text" class="form-control" id="username" v-model="formData.username"
-                @blur="() => validateUsername(true)" @input="() => validateUsername(false)" placeholder="Enter username"
-                maxlength="30" />
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                v-model="formData.username"
+                @blur="() => validateUsername(true)"
+                @input="() => validateUsername(false)"
+                placeholder="Enter username"
+                maxlength="30"
+              />
               <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
 
               <!-- Password Input -->
               <label for="password" class="form-label mt-3 fw-bold">Password *</label>
-              <input type="password" class="form-control" id="password" v-model="formData.password"
-                @blur="() => validatePassword(true)" @input="() => validatePassword(false)"
-                placeholder="Enter password" />
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                v-model="formData.password"
+                @blur="() => validatePassword(true)"
+                @input="() => validatePassword(false)"
+                placeholder="Enter password"
+              />
               <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
 
               <!-- Confirm Password Input -->
-              <label for="confirmPassword" class="form-label mt-3 fw-bold">Confirm Password *</label>
-              <input type="password" class="form-control" id="confirmPassword" v-model="formData.confirmPassword"
-                @blur="() => validateConfirmPassword(true)" @input="() => validateConfirmPassword(false)"
-                placeholder="Confirm password" />
+              <label for="confirmPassword" class="form-label mt-3 fw-bold"
+                >Confirm Password *</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                v-model="formData.confirmPassword"
+                @blur="() => validateConfirmPassword(true)"
+                @input="() => validateConfirmPassword(false)"
+                placeholder="Confirm password"
+              />
               <div v-if="errors.confirmPassword" class="text-danger">
                 {{ errors.confirmPassword }}
               </div>
 
               <!-- Gender Selection -->
               <label for="gender" class="form-label mt-3 fw-bold">Gender *</label>
-              <select class="form-select" @blur="() => validateGender(true)" v-model="formData.gender">
+              <select
+                class="form-select"
+                @blur="() => validateGender(true)"
+                v-model="formData.gender"
+              >
                 <option value="" disabled selected>Select your gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -58,27 +90,45 @@
                 <div class="fw-bold">Birthday *</div>
                 <div>You should be older than 13 to sign up.</div>
               </label>
-              <input type="date" class="form-control" v-model="formData.birthday" placeholder="Select your birthday"
-                @blur="() => validateBirthday(true)" @input="() => validateBirthday(false)" />
+              <input
+                type="date"
+                class="form-control"
+                v-model="formData.birthday"
+                placeholder="Select your birthday"
+                @blur="() => validateBirthday(true)"
+                @input="() => validateBirthday(false)"
+              />
               <!-- :max="maxDate" -->
               <div v-if="errors.birthday" class="text-danger">{{ errors.birthday }}</div>
 
               <!-- Terms and Policy Checkbox -->
               <div class="form-check mt-3">
-                <input class="form-check-input" type="checkbox" id="agreeToTerms" v-model="formData.agreeToTerms"
-                  @blur="() => validateAgreeToTerms(true)" @input="() => validateAgreeToTerms(false)">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="agreeToTerms"
+                  v-model="formData.agreeToTerms"
+                  @blur="() => validateAgreeToTerms(true)"
+                  @input="() => validateAgreeToTerms(false)"
+                />
                 <label class="form-check-label" for="agreeToTerms">
                   I agree to the
                   <a href="/about/terms-and-policy" target="_blank" rel="noopener noreferrer">
-                    terms and policy</a> *
+                    terms and policy</a
+                  >
+                  *
                 </label>
               </div>
               <div v-if="errors.agreeToTerms" class="text-danger">{{ errors.agreeToTerms }}</div>
 
               <!-- Newsletter Subscription Checkbox -->
               <div class="form-check mt-3">
-                <input class="form-check-input" type="checkbox" id="subscribeToNewsletter"
-                  v-model="formData.subscribeToNewsletter">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="subscribeToNewsletter"
+                  v-model="formData.subscribeToNewsletter"
+                />
                 <label class="form-check-label" for="subscribeToNewsletter">
                   Subscribe to our newsletter
                 </label>
@@ -87,8 +137,12 @@
               <!-- Register Button -->
               <div class="mt-3 d-grid gap-2">
                 <button type="submit" class="btn btn-primary button-text" :disabled="isSubmitting">
-                  <i v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                    aria-hidden="true"></i>
+                  <i
+                    v-if="isSubmitting"
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></i>
                   Register Now
                 </button>
               </div>
@@ -206,10 +260,10 @@ const handleRegister = () => {
     // Register the user with Firebase Authentication
     createUserWithEmailAndPassword(auth, formData.value.email, formData.value.password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        console.log('User registered successfully!', user.uid);
+        const user = userCredential.user
+        console.log('User registered successfully!', user.uid)
         // Get a fresh token
-        return Promise.all([user.getIdToken(true), user.email]);
+        return Promise.all([user.getIdToken(true), user.email])
       })
       .then(([freshToken, email]) => {
         // Prepare the data for updating user information
@@ -226,7 +280,11 @@ const handleRegister = () => {
         }
 
         // Call the updateUserInfo API
-        const response = axios.post('https://updateuserinfo-s3vwdaiioq-ts.a.run.app', userData, config)
+        const response = axios.post(
+          'https://updateuserinfo-s3vwdaiioq-ts.a.run.app',
+          userData,
+          config
+        )
 
         toast.add({
           severity: 'success',

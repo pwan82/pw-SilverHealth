@@ -182,9 +182,9 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/booking-record',
-    name: 'AdminBookingRecord',
-    component: () => import('../views/Admin/AdminBookingRecordView.vue'),
+    path: '/admin/event-management',
+    name: 'AdminEventManagement',
+    component: () => import('../views/Admin/AdminEventManagementView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
