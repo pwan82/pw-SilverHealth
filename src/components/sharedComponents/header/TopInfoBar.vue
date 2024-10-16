@@ -3,7 +3,7 @@ import { computed, ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { auth } from '@/firebase/init'
 import { onAuthStateChanged } from 'firebase/auth'
-import { redirectToLogin as baseRedirectToLogin } from '@/utils/helpers'
+import { redirectToLogin as baseRedirectToLogin } from '@/helpers/helpers'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()

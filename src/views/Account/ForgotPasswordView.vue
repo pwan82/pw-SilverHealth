@@ -52,7 +52,7 @@ import { ref } from 'vue'
 import { auth } from '@/firebase/init'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import DOMPurify from 'dompurify'
-import { validateInputEmail } from '@/utils/inputValidators'
+import { validateInputEmail } from '@/helpers/inputValidators'
 
 import { useToast } from 'primevue/usetoast'
 const toast = useToast()

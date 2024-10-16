@@ -182,7 +182,7 @@ import {
   validateInputConfirmPassword,
   validateInputName,
   validateInputBirthday
-} from '@/utils/inputValidators'
+} from '@/helpers/inputValidators'
 import DOMPurify from 'dompurify' // Import DOMPurify for sanitizing input
 
 import { useToast } from 'primevue/usetoast'

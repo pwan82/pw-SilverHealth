@@ -191,7 +191,7 @@ import {
   validateInputName,
   validateInputBirthday,
   validateInputAddress
-} from '@/utils/inputValidators'
+} from '@/helpers/inputValidators'
 
 import { useToast } from 'primevue/usetoast'
 const toast = useToast()

@@ -328,7 +328,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { onAuthStateChanged } from 'firebase/auth'
 
 import { auth } from '@/firebase/init'
-import { redirectToLogin as baseRedirectToLogin } from '@/utils/helpers'
+import { redirectToLogin as baseRedirectToLogin } from '@/helpers/helpers'
 import EventLocationMapbox from '@/components/EventLocationMapbox.vue'
 
 const route = useRoute()

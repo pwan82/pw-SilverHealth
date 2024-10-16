@@ -3,7 +3,9 @@
     <div class="row">
       <div class="col-md-12">
         <h1 class="text-center">My Event Registrations</h1>
-        <p class="text-center">Check your events calendar and the list of your registered events.</p>
+        <p class="text-center">
+          Check your events calendar and the list of your registered events.
+        </p>
 
         <!-- Loading indicator -->
         <div v-if="loading" class="text-center my-4">

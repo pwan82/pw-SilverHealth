@@ -5,20 +5,33 @@
         <h1 class="text-center">Admin Bulk Email Management</h1>
         <p class="text-center">Select the users you want to send bulk emails to.</p>
 
-        <UserList ref="userList" :users="users" :loading="loading" v-model:selectedUsers="selectedUsers" />
+        <UserList
+          ref="userList"
+          :users="users"
+          :loading="loading"
+          v-model:selectedUsers="selectedUsers"
+        />
 
         <!-- Send Email Button -->
-        <button class="btn btn-primary mt-3 button-text" @click="openEmailEditor" :disabled="!selectedUsers.length">
+        <button
+          class="btn btn-primary mt-3 button-text"
+          @click="openEmailEditor"
+          :disabled="!selectedUsers.length"
+        >
           <i class="bi bi-envelope-plus mr-2"></i>
           {{
-          `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
+            `Send Email to ${selectedUsers.length > 0 ? selectedUsers.length : ''}
           Selected ${selectedUsers.length > 1 ? 'Users' : 'User'}`
           }}
         </button>
 
         <!-- Email Editor Dialog -->
-        <EmailEditorDialog v-model="displayEmailEditor" :selectedUsers="selectedUsers" :getAuthToken="getAuthToken"
-          @emailsSent="handleEmailsSent" />
+        <EmailEditorDialog
+          v-model="displayEmailEditor"
+          :selectedUsers="selectedUsers"
+          :getAuthToken="getAuthToken"
+          @emailsSent="handleEmailsSent"
+        />
       </div>
     </div>
   </div>

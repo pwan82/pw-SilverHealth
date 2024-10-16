@@ -186,7 +186,7 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
-import { redirectToLogin as baseRedirectToLogin } from '@/utils/helpers'
+import { redirectToLogin as baseRedirectToLogin } from '@/helpers/helpers'
 
 const route = useRoute()
 const router = useRouter()

@@ -94,7 +94,7 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 
 import { getDoc, doc } from 'firebase/firestore'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
-import { validateInputEmail, validateInputPassword } from '@/utils/inputValidators'
+import { validateInputEmail, validateInputPassword } from '@/helpers/inputValidators'
 import DOMPurify from 'dompurify'
 
 import { useToast } from 'primevue/usetoast'
