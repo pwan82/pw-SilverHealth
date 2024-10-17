@@ -28,6 +28,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const authStore = useAuthStore()
+const isLoggedIn = ref(authStore.isLoggedIn)
 
 const cards = ref([
   {
@@ -53,7 +57,8 @@ const cards = ref([
   },
   {
     title: 'Event Calendar',
-    description: 'View and manage your registered events.',
+    description:
+      (isLoggedIn.value ? '' : 'Please login first. ') + 'View and manage your registered events.',
     link: '/event/registered',
     bgClass: 'bg-purple',
     icon: 'bi bi-calendar3'

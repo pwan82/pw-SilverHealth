@@ -16,6 +16,14 @@
         </div>
 
         <div v-else>
+          <!-- Navigation Buttons -->
+          <div class="d-flex justify-content-center gap-4 mt-4 mb-4">
+            <router-link to="/event/registered" class="btn btn-outline-primary custom-button">
+              <i class="bi bi-person-lines-fill mr-2"></i>
+              <div class="button-text">See My Registered Events</div>
+            </router-link>
+          </div>
+
           <!-- Search and filter controls -->
           <div
             class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"

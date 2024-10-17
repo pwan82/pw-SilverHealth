@@ -17,7 +17,6 @@
 
         <div v-else>
           <!-- Add Event Button -->
-
           <div class="d-flex justify-content-center mt-4 mb-4">
             <button @click="openAddModal" class="btn btn-primary custom-button">
               <i class="bi bi-plus-lg mr-2"></i>

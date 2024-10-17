@@ -17,6 +17,19 @@
         </div>
 
         <div v-else>
+          <!-- Navigation Buttons -->
+          <div class="d-flex justify-content-center gap-4 mt-4">
+            <button @click="scrollToRegistrationTable" class="btn btn-primary custom-button">
+              <i class="bi bi-person-lines-fill mr-2"></i>
+              <div class="button-text">See My Registration List</div>
+            </button>
+
+            <router-link to="/event" class="btn btn-outline-primary custom-button">
+              <i class="bi bi-list-task mr-2"></i>
+              <div class="button-text">Browse All Other Events</div>
+            </router-link>
+          </div>
+
           <!-- FullCalendar -->
           <div class="row mt-5">
             <div class="event-calendar-container mx-auto">
@@ -78,6 +91,7 @@
           </div>
 
           <DataTable
+            ref="registrationTable"
             :value="formattedRegistrations"
             :paginator="true"
             :rows="10"
@@ -335,6 +349,14 @@ const setRegistrationLoading = (eventId, isLoading) => {
   const index = formattedRegistrations.value.findIndex((reg) => reg.eventId === eventId)
   if (index !== -1) {
     formattedRegistrations.value[index].isLoading = isLoading
+  }
+}
+
+const registrationTable = ref(null)
+
+const scrollToRegistrationTable = () => {
+  if (registrationTable.value) {
+    registrationTable.value.$el.scrollIntoView()
   }
 }
 

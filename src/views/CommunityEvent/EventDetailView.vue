@@ -12,6 +12,17 @@
           </div>
 
           <div v-else-if="communityEvent">
+            <!-- Go back button -->
+            <div class="mb-2">
+              <button
+                @click="router.push({ name: 'EventList' })"
+                class="btn btn-outline-primary custom-button"
+              >
+                <i class="bi bi-arrow-left mr-2"></i>
+                <div class="button-text">Browse All Events</div>
+              </button>
+            </div>
+
             <!-- Title -->
             <h1 class="text-center">{{ communityEvent.title }}</h1>
             <p class="text-center">

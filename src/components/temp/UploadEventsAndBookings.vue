@@ -29,12 +29,12 @@ import { db } from '@/firebase/init'
 import { collection, addDoc } from 'firebase/firestore'
 
 // Import events data from JSON file
-import eventsData from '@/assets/json/events.json'
+// import eventsData from '@/assets/json/events.json'
 import events2 from '@/assets/json/events2.json'
 
 // Create an array of event files for extensibility
 const eventFiles = [
-  { name: 'events.json', data: eventsData },
+  // { name: 'events.json', data: eventsData },
   { name: 'events2.json', data: events2 }
 ]
 

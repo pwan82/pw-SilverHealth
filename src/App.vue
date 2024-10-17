@@ -23,7 +23,8 @@ onMounted(() => {
       if (authStore.isLoggedIn) {
         authStore.logout()
         // If user logs out (newUser is null), navigate to the home page
-        router.push({ name: 'Home' })
+        // router.push({ name: 'Home' })
+        window.location.href = '/'
       }
     }
   })

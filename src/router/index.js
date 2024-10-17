@@ -10,7 +10,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('../views/Home/HomeView.vue'),
-    meta: { requiresAuth: false }
+    meta: { title: 'Home', requiresAuth: false }
   },
   {
     path: '/article',
@@ -88,17 +88,17 @@ const routes = [
   //   component: () => import('../views/GetSupport/MyBookingsView.vue'),
   //   meta: { requiresAuth: true }
   // },
-  {
-    path: '/search',
-    name: 'Search',
-    component: () => import('../views/Search/SearchView.vue'),
-    meta: { requiresAuth: false }
-  },
+  // {
+  //   path: '/search',
+  //   name: 'Search',
+  //   component: () => import('../views/Search/SearchView.vue'),
+  //   meta: { requiresAuth: false }
+  // },
   {
     path: '/profile',
     name: 'MyProfile',
     component: () => import('../views/Account/MyProfileView.vue'),
-    meta: { requiresAuth: true }
+    meta: { title: 'My Profile', requiresAuth: true }
   },
   // {
   //   path: '/account/settings',
@@ -181,12 +181,12 @@ const routes = [
     component: () => import('../views/Admin/AdminArticleManagementView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
-  // {
-  //   path: '/admin/temp-content-upload',
-  //   name: 'AdminTempContentUpload',
-  //   component: () => import('../views/Admin/TempContentUploadView.vue'),
-  //   meta: { requiresAuth: true, requiresAdmin: true }
-  // },
+  {
+    path: '/admin/temp-content-upload',
+    name: 'AdminTempContentUpload',
+    component: () => import('../views/Admin/TempContentUploadView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
   {
     path: '/admin/event-management',
     name: 'AdminEventManagement',
@@ -195,7 +195,7 @@ const routes = [
   },
   {
     path: '/admin/bulk-email-management',
-    name: 'AdminBulkEmailManagementView',
+    name: 'AdminBulkEmailManagemen',
     component: () => import('../views/Admin/AdminBulkEmailManagementView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
@@ -283,6 +283,11 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next()
   }
+})
+
+router.afterEach((to, from, next) => {
+  document.title = to.meta.title ? to.meta.title.trim() + ' - SilverHealth' : 'SilverHealth'
+  window.scrollTo(0, 0)
 })
 
 export default router

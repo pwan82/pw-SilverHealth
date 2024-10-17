@@ -11,6 +11,17 @@
 
         <!-- Article content -->
         <div v-else-if="article">
+          <!-- Go back button -->
+          <div v-if="isArticlePage" class="mb-2">
+            <button
+              @click="router.push({ name: 'ArticleList' })"
+              class="btn btn-outline-primary custom-button"
+            >
+              <i class="bi bi-arrow-left mr-2"></i>
+              <div class="button-text">Browse All Articles</div>
+            </button>
+          </div>
+
           <!-- Title -->
           <h1 class="text-center">{{ article.title }}</h1>
 
@@ -191,6 +202,9 @@ import { redirectToLogin as baseRedirectToLogin } from '@/helpers/redirect'
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+
+const routePrefix = computed(() => `${router.currentRoute.value.path.split('/')[1] || ''}`)
+const isArticlePage = ref(routePrefix.value === 'article')
 
 const props = defineProps({
   articleId: {
@@ -377,11 +391,15 @@ onMounted(() => {
   unsubscribe = onAuthStateChanged(auth, async (user) => {
     if (user) {
       const token = await user.getIdToken()
-      fetchArticleData(token)
-      fetchRatings(token)
+      await fetchArticleData(token)
+      if (article.value.isRatable) {
+        await fetchRatings(token)
+      }
     } else {
-      fetchArticleData(null)
-      fetchRatings(null)
+      await fetchArticleData(null)
+      if (article.value.isRatable) {
+        await fetchRatings(null)
+      }
     }
   })
 })
