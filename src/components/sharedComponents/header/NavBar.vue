@@ -215,10 +215,10 @@
             </li>
             <li>
               <router-link
-                to="/admin/content-management"
+                to="/admin/article-management"
                 class="dropdown-item"
                 active-class="active"
-                >Content Management</router-link
+                >Article Management</router-link
               >
             </li>
             <li>
@@ -296,7 +296,7 @@ const activeParent = computed(() => {
     [
       'AdminDashboard',
       'AdminUserAnalytics',
-      'AdminContentManagement',
+      'AdminArticleManagement',
       'AdminEventManagement',
       'AdminBulkEmailManagementView'
     ].includes(route.name)

@@ -42,7 +42,7 @@ const cards = ref([
     description: 'Join local events and connect with your community.',
     link: '/event',
     bgClass: 'bg-green',
-    icon: 'bi bi-calendar3'
+    icon: 'bi bi-broadcast'
   },
   {
     title: 'Find Services Near You',
@@ -56,7 +56,7 @@ const cards = ref([
     description: 'View and manage your registered events.',
     link: '/event/registered',
     bgClass: 'bg-purple',
-    icon: 'bi bi-calendar-check'
+    icon: 'bi bi-calendar3'
   }
 ])
 </script>

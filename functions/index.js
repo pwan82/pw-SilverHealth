@@ -41,10 +41,11 @@ exports.getUserInfo = getUserInfo
 exports.updateUserInfo = updateUserInfo
 
 // adminFunctions
-const { onAdminUserChanged, getAllUsers } = require('./adminFunctions')
+const { onAdminUserChanged, getAllUsers, getWebsiteStatistics } = require('./adminFunctions')
 // Triggered when there is a change in the adminUsers collection
 exports.onAdminUserChanged = onAdminUserChanged
 exports.getAllUsers = getAllUsers
+exports.getWebsiteStatistics = getWebsiteStatistics
 
 // articleFunctions
 const {

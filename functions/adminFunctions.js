@@ -112,3 +112,68 @@ exports.getAllUsers = onRequest({ region: region }, (req, res) => {
     }
   })
 })
+
+exports.getWebsiteStatistics = onRequest({ region: region }, (req, res) => {
+  return cors(req, res, async () => {
+    if (req.method !== 'GET') {
+      return res.status(405).send('Method Not Allowed')
+    }
+
+    try {
+      // Verify user authentication and admin status
+      const authCheck = await checkUserRole(req.headers, 'admin')
+      if (!authCheck.isLoggedIn || !authCheck.isAdmin) {
+        return res.status(authCheck.status).send(authCheck.message)
+      }
+
+      // Initialize statistics object
+      const statistics = {
+        totalUsers: 0,
+        adminUsers: 0,
+        normalUsers: 0,
+        totalArticles: 0,
+        totalRatings: 0,
+        totalEvents: 0,
+        totalEventBookings: 0
+      }
+
+      // Get user statistics
+      const userListResult = await admin.auth().listUsers()
+      statistics.totalUsers = userListResult.users.length
+
+      // Count admin and normal users
+      for (const userRecord of userListResult.users) {
+        if (userRecord.customClaims && userRecord.customClaims.role === 'admin') {
+          statistics.adminUsers++
+        } else {
+          statistics.normalUsers++
+        }
+      }
+
+      // Get article statistics and ratings
+      const articlesSnapshot = await db.collection('articles').get()
+      statistics.totalArticles = articlesSnapshot.size
+
+      // Count ratings across all articles
+      let ratingsPromises = articlesSnapshot.docs.map((doc) =>
+        doc.ref.collection('ratings').count().get()
+      )
+      let ratingsCounts = await Promise.all(ratingsPromises)
+      statistics.totalRatings = ratingsCounts.reduce((sum, count) => sum + count.data().count, 0)
+
+      // Get event statistics
+      const eventsSnapshot = await db.collection('events').count().get()
+      statistics.totalEvents = eventsSnapshot.data().count
+
+      // Get event booking statistics
+      const eventBookingsSnapshot = await db.collection('eventBookings').count().get()
+      statistics.totalEventBookings = eventBookingsSnapshot.data().count
+
+      console.log('Website statistics generated successfully')
+      res.status(200).json(statistics)
+    } catch (error) {
+      console.error('Error generating website statistics:', error)
+      res.status(500).send('Error generating website statistics')
+    }
+  })
+})

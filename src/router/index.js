@@ -176,9 +176,15 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
-    path: '/admin/content-management',
-    name: 'AdminContentManagement',
-    component: () => import('../views/Admin/AdminContentManagementView.vue'),
+    path: '/admin/article-management',
+    name: 'AdminArticleManagement',
+    component: () => import('../views/Admin/AdminArticleManagementView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/temp-content-upload',
+    name: 'AdminTempContentUpload',
+    component: () => import('../views/Admin/TempContentUploadView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
