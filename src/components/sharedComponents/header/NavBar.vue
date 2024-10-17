@@ -234,6 +234,11 @@
                 >Bulk Email Management</router-link
               >
             </li>
+            <li>
+              <router-link to="/admin/api-docs" class="dropdown-item" active-class="active"
+                >API Documents</router-link
+              >
+            </li>
           </ul>
         </li>
       </ul>
@@ -298,7 +303,8 @@ const activeParent = computed(() => {
       'AdminUserAnalytics',
       'AdminArticleManagement',
       'AdminEventManagement',
-      'AdminBulkEmailManagementView'
+      'AdminBulkEmailManagementView',
+      'AdminApiDocs'
     ].includes(route.name)
   ) {
     return 'admin'

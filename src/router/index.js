@@ -181,12 +181,12 @@ const routes = [
     component: () => import('../views/Admin/AdminArticleManagementView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
-  {
-    path: '/admin/temp-content-upload',
-    name: 'AdminTempContentUpload',
-    component: () => import('../views/Admin/TempContentUploadView.vue'),
-    meta: { requiresAuth: true, requiresAdmin: true }
-  },
+  // {
+  //   path: '/admin/temp-content-upload',
+  //   name: 'AdminTempContentUpload',
+  //   component: () => import('../views/Admin/TempContentUploadView.vue'),
+  //   meta: { requiresAuth: true, requiresAdmin: true }
+  // },
   {
     path: '/admin/event-management',
     name: 'AdminEventManagement',
@@ -197,6 +197,12 @@ const routes = [
     path: '/admin/bulk-email-management',
     name: 'AdminBulkEmailManagementView',
     component: () => import('../views/Admin/AdminBulkEmailManagementView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/admin/api-docs',
+    name: 'AdminApiDocs',
+    component: () => import('../views/Admin/AdminApiDocsView.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
   },
   {
