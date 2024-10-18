@@ -17,17 +17,18 @@
         <div class="modal-body">
           <form @submit.prevent="submitEditEvent">
             <div class="mb-3">
-              <label for="editTitle" class="form-label">Title</label>
+              <label for="editTitle" class="form-label fw-bold">Title</label>
               <input
                 type="text"
                 class="form-control"
                 id="editTitle"
                 v-model="editEventData.title"
                 required
+                ref="titleInput"
               />
             </div>
             <div class="mb-3">
-              <label for="editOrganizerName" class="form-label">Organizer Name</label>
+              <label for="editOrganizerName" class="form-label fw-bold">Organizer Name</label>
               <input
                 type="text"
                 class="form-control"
@@ -37,17 +38,20 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editDescription" class="form-label">Description</label>
+              <label for="editDescription" class="form-label fw-bold">Description</label>
               <textarea
                 class="form-control"
                 id="editDescription"
                 v-model="editEventData.description"
                 rows="3"
+                placeholder="in Markdown format, heading level up to 2 ##"
                 required
               ></textarea>
             </div>
             <div class="mb-3">
-              <label for="editCategory" class="form-label">Category</label>
+              <label for="editCategory" class="form-label">
+                <span class="fw-bold">Category</span> (separate by commas)</label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -59,7 +63,7 @@
 
             <!-- Address fields -->
             <div class="mb-3">
-              <label for="editPlaceName" class="form-label">Place Name</label>
+              <label for="editPlaceName" class="form-label fw-bold">Place Name</label>
               <input
                 type="text"
                 class="form-control"
@@ -69,7 +73,7 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editAddressString" class="form-label">Address</label>
+              <label for="editAddressString" class="form-label fw-bold">Address</label>
               <input
                 type="text"
                 class="form-control"
@@ -79,31 +83,33 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editLatitude" class="form-label">Latitude</label>
+              <label for="editLatitude" class="form-label fw-bold">Latitude</label>
               <input
                 type="number"
                 step="any"
                 class="form-control"
                 id="editLatitude"
                 v-model.number="editEventData.address.latitude"
+                placeholder="between -90 and 90"
                 required
               />
             </div>
             <div class="mb-3">
-              <label for="editLongitude" class="form-label">Longitude</label>
+              <label for="editLongitude" class="form-label fw-bold">Longitude</label>
               <input
                 type="number"
                 step="any"
                 class="form-control"
                 id="editLongitude"
                 v-model.number="editEventData.address.longitude"
+                placeholder="between -180 and 180"
                 required
               />
             </div>
 
             <!-- Remaining existing fields -->
             <div class="mb-3">
-              <label for="editStartTime" class="form-label">Start Time</label>
+              <label for="editStartTime" class="form-label fw-bold">Start Time</label>
               <input
                 type="datetime-local"
                 class="form-control"
@@ -113,7 +119,7 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editEndTime" class="form-label">End Time</label>
+              <label for="editEndTime" class="form-label fw-bold">End Time</label>
               <input
                 type="datetime-local"
                 class="form-control"
@@ -123,7 +129,7 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editTotalCapacity" class="form-label">Total Capacity</label>
+              <label for="editTotalCapacity" class="form-label fw-bold">Total Capacity</label>
               <input
                 type="number"
                 class="form-control"
@@ -134,7 +140,9 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editRemainingCapacity" class="form-label">Remaining Capacity</label>
+              <label for="editRemainingCapacity" class="form-label fw-bold"
+                >Remaining Capacity</label
+              >
               <input
                 type="number"
                 class="form-control"
@@ -145,7 +153,7 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editRegistrationStartTime" class="form-label"
+              <label for="editRegistrationStartTime" class="form-label fw-bold"
                 >Registration Start Time</label
               >
               <input
@@ -157,7 +165,9 @@
               />
             </div>
             <div class="mb-3">
-              <label for="editRegistrationEndTime" class="form-label">Registration End Time</label>
+              <label for="editRegistrationEndTime" class="form-label fw-bold"
+                >Registration End Time</label
+              >
               <input
                 type="datetime-local"
                 class="form-control"
@@ -173,12 +183,24 @@
                 id="editIsVisible"
                 v-model="editEventData.isVisible"
               />
-              <label class="form-check-label" for="editIsVisible">Is Visible</label>
+              <label class="form-check-label fw-bold" for="editIsVisible"
+                >Is Visible To Users</label
+              >
             </div>
-            <button type="submit" class="btn btn-primary" :disabled="!isFormChanged">
-              Save Changes
-            </button>
           </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="submit"
+            class="btn"
+            :class="{
+              'btn-primary': isFormChanged,
+              'btn-secondary': !isFormChanged
+            }"
+            :disabled="!isFormChanged"
+          >
+            {{ isNewEvent ? 'Add New Event' : 'Save Changes' }}
+          </button>
         </div>
       </div>
     </div>
@@ -217,8 +239,8 @@ const editEventData = ref({
   category: '',
   startTime: '',
   endTime: '',
-  totalCapacity: 0,
-  remainingCapacity: 0,
+  totalCapacity: 50,
+  remainingCapacity: 50,
   registrationStartTime: '',
   registrationEndTime: '',
   isVisible: true,

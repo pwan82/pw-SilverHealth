@@ -144,6 +144,14 @@
                   >
                     <i class="bi bi-download"></i>
                   </button>
+
+                  <button
+                    class="btn btn-sm btn-danger"
+                    @click="confirmDelete(slotProps.data)"
+                    :disabled="slotProps.data.isLoading"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
                 </div>
               </template>
             </Column>
@@ -183,13 +191,52 @@
   </div>
 
   <!-- Edit Event Modal -->
-  <!-- Edit Event Modal -->
   <EditEventModal
     :event="selectedEvent"
     v-model:show="showEditModal"
     @event-updated="fetchEvents"
     :is-new-event="isNewEvent"
   />
+
+  <!-- Delete Event Confirmation Modal -->
+  <div
+    class="modal fade"
+    id="deleteConfirmModal"
+    tabindex="-1"
+    aria-labelledby="deleteConfirmModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" @click="cancelDelete" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure to <strong>delete the event</strong>?</p>
+          <p>
+            <strong>Event:</strong>
+            <a :href="'/event/' + eventToDelete?.eventId" target="_blank">
+              {{ eventToDelete?.title }}
+            </a>
+          </p>
+          <p><strong>Start Time:</strong> {{ formatDate(eventToDelete?.startTime) }}</p>
+          <p><strong>End Time:</strong> {{ formatDate(eventToDelete?.endTime) }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="cancelDelete">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteEvent"
+            :disabled="countdownTime > 0"
+          >
+            Delete {{ countdownTime !== 0 ? '(' + countdownTime + ')' : '' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -198,6 +245,7 @@ import axios from 'axios'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
 import { useToast } from 'primevue/usetoast'
+import { Modal } from 'bootstrap'
 
 import EditEventModal from '@/components/Admin/EditEventModal.vue'
 
@@ -270,7 +318,7 @@ const formattedEvents = computed(() => {
 const setEventLoading = (eventId, isLoading) => {
   const index = formattedEvents.value.findIndex((event) => event.eventId === eventId)
   if (index !== -1) {
-    formattedEvents.value[index].isLoading = !isLoading
+    formattedEvents.value[index].isLoading = isLoading
   }
 }
 
@@ -346,7 +394,7 @@ const openEditModal = async (event) => {
 const openAddModal = () => {
   isNewEvent.value = true
   selectedEvent.value = {
-    title: '',
+    title: 'New Community Event',
     organizerName: 'SilverHealth Team',
     description: '',
     category: [],
@@ -512,6 +560,11 @@ const clearFilters = () => {
   }
 }
 
+const eventToDelete = ref(null)
+let deleteConfirmModal = null
+const countdownTime = ref(5)
+let countdownInterval = null
+
 let unsubscribe
 onMounted(() => {
   unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -522,10 +575,16 @@ onMounted(() => {
       fetchEvents(null)
     }
   })
+
+  deleteConfirmModal = new Modal(document.getElementById('deleteConfirmModal'), {
+    backdrop: 'static',
+    keyboard: false
+  })
 })
 
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
+  clearInterval(countdownInterval)
 })
 
 const formatDate = (value) => {
@@ -539,6 +598,75 @@ const formatDate = (value) => {
     })
   }
   return ''
+}
+
+const confirmDelete = (event) => {
+  eventToDelete.value = event
+  countdownTime.value = 5
+  startDeleteCountdown()
+  deleteConfirmModal.show()
+}
+
+const startDeleteCountdown = () => {
+  countdownInterval = setInterval(() => {
+    countdownTime.value--
+    if (countdownTime.value === 0) {
+      clearInterval(countdownInterval)
+    }
+  }, 1000)
+}
+
+const cancelDelete = () => {
+  clearInterval(countdownInterval)
+  countdownTime.value = 5
+  deleteConfirmModal.hide()
+}
+
+const deleteEvent = async () => {
+  if (!eventToDelete.value) return
+
+  clearInterval(countdownInterval)
+
+  try {
+    setEventLoading(eventToDelete.value.eventId, true)
+
+    const token = await auth.currentUser.getIdToken()
+    await axios.post(
+      'https://manageevent-s3vwdaiioq-ts.a.run.app',
+      {
+        eventId: eventToDelete.value.eventId,
+        action: 'delete'
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    await fetchEvents(token)
+
+    toast.add({
+      severity: 'success',
+      summary: 'Event Deleted',
+      detail: 'The event has been successfully deleted.',
+      life: 3000
+    })
+
+    deleteConfirmModal.hide()
+  } catch (error) {
+    console.error('Error deleting event:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Delete Failed',
+      detail: 'Failed to delete the event. Please try again.',
+      life: 3000
+    })
+  } finally {
+    setEventLoading(eventToDelete.value.eventId, false)
+    eventToDelete.value = null
+    countdownTime.value = 5
+  }
 }
 </script>
 

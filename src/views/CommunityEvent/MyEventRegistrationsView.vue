@@ -18,16 +18,18 @@
 
         <div v-else>
           <!-- Navigation Buttons -->
-          <div class="d-flex justify-content-center gap-4 mt-4">
-            <button @click="scrollToRegistrationTable" class="btn btn-primary custom-button">
-              <i class="bi bi-person-lines-fill mr-2"></i>
-              <div class="button-text">See My Registration List</div>
-            </button>
+          <div class="container mt-4">
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-3 gap-md-4">
+              <button @click="scrollToRegistrationTable" class="btn btn-primary custom-button">
+                <i class="bi bi-person-lines-fill me-2"></i>
+                <span class="button-text">See My Registration List</span>
+              </button>
 
-            <router-link to="/event" class="btn btn-outline-primary custom-button">
-              <i class="bi bi-list-task mr-2"></i>
-              <div class="button-text">Browse All Other Events</div>
-            </router-link>
+              <router-link to="/event" class="btn btn-outline-primary custom-button">
+                <i class="bi bi-list-task me-2"></i>
+                <span class="button-text">Browse All Other Events</span>
+              </router-link>
+            </div>
           </div>
 
           <!-- FullCalendar -->
@@ -269,7 +271,12 @@
         </div>
         <div class="modal-body">
           <p>Are you sure you want to cancel your registration for this event?</p>
-          <p><strong>Event:</strong> {{ selectedEvent?.eventTitle }}</p>
+          <p>
+            <strong>Event:</strong>
+            <a :href="'/event/' + selectedEvent?.eventId" target="_blank">
+              {{ selectedEvent?.eventTitle }}
+            </a>
+          </p>
           <p><strong>Start Time:</strong> {{ formatDate(selectedEvent?.startTime) }}</p>
           <p><strong>End Time:</strong> {{ formatDate(selectedEvent?.endTime) }}</p>
           <p><strong>Booked At:</strong> {{ formatDate(selectedEvent?.bookingTime) }}</p>
