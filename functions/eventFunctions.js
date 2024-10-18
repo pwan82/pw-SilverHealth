@@ -231,7 +231,8 @@ exports.manageEvent = onRequest({ region: region }, (req, res) => {
       // For add and update actions, proceed with validation
       if (action !== 'delete') {
         // Validate and sanitize text fields
-        const textFields = ['organizerName', 'title', 'description']
+        // const textFields = ['organizerName', 'title', 'description']
+        const textFields = ['organizerName', 'title']
         for (const field of textFields) {
           if (typeof eventData[field] !== 'string') {
             return res.status(400).send(`${field} must be a string`)

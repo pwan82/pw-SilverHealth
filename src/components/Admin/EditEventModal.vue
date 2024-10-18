@@ -44,7 +44,7 @@
                 id="editDescription"
                 v-model="editEventData.description"
                 rows="3"
-                placeholder="in Markdown format, heading level up to 2 ##"
+                placeholder="in Markdown format, heading level up to 3 ###"
                 required
               ></textarea>
             </div>
@@ -184,7 +184,7 @@
                 v-model="editEventData.isVisible"
               />
               <label class="form-check-label fw-bold" for="editIsVisible"
-                >Is Visible To Users</label
+                >Is visible to users</label
               >
             </div>
           </form>
@@ -192,6 +192,7 @@
         <div class="modal-footer">
           <button
             type="submit"
+            @click="submitEditEvent"
             class="btn"
             :class="{
               'btn-primary': isFormChanged,

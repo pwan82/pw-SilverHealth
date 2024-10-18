@@ -213,7 +213,7 @@
           <button type="button" class="btn-close" @click="cancelDelete" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure to <strong>delete the event</strong>?</p>
+          <p>Are you sure to <strong>delete this event</strong>?</p>
           <p>
             <strong>Event:</strong>
             <a :href="'/event/' + eventToDelete?.eventId" target="_blank">

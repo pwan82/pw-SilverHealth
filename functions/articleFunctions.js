@@ -138,21 +138,22 @@ exports.getArticleById = onRequest({ region: region }, async (req, res) => {
       const articleData = articleDoc.data()
       console.log(`Fetched article data for articleId ${articleId}:`, articleData)
 
-      let isAdmin = false
+      const authCheck = await checkUserRole(req.headers, 'admin')
+      console.log(`Authorization check result: ${authCheck.status}`)
+      const isAdmin = authCheck.isAdmin
+      console.log('authCheck.isAdmin: ', authCheck.isAdmin)
 
       // If the article is visible to everyone, skip the auth & role check.
       if (articleData.isVisible === true) {
-        console.log('Article is visible to all users, skipping authorization check.')
+        console.log('Article is visible to all users, skipping permission check.')
       } else {
         // If the article is not visible, must check for admin access
-        const authCheck = await checkUserRole(req.headers, 'admin')
-        console.log(`Authorization check result: ${authCheck.status}`)
-
-        if (!authCheck.isAdmin) {
-          console.error(`Authorization failed for articleId ${articleId}: ${authCheck.message}`)
+        if (!isAdmin) {
+          console.error(
+            `Authorization failed for isVisible articleId ${articleId}: ${authCheck.message}`
+          )
           return res.status(authCheck.status).send(authCheck.message)
         }
-        isAdmin = authCheck.isAdmin
       }
 
       // If the article requires authentication, check for logged-in user
@@ -178,6 +179,11 @@ exports.getArticleById = onRequest({ region: region }, async (req, res) => {
       }
 
       // Add conditional fields based on article properties and user role
+      if (isAdmin) {
+        responseData.isVisible = articleData.isVisible
+        responseData.showInList = articleData.showInList
+      }
+
       if (articleData.showMetadata !== false || isAdmin) {
         responseData.author = articleData.author
         responseData.publicationTime = articleData.publicationTime
@@ -524,12 +530,12 @@ exports.manageArticle = onRequest({ region: region }, (req, res) => {
         }
 
         await db.runTransaction(async (transaction) => {
-          // Delete the article
-          transaction.delete(documentToDelete.ref)
-
-          // Delete associated ratings
+          // First get all the ratings
           const ratingsRef = documentToDelete.ref.collection('ratings')
           const ratingsSnapshot = await transaction.get(ratingsRef)
+
+          // Then perform all the write operations
+          transaction.delete(documentToDelete.ref)
           ratingsSnapshot.forEach((doc) => {
             transaction.delete(doc.ref)
           })
@@ -549,8 +555,8 @@ exports.manageArticle = onRequest({ region: region }, (req, res) => {
       // Prepare the article data
       const validatedArticleData = {
         title: sanitizeEmailHtml(articleData.title),
-        body: sanitizeEmailHtml(articleData.body),
-        category: articleData.category.map((cat) => sanitizeEmailHtml(cat)),
+        body: articleData.body,
+        category: articleData.category.map((cat) => sanitizeEmailHtml(cat.toLowerCase())),
         author: articleData.author ? sanitizeEmailHtml(articleData.author) : null,
         isRatable: articleData.isRatable !== false,
         isVisible: articleData.isVisible !== false,

@@ -2,9 +2,10 @@
   <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col-md-12">
-        <h1 class="text-center">SilverHealth Articles</h1>
+        <h1 class="text-center">Admin Article Management</h1>
         <p class="text-center">
-          Check out all the high-quality senior health articles from SilverHealth.
+          Add or edit articles.
+          <br />Export article rating records as .CSV file.
         </p>
 
         <!-- Loading indicator -->
@@ -15,6 +16,14 @@
         </div>
 
         <div v-else>
+          <!-- Add Article Button -->
+          <div class="d-flex justify-content-center mt-4 mb-4">
+            <button @click="openAddModal" class="btn btn-primary custom-button">
+              <i class="bi bi-plus-lg mr-2"></i>
+              <div class="button-text">Add New Article</div>
+            </button>
+          </div>
+
           <!-- Search and filter controls -->
           <div
             class="search-controls d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3"
@@ -125,6 +134,25 @@
               </template>
             </Column>
 
+            <Column field="manage" header="Manage" :sortable="false">
+              <template #body="slotProps">
+                <div class="manage-buttons-container gap-2">
+                  <button class="btn btn-sm btn-primary" @click="openEditModal(slotProps.data)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    @click="exportRatings(slotProps.data)"
+                  >
+                    <i class="bi bi-download"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" @click="confirmDelete(slotProps.data)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </template>
+            </Column>
+
             <!-- Empty state template -->
             <template #empty>
               <div class="text-center p-4">
@@ -138,6 +166,55 @@
       </div>
     </div>
   </div>
+
+  <EditArticleModal
+    :article="selectedArticle"
+    v-model:show="showEditModal"
+    @article-updated="fetchArticles"
+    :is-new-article="isNewArticle"
+  />
+
+  <!-- Delete Article Confirmation Modal -->
+  <div
+    class="modal fade"
+    id="deleteConfirmModal"
+    tabindex="-1"
+    aria-labelledby="deleteConfirmModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" @click="cancelDelete" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure to <strong>delete this article</strong>?</p>
+          <p>
+            <strong>Title:</strong>
+            <a :href="'/article/' + articleToDelete?.articleId" target="_blank">
+              {{ articleToDelete?.title }}
+            </a>
+          </p>
+          <p><strong>Author:</strong> {{ articleToDelete?.author }}</p>
+          <p>
+            <strong>Publication Time:</strong> {{ formatDate(articleToDelete?.publicationTime) }}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="cancelDelete">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteArticle"
+            :disabled="countdownTime > 0"
+          >
+            Delete {{ countdownTime !== 0 ? '(' + countdownTime + ')' : '' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -145,6 +222,16 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
 import axios from 'axios'
+import { useToast } from 'primevue/usetoast'
+import { Modal } from 'bootstrap'
+
+import EditArticleModal from '@/components/Admin/EditArticleModal.vue'
+
+const toast = useToast()
+const articleToDelete = ref(null)
+let deleteConfirmModal = null
+const countdownTime = ref(5)
+let countdownInterval = null
 
 const articles = ref([])
 const searchValue = ref('')
@@ -290,12 +377,217 @@ onMounted(() => {
       fetchArticles(null)
     }
   })
+
+  deleteConfirmModal = new Modal(document.getElementById('deleteConfirmModal'), {
+    backdrop: 'static',
+    keyboard: false
+  })
 })
 
 // Clean up auth state listener
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
+
+  clearInterval(countdownInterval)
 })
+
+const selectedArticle = ref({})
+const showEditModal = ref(false)
+const isNewArticle = ref(false)
+
+const openEditModal = async (article) => {
+  isNewArticle.value = false
+  try {
+    const response = await axios.get(
+      `https://getarticlebyid-s3vwdaiioq-ts.a.run.app?id=${article.articleId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser.getIdToken()}`
+        }
+      }
+    )
+
+    selectedArticle.value = response.data
+    showEditModal.value = true
+  } catch (error) {
+    console.error('Error fetching article details:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to fetch article details',
+      life: 3000
+    })
+  }
+}
+
+const openAddModal = () => {
+  isNewArticle.value = true
+  selectedArticle.value = {
+    title: '',
+    author: 'SilverHealth Team',
+    body: '',
+    category: [],
+    isRatable: true,
+    isVisible: true,
+    requireAuth: false,
+    showCategory: true,
+    showInList: true,
+    showMetadata: true,
+    publicationTime: new Date().toISOString().slice(0, 16)
+  }
+  showEditModal.value = true
+}
+
+const exportRatings = async (article) => {
+  try {
+    const token = await auth.currentUser.getIdToken()
+    const response = await axios.get(
+      `https://getarticleratings-s3vwdaiioq-ts.a.run.app?id=${article.articleId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    const ratings = response.data
+
+    // Check if there is a rating record
+    if (ratings.length === 0) {
+      toast.add({
+        severity: 'info',
+        summary: 'No Records',
+        detail: 'There are no rating/comment records for this article.',
+        life: 3000
+      })
+      return
+    }
+
+    // Prepare CSV data
+    let csvContent = 'articleId,title,ratingId,userId,publicationTime,rating,comment\n'
+
+    ratings.forEach((rating, index) => {
+      const ratingId = `rating_${index + 1}` // Generate a unique ratingId
+      const row = [
+        article.articleId,
+        article.title,
+        ratingId,
+        rating.userId,
+        rating.publicationTime,
+        rating.rating,
+        `"${rating.comment.replace(/"/g, '""')}"` // Escaping quotes in comments
+      ]
+      csvContent += row.join(',') + '\n'
+    })
+
+    // Create and download CSV files
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob)
+      link.setAttribute('href', url)
+      link.setAttribute('download', `ratings_${article.articleId}.csv`)
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+
+    toast.add({
+      severity: 'success',
+      summary: 'Export Successful',
+      detail: 'Ratings have been exported successfully.',
+      life: 3000
+    })
+  } catch (error) {
+    console.error('Error exporting ratings:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Export Failed',
+      detail: 'Failed to export ratings. Please try again.',
+      life: 3000
+    })
+  }
+}
+
+const formatDate = (value) => {
+  if (value) {
+    return new Date(value).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+  return ''
+}
+
+const confirmDelete = (article) => {
+  articleToDelete.value = article
+  countdownTime.value = 5
+  startDeleteCountdown()
+  deleteConfirmModal.show()
+}
+
+const startDeleteCountdown = () => {
+  countdownInterval = setInterval(() => {
+    countdownTime.value--
+    if (countdownTime.value === 0) {
+      clearInterval(countdownInterval)
+    }
+  }, 1000)
+}
+
+const cancelDelete = () => {
+  clearInterval(countdownInterval)
+  countdownTime.value = 5
+  deleteConfirmModal.hide()
+}
+
+const deleteArticle = async () => {
+  if (!articleToDelete.value) return
+
+  clearInterval(countdownInterval)
+
+  try {
+    const token = await auth.currentUser.getIdToken()
+    await axios.post(
+      'https://managearticle-s3vwdaiioq-ts.a.run.app',
+      {
+        articleId: articleToDelete.value.articleId,
+        action: 'delete'
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    await fetchArticles(token)
+
+    toast.add({
+      severity: 'success',
+      summary: 'Article Deleted',
+      detail: 'The article has been successfully deleted.',
+      life: 3000
+    })
+
+    deleteConfirmModal.hide()
+  } catch (error) {
+    console.error('Error deleting article:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Delete Failed',
+      detail: 'Failed to delete the article. Please try again.',
+      life: 3000
+    })
+  } finally {
+    articleToDelete.value = null
+    countdownTime.value = 5
+  }
+}
 </script>
 
 <style>
@@ -313,5 +605,17 @@ onUnmounted(() => {
 
 .w-100 {
   width: 100%;
+}
+
+.manage-buttons-container {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.manage-buttons-container button {
+  position: relative;
+  z-index: 0;
 }
 </style>
