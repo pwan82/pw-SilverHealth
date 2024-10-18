@@ -1,33 +1,47 @@
 <template>
-  <div class="admin-dashboard">
+  <div class="admin-dashboard" role="main">
     <div class="container mt-5 mb-5">
       <div class="row">
         <div class="col-md-10 offset-md-1">
           <h1 class="text-center">SilverHealth Admin Dashboard</h1>
-          <p class="text-center">Manage users, articles, events, and communications.</p>
+          <p class="text-center" role="doc-subtitle">
+            Manage users, articles, events, and communications.
+          </p>
         </div>
 
         <!-- Loading indicator -->
-        <div v-if="loading" class="text-center my-4">
+        <div v-if="loading" class="text-center my-4" aria-live="polite">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
 
-        <div v-else-if="error" class="alert alert-danger" role="alert">
+        <div v-else-if="error" class="alert alert-danger" role="alert" aria-live="assertive">
           {{ error }}
         </div>
-        <div v-else class="card-grid">
+
+        <nav v-else class="card-grid" aria-label="Admin functions">
           <div v-for="card in cards" :key="card.title" class="card-wrapper">
-            <router-link :to="card.link" class="card-link">
-              <div class="card" :class="card.bgClass">
+            <router-link
+              :to="card.link"
+              class="card-link"
+              :aria-label="`${card.title}: ${card.description}`"
+            >
+              <div
+                class="card"
+                :class="card.bgClass"
+                role="region"
+                :aria-labelledby="`card-title-${card.title.replace(/\s+/g, '-').toLowerCase()}`"
+              >
                 <div class="card-content">
-                  <div class="card-icon">
+                  <div class="card-icon" aria-hidden="true">
                     <i :class="card.icon"></i>
                   </div>
-                  <h2>{{ card.title }}</h2>
+                  <h2 :id="`card-title-${card.title.replace(/\s+/g, '-').toLowerCase()}`">
+                    {{ card.title }}
+                  </h2>
                   <p>{{ card.description }}</p>
-                  <div v-if="card.stats" class="stats">
+                  <div v-if="card.stats" class="stats" aria-live="polite">
                     <strong>{{ card.stats.main }}</strong>
                     <small>{{ card.stats.sub }}</small>
                   </div>
@@ -35,7 +49,7 @@
               </div>
             </router-link>
           </div>
-        </div>
+        </nav>
       </div>
     </div>
   </div>
@@ -154,6 +168,7 @@ const cards = computed(() => {
   text-decoration: none;
   color: inherit;
   outline: none;
+  position: relative;
 }
 
 .card-link:focus,
@@ -162,18 +177,38 @@ const cards = computed(() => {
   color: inherit;
 }
 
+.card-link:focus {
+  outline: 3px solid #6ac1ff;
+  outline-offset: 3px;
+}
+
+.card-link:focus::after {
+  content: '⌨';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  color: #6ac1ff;
+}
+
 .card {
   height: 100%;
   padding: 1.5rem;
   border-radius: 8px;
   transition:
     transform 0.3s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.card-link:focus .card {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
 
 .card:hover {
@@ -199,20 +234,7 @@ const cards = computed(() => {
 
 .card p {
   font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.stats {
-  margin-top: 0.5rem;
-}
-
-.stats strong {
-  display: block;
-  font-size: 1.2rem;
-}
-
-.stats small {
-  font-size: 0.9rem;
+  margin-bottom: 0;
 }
 
 .bg-blue {
