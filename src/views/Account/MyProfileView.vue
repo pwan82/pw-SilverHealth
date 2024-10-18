@@ -36,6 +36,16 @@
                 />
                 <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
 
+                <label class="form-label mt-3 fw-bold">Password</label>
+                <a
+                  class="form-control btn btn-outline-primary fw-bold"
+                  :href="'/forgot-password'"
+                  target="_blank"
+                >
+                  <i class="bi bi-box-arrow-up-right mr-2"></i>
+                  Reset Password
+                </a>
+
                 <!-- Gender Selection -->
                 <label for="gender" class="form-label mt-3 fw-bold">Gender *</label>
                 <select

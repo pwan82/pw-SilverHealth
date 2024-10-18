@@ -173,5 +173,187 @@
         "comment": "Very informative"
       }
     ]
+  },
+  {
+    "articleId": 108,
+    "author": "Secret Team",
+    "publicationTime": 1716028600000,
+    "modificationTime": -1,
+    "category": ["news"],
+    "title": "Secret Newsletter that Needs Logged In",
+    "body": "SilverHealth is excited to announce the launch of a new initiative aimed at promoting wellness among seniors.\n\n### Key Highlights:\n\n- **Free Wellness Webinars**: Starting next month, seniors can join weekly webinars on topics ranging from mental health to physical fitness.\n- **Expanded Resource Hub**: We have added new guides on nutrition, hydration, and preventing falls at home.\n- **Community Support**: Our community forum now includes specialized groups for discussing chronic conditions and sharing personal stories.\n\nWe are committed to supporting the elderly population through education, resources, and community building. Stay tuned for more updates!",
+    "requireAuth": true,
+    "isVisible": true,
+    "averageRating": 3.0,
+    "ratings": [
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1701255193942,
+        "rating": 1,
+        "comment": "Hidden contents"
+      },
+      {
+        "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
+        "publicationTime": 1703797485767,
+        "rating": 5,
+        "comment": "Cannot be seen by un-logged-in users"
+      }
+    ]
+  },
+  {
+    "articleId": 109,
+    "author": "Secret Team",
+    "publicationTime": 1704028600000,
+    "modificationTime": -1,
+    "category": ["mental health"],
+    "title": "Article Only Available to Admin",
+    "body": "SilverHealth is excited to announce the launch of a new initiative aimed at promoting wellness among seniors.\n### Key Highlights:\n\n- **Free Wellness Webinars**: Starting next month, seniors can join weekly webinars on topics ranging from mental health to physical fitness.\n- **Expanded Resource Hub**: We have added new guides on nutrition, hydration, and preventing falls at home.\n- **Community Support**: Our community forum now includes specialized groups for discussing chronic conditions and sharing personal stories.\n\nWe are committed to supporting the elderly population through education, resources, and community building. Stay tuned for more updates!",
+    "requireAuth": false,
+    "isVisible": false,
+    "averageRating": 3.0,
+    "ratings": [
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1701255193942,
+        "rating": 1,
+        "comment": "Hidden contents"
+      },
+      {
+        "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
+        "publicationTime": 1703797485767,
+        "rating": 5,
+        "comment": "Cannot be seen by normal users"
+      }
+    ]
+  },
+  {
+    "articleId": 110,
+    "author": "SilverHealth Team",
+    "publicationTime": 1704027600000,
+    "modificationTime": -1,
+    "category": ["healthy living", "senior health", "well-being"],
+    "title": "Healthy Living for Seniors",
+    "body": "## Introduction\nMaintaining a healthy lifestyle is important at any age, but it becomes especially crucial as we grow older. As we age, our bodies and minds change, and adapting our lifestyle to meet these changes is essential for overall well-being. In this article, we will explore key aspects of healthy living for seniors, including physical activity, a balanced diet, mental well-being, and social connections.\n\n## Physical Activity\nRegular physical activity is one of the best things seniors can do to maintain their health. Staying active can help reduce the risk of chronic diseases, improve balance and coordination, and boost mood.\n\n### Types of Activities\n- **Aerobic Exercises**: Walking, swimming, or cycling for at least 30 minutes a day, five days a week, can enhance cardiovascular health.\n- **Strength Training**: Light weight lifting or resistance band exercises twice a week can help maintain muscle mass and bone strength.\n- **Flexibility and Balance**: Yoga or tai chi can improve balance and flexibility, which are important for preventing falls.\n\n### Tips for Staying Active\n- Start slow and gradually increase the intensity.\n- Find activities that you enjoy to stay motivated.\n- Exercise with friends or join a senior exercise group to make it social and fun.\n\n## Balanced Diet\nA healthy diet is a cornerstone of maintaining good health as we age. Eating a variety of nutritious foods can help prevent or manage chronic illnesses, maintain energy levels, and improve overall quality of life.\n\n### Key Components of a Balanced Diet\n- **Fruits and Vegetables**: Aim for a variety of colors and types to get a wide range of vitamins and minerals.\n- **Protein**: Include lean meats, fish, beans, and legumes to help maintain muscle mass.\n- **Whole Grains**: Whole grains like oats, quinoa, and brown rice provide fiber that aids digestion.\n- **Hydration**: Drink plenty of water throughout the day to stay hydrated, even if you don’t feel thirsty.\n\n### Dietary Tips\n- Limit processed foods and added sugars.\n- Eat smaller, more frequent meals if you find large meals difficult to digest.\n- Consult a dietitian to create a personalized meal plan if you have dietary restrictions.\n\n## Mental Well-Being\nMental health is just as important as physical health. Keeping the mind active and engaged can help prevent cognitive decline and promote emotional well-being.\n\n### Ways to Support Mental Health\n- **Stay Mentally Active**: Engage in puzzles, reading, or learning new skills to keep your mind sharp.\n- **Practice Mindfulness**: Meditation, breathing exercises, and mindfulness practices can reduce stress and anxiety.\n- **Get Enough Sleep**: Aim for 7-8 hours of sleep per night, and try to maintain a consistent sleep schedule.\n\n### Seeking Support\nIf you or a loved one is experiencing feelings of depression or anxiety, it's important to seek support. Talk to a healthcare provider or join a support group for seniors.\n\n## Social Connections\nStaying socially connected is vital for seniors' mental and emotional health. Strong social networks can reduce the risk of depression and improve overall happiness.\n\n### Ways to Stay Connected\n- **Join Clubs or Groups**: Participate in community activities, such as book clubs, gardening groups, or senior centers.\n- **Volunteer**: Volunteering can provide a sense of purpose and connection with others.\n- **Stay in Touch with Family and Friends**: Regular phone calls, video chats, or visits can help maintain relationships and reduce feelings of isolation.\n\n### Building New Connections\nDon’t hesitate to reach out and meet new people. Many community centers and organizations have programs specifically designed for seniors to make new friends and engage in social activities.\n\n## Conclusion\nMaintaining a healthy lifestyle as a senior involves a combination of staying physically active, eating a balanced diet, taking care of mental well-being, and staying socially connected. By making small, positive changes in daily habits, seniors can greatly enhance their quality of life and enjoy their golden years to the fullest. Remember, it’s never too late to start making healthier choices.",
+    "requireAuth": false,
+    "isVisible": true,
+    "averageRating": 4.0,
+    "ratings": [
+      {
+        "userId": "qKSmGU4GVGRWNsmPJRgjDu9UwdD3",
+        "publicationTime": 1704555600000,
+        "rating": 4,
+        "comment": "Very insightful and helpful tips for seniors."
+      },
+      {
+        "userId": "oJxOhKyaHkSXPtEKlA1UA5GWmPQ2",
+        "publicationTime": 1704844800000,
+        "rating": 5,
+        "comment": "Excellent advice! This article really helped my parents."
+      }
+    ]
+  },
+  {
+    "articleId": 111,
+    "author": "SilverHealth Team",
+    "publicationTime": 1704027600000,
+    "modificationTime": -1,
+    "category": ["mental health", "stress management"],
+    "title": "Managing Stress for Seniors",
+    "body": "As we age, life's challenges can bring about new stressors, from health changes to life transitions like retirement or the loss of loved ones. It is important for seniors to manage stress effectively to maintain both physical and mental health. In this article, we explore various techniques that can help seniors manage stress, and how to adopt a more relaxed and positive lifestyle.\n\n## Understanding Stress in Older Adults\nStress can be caused by various factors, including health issues, changes in daily routines, loneliness, and financial worries. Recognizing the sources of stress is the first step towards managing it effectively. Signs of stress can include headaches, trouble sleeping, irritability, and fatigue. \n\n### Common Stress Triggers\n- **Health Issues**: Chronic conditions or new diagnoses can be a significant source of stress.\n- **Social Isolation**: Many seniors experience loneliness, especially after the loss of a spouse or close friends.\n- **Financial Concerns**: Limited income post-retirement can create financial anxiety.\n\n## Techniques for Managing Stress\nThere are several techniques that seniors can adopt to manage their stress levels. Finding what works best for you can take time, but it is important to stay persistent.\n\n### 1. **Exercise Regularly**\nPhysical activity is a powerful way to relieve stress. It helps the body release endorphins, which are natural mood lifters.\n- **Walking**: Taking a brisk 20-minute walk every day can greatly reduce stress.\n- **Yoga or Tai Chi**: These exercises combine physical movement with mindfulness, making them perfect for reducing anxiety and improving flexibility.\n\n### 2. **Connect with Others**\nSocial interactions are important for mental health. Staying connected with friends, family, or joining a senior group can help alleviate stress and feelings of loneliness.\n- **Community Centers**: Many local community centers offer activities and clubs for seniors.\n- **Volunteer Work**: Engaging in volunteer work is a great way to stay connected and give back to the community.\n\n### 3. **Practice Relaxation Techniques**\nRelaxation techniques like deep breathing, meditation, and progressive muscle relaxation can significantly reduce stress.\n- **Deep Breathing**: Sit or lie down comfortably, breathe in deeply through the nose, hold for a moment, and then exhale slowly through the mouth.\n- **Mindfulness Meditation**: Practice staying in the present moment, focusing on breathing, and allowing thoughts to come and go without judgment.\n\n### 4. **Maintain a Healthy Diet**\nA well-balanced diet can help improve mood and reduce stress levels. Limit caffeine and alcohol, which can increase anxiety, and aim to eat more fruits, vegetables, and whole grains.\n\n### 5. **Get Enough Sleep**\nPoor sleep can increase stress and make it more difficult to manage daily challenges. Create a calming bedtime routine and aim for 7-8 hours of sleep each night.\n- **Bedtime Routine**: Go to bed at the same time each night, avoid screens for at least an hour before sleep, and read a book or listen to calming music instead.\n\n## Seeking Professional Help\nIf stress becomes overwhelming, do not hesitate to seek professional help. Counselors or therapists trained in working with older adults can provide support and teach effective coping strategies.\n- **Counseling**: Speaking to a professional can help seniors process their emotions and develop healthier responses to stress.\n- **Support Groups**: Joining a support group for seniors facing similar challenges can provide comfort and practical advice.\n\n## Conclusion\nManaging stress as a senior involves a combination of physical activity, social connections, healthy eating, and relaxation techniques. It is important to take a proactive approach to mental well-being and seek help when needed. By incorporating these strategies into daily life, seniors can lead happier, more relaxed lives, free from the burdens of excessive stress.\n",
+    "requireAuth": false,
+    "isVisible": true,
+    "averageRating": 4.5,
+    "ratings": [
+      {
+        "userId": "wrEX98lEvGcZk8V6FqJMKs8gv162",
+        "publicationTime": 1705125600000,
+        "rating": 5,
+        "comment": "This article offers really practical tips for managing stress. Highly recommended for seniors!"
+      },
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1705318800000,
+        "rating": 4,
+        "comment": "Helpful techniques, especially the section on relaxation and mindfulness. Well-written and informative."
+      }
+    ]
+  },
+  {
+    "articleId": 112,
+    "author": "SilverHealth Team",
+    "publicationTime": 1704027600000,
+    "modificationTime": -1,
+    "category": ["hydration", "nutrition"],
+    "title": "The Importance of Hydration for Seniors",
+    "body": "Proper hydration is essential for everyone, but it becomes particularly crucial as we age. Seniors are more prone to dehydration due to physiological changes and certain health conditions. Understanding the importance of staying hydrated can help prevent various health issues and maintain overall well-being. This article will explore the benefits of hydration for seniors, symptoms of dehydration, and effective ways to stay adequately hydrated.\n\n## Why Hydration Matters for Seniors\nAs we grow older, the body’s ability to conserve water decreases, and the sense of thirst diminishes, making it easier for seniors to become dehydrated. Proper hydration is essential for maintaining physical and cognitive health.\n\n### Benefits of Staying Hydrated\n- **Regulates Body Temperature**: Water helps regulate body temperature, which is especially important for seniors who may be more vulnerable to temperature changes.\n- **Supports Cognitive Function**: Dehydration can affect concentration and memory. Drinking enough water helps maintain mental clarity and cognitive function.\n- **Aids Digestion**: Hydration is important for healthy digestion and preventing constipation, a common issue among older adults.\n- **Joint and Muscle Health**: Water helps lubricate joints and muscles, reducing the risk of cramps and joint pain.\n\n## Symptoms of Dehydration in Seniors\nIt’s important to recognize the symptoms of dehydration early. Common symptoms include:\n- **Dry Mouth and Lips**: A persistent feeling of dryness is a common sign.\n- **Fatigue**: Dehydration can lead to a lack of energy and increased tiredness.\n- **Dizziness or Confusion**: Seniors may experience dizziness, confusion, or even fainting if dehydrated.\n- **Dark Urine**: Dark yellow or amber-colored urine is an indicator of dehydration.\n\nIf any of these symptoms are noticed, it is important to increase fluid intake and seek medical advice if symptoms persist.\n\n## Tips for Staying Hydrated\nStaying adequately hydrated doesn’t have to be challenging. Here are some tips to help seniors maintain proper hydration levels.\n\n### 1. **Drink Water Regularly**\nMake a habit of drinking small amounts of water throughout the day. Even if you don’t feel thirsty, it's important to drink regularly.\n- **Carry a Water Bottle**: Keeping a water bottle nearby makes it easier to take sips throughout the day.\n- **Set Reminders**: Use phone alarms or sticky notes to remind yourself to drink water.\n\n### 2. **Eat Water-Rich Foods**\nFruits and vegetables are great sources of water. Incorporating water-rich foods into meals can help maintain hydration levels.\n- **Cucumbers, Watermelon, and Oranges**: These fruits and vegetables are high in water content and make great snacks.\n- **Soups and Broths**: Including soups in your diet is another easy way to increase fluid intake.\n\n### 3. **Limit Caffeine and Alcohol**\nCaffeinated and alcoholic beverages can have a diuretic effect, which means they cause the body to lose water. Limiting these drinks can help maintain better hydration.\n- **Moderate Caffeine**: Enjoy coffee or tea in moderation, but balance it with extra water.\n\n### 4. **Monitor Fluid Intake**\nKeep track of how much water you drink each day to ensure you’re getting enough.\n- **Fluid Intake Chart**: Consider using a simple chart or hydration app to track your daily water intake.\n\n## When to Seek Medical Advice\nIf dehydration symptoms persist despite increasing fluid intake, it’s important to consult a healthcare provider. Chronic dehydration can lead to more serious health problems, such as kidney issues or urinary tract infections.\n\n- **Talk to Your Doctor**: Discuss your hydration habits with your healthcare provider, especially if you are on medications that may increase the risk of dehydration.\n\n## Conclusion\nHydration is a key aspect of maintaining health and well-being in seniors. By understanding the importance of hydration and implementing simple strategies to drink more fluids, seniors can reduce the risk of dehydration and enjoy a healthier lifestyle. Remember, it’s not just about drinking water—it’s about creating habits that support good hydration every day.\n",
+    "requireAuth": false,
+    "isVisible": true,
+    "averageRating": 4.5,
+    "ratings": [
+      {
+        "userId": "qKSmGU4GVGRWNsmPJRgjDu9UwdD3",
+        "publicationTime": 1705843200000,
+        "rating": 5,
+        "comment": "Excellent information, very helpful for understanding the importance of hydration. Clear and easy to follow tips!"
+      },
+      {
+        "userId": "oJxOhKyaHkSXPtEKlA1UA5GWmPQ2",
+        "publicationTime": 1705939600000,
+        "rating": 4,
+        "comment": "Good article. It gave me some practical ideas on how to help my parents stay hydrated."
+      }
+    ]
+  },
+  {
+    "articleId": 113,
+    "author": "SilverHealth Team",
+    "publicationTime": 1704027600000,
+    "modificationTime": -1,
+    "category": ["sleep health", "well-being"],
+    "title": "The Importance of Sleep for Seniors",
+    "body": "## Introduction\nSleep plays a crucial role in maintaining both physical and mental health, especially for seniors. As we age, getting enough quality sleep can become more challenging, yet it is essential for overall well-being. In this article, we will discuss why sleep is so important for seniors, common sleep issues they may face, and strategies for improving sleep quality.\n\n## Why Sleep Matters for Seniors\nSleep is a restorative process that allows the body and mind to rejuvenate. For seniors, proper sleep is especially important as it helps maintain cognitive function, emotional health, and physical well-being.\n\n### Benefits of Quality Sleep\n- **Boosts Immune System**: Adequate sleep strengthens the immune system, making seniors less vulnerable to illnesses.\n- **Enhances Memory and Cognitive Function**: Quality sleep aids memory consolidation and helps maintain cognitive health.\n- **Supports Emotional Well-Being**: Proper sleep helps reduce stress and anxiety, promoting emotional stability.\n- **Improves Physical Health**: Sleep is essential for muscle repair, energy restoration, and maintaining a healthy heart.\n\n## Common Sleep Issues in Seniors\nSeniors often face unique sleep challenges due to physiological changes, medical conditions, or lifestyle factors.\n\n### 1. **Insomnia**\nDifficulty falling or staying asleep is common among older adults. Insomnia can be caused by stress, anxiety, or certain medications.\n\n### 2. **Sleep Apnea**\nSleep apnea is a condition in which breathing repeatedly stops and starts during sleep. This can lead to poor sleep quality and fatigue during the day.\n\n### 3. **Restless Legs Syndrome (RLS)**\nRLS causes uncomfortable sensations in the legs and an urge to move them, which can make it difficult to fall asleep or stay asleep.\n\n## Tips for Improving Sleep Quality\nThere are several strategies that seniors can adopt to improve their sleep quality and ensure they get the restorative rest they need.\n\n### 1. **Maintain a Consistent Sleep Schedule**\nGoing to bed and waking up at the same time every day helps regulate the body's internal clock and promotes better sleep.\n\n### 2. **Create a Relaxing Bedtime Routine**\nEngaging in calming activities before bed, such as reading a book, listening to soothing music, or taking a warm bath, can signal to your body that it's time to wind down.\n\n### 3. **Limit Caffeine and Alcohol**\nCaffeine and alcohol can interfere with sleep quality. It’s best to avoid caffeinated drinks in the afternoon and limit alcohol consumption.\n\n### 4. **Make the Bedroom Comfortable**\nEnsure your bedroom is conducive to sleep by keeping it cool, quiet, and dark. Consider using blackout curtains or a white noise machine if needed.\n\n### 5. **Stay Physically Active**\nRegular physical activity can help improve sleep quality, but it’s important to avoid vigorous exercise close to bedtime.\n- **Walking**: A daily walk can promote better sleep.\n- **Yoga**: Gentle stretching or yoga can help relax the body and mind before sleep.\n\n## When to Seek Medical Help\nIf sleep problems persist despite making lifestyle changes, it’s important to consult a healthcare provider. Sleep disorders such as sleep apnea require medical attention and proper treatment.\n- **Sleep Study**: A doctor may recommend a sleep study to diagnose issues like sleep apnea.\n- **Medication**: In some cases, medication or supplements may be prescribed to help manage sleep problems.\n\n## Conclusion\nGetting enough quality sleep is vital for seniors to maintain their physical health, cognitive function, and emotional well-being. By following good sleep hygiene practices, seniors can improve their sleep quality and lead more energized, healthier lives. Remember, it's never too late to make changes that promote better sleep.\n",
+    "requireAuth": false,
+    "isVisible": true,
+    "averageRating": 4.0,
+    "ratings": [
+      {
+        "userId": "wrEX98lEvGcZk8V6FqJMKs8gv162",
+        "publicationTime": 1706404800000,
+        "rating": 4,
+        "comment": "This article was very informative and helped me understand the importance of sleep. Great tips for maintaining a sleep schedule."
+      },
+      {
+        "userId": "FmLN6rKZfFd0dtxYyy7XwYUvfQx2",
+        "publicationTime": 1706491200000,
+        "rating": 4,
+        "comment": "Good advice, especially about creating a bedtime routine. It's helpful for my parents!"
+      }
+    ]
+  },
+  {
+    "articleId": 114,
+    "author": "SilverHealth Team",
+    "publicationTime": 1704027600000,
+    "modificationTime": -1,
+    "category": ["yoga", "senior health", "exercise"],
+    "title": "The Benefits of Yoga for Seniors",
+    "body": "## Introduction\nYoga is a gentle form of exercise that offers numerous physical and mental health benefits, making it an ideal activity for seniors. Unlike high-intensity workouts, yoga can be modified to suit all fitness levels, and it helps improve flexibility, balance, and strength. In this article, we will explore the many benefits of yoga for seniors and how to get started safely.\n\n## Physical Benefits of Yoga for Seniors\nYoga offers a range of physical health benefits that can improve quality of life for older adults.\n\n### 1. **Improves Flexibility**\nAs we age, our muscles and joints can become stiff, leading to limited mobility. Yoga helps stretch the muscles and joints, improving flexibility and range of motion. Poses like **Cat-Cow** and **Child’s Pose** are especially beneficial for gently stretching the back and hips.\n\n### 2. **Enhances Balance and Reduces Fall Risk**\nBalance issues are a major concern for seniors, as falls can lead to serious injuries. Yoga focuses on improving balance and coordination through poses such as **Tree Pose** and **Warrior II**. Practicing these poses regularly helps seniors maintain stability and reduces the risk of falls.\n\n### 3. **Builds Strength**\nYoga incorporates weight-bearing poses that build muscle strength. Strong muscles help support joints, protect against arthritis, and improve overall mobility. Poses like **Downward-Facing Dog** and **Chair Pose** help build strength in the arms, legs, and core.\n\n### 4. **Improves Circulation**\nYoga encourages better blood flow throughout the body, which helps reduce the risk of cardiovascular issues. The combination of deep breathing and gentle movement enhances circulation, keeping the heart healthy.\n\n## Mental Health Benefits of Yoga\nIn addition to physical benefits, yoga offers numerous mental health advantages that are crucial for maintaining emotional well-being in seniors.\n\n### 1. **Reduces Stress and Anxiety**\nThe practice of yoga encourages mindfulness and relaxation, which can reduce stress and anxiety. Techniques like **deep breathing** and **meditation** help calm the mind and promote a sense of tranquility.\n\n### 2. **Improves Sleep Quality**\nYoga can help seniors sleep better by relaxing the body and mind before bedtime. Practicing gentle stretches and breathing exercises in the evening helps release tension and prepare the body for restful sleep.\n\n### 3. **Boosts Mood**\nYoga practice releases endorphins, the body's natural mood enhancers, which can help alleviate symptoms of depression and boost overall mood. Group yoga classes also provide a sense of community, reducing feelings of isolation.\n\n## Types of Yoga Suitable for Seniors\nNot all types of yoga are suitable for seniors, but there are specific styles that are particularly beneficial and safe for older adults.\n\n### 1. **Hatha Yoga**\nHatha yoga is a gentle style that focuses on basic poses and breathing techniques. It is a great starting point for seniors who are new to yoga, as it emphasizes slow and controlled movements.\n\n### 2. **Chair Yoga**\nChair yoga is designed for seniors with limited mobility. Poses are modified to be done while seated in a chair, making it accessible for those who may have difficulty getting down on the floor.\n\n### 3. **Restorative Yoga**\nRestorative yoga involves gentle poses held for longer periods to promote relaxation and relieve tension. This type of yoga is particularly beneficial for reducing stress and improving flexibility.\n\n## Safety Tips for Seniors Practicing Yoga\nIt is important for seniors to practice yoga safely to avoid injury and gain the maximum benefit from each session.\n\n### 1. **Consult Your Doctor**\nBefore starting yoga, consult your healthcare provider, especially if you have existing medical conditions or mobility issues.\n\n### 2. **Start Slow**\nBegin with beginner-level classes or sessions designed specifically for seniors. Avoid advanced poses that could strain joints or cause injury.\n\n### 3. **Listen to Your Body**\nYoga should never be painful. Listen to your body and modify poses as needed. Use props like yoga blocks, straps, or a chair to make poses more comfortable and accessible.\n\n## Conclusion\nYoga is a gentle, low-impact activity that offers a multitude of physical and mental health benefits for seniors. By incorporating yoga into a weekly routine, seniors can improve flexibility, balance, strength, and mental well-being. Always start slowly, choose the right type of yoga, and listen to your body. With consistency, yoga can be a valuable tool for maintaining health and enhancing quality of life in older adults.\n",
+    "requireAuth": false,
+    "isVisible": true,
+    "averageRating": 4.5,
+    "ratings": [
+      {
+        "userId": "qKSmGU4GVGRWNsmPJRgjDu9UwdD3",
+        "publicationTime": 1706985600000,
+        "rating": 5,
+        "comment": "This article is really well-written and highlights the benefits of yoga for seniors. The tips are practical and easy to follow!"
+      },
+      {
+        "userId": "BIeZrgPO5zf9lwzB0x9xqHXg6J42",
+        "publicationTime": 1707072000000,
+        "rating": 4,
+        "comment": "Good overview of yoga benefits for seniors. I appreciated the emphasis on safety tips."
+      }
+    ]
   }
 ]

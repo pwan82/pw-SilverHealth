@@ -2,7 +2,7 @@
   {
     "articleId": 1,
     "author": "SilverHealth Team",
-    "publicationTime": 1716028600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1727704800000,
     "category": ["document"],
     "title": "About SilverHealth✨",
@@ -17,7 +17,7 @@
   {
     "articleId": 2,
     "author": "SilverHealth Team",
-    "publicationTime": 1716028600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1727704800000,
     "category": ["document"],
     "title": "Contact SilverHealth✨",
@@ -32,7 +32,7 @@
   {
     "articleId": 3,
     "author": "SilverHealth Team",
-    "publicationTime": 1716028600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1727704800000,
     "category": ["document"],
     "title": "Terms and Policy",
@@ -47,7 +47,7 @@
   {
     "articleId": 4,
     "author": "SilverHealth Team",
-    "publicationTime": 1716028600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1727704800000,
     "category": ["document"],
     "title": "Sitemap",
@@ -62,7 +62,7 @@
   {
     "articleId": 5,
     "author": "SilverHealth Team",
-    "publicationTime": 1716018600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1729804800000,
     "category": ["document"],
     "title": "Become a Volunteer",
@@ -77,7 +77,7 @@
   {
     "articleId": 6,
     "author": "SilverHealth Team",
-    "publicationTime": 1716018600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1729804800000,
     "category": ["document"],
     "title": "Donate to SilverHealth✨",
@@ -92,7 +92,7 @@
   {
     "articleId": 7,
     "author": "SilverHealth Team",
-    "publicationTime": 1716018600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1729804800000,
     "category": ["document"],
     "title": "Book Services by Telephone: Guidelines",
@@ -107,13 +107,13 @@
   {
     "articleId": 8,
     "author": "SilverHealth Team",
-    "publicationTime": 1716018600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1729804800000,
     "category": ["document"],
-    "title": "API Documents",
-    "body": "API list here",
-    "requireAuth": false,
-    "isVisible": true,
+    "title": "SilverHealth API Documentation",
+    "body": "## Authentication and Authorization\n\nAll endpoints use Firebase Authentication. Here's how it works:\n\n- A valid Firebase ID token must be provided in the `Authorization` header as a Bearer token.\n- The API verifies the token and extracts the user's role and ID.\n- It determines if the user is logged in and if they have admin privileges.\n- For endpoints that require specific roles, it checks if the user has the required role.\n\nExample of Authorization header:\n\n```json\nAuthorization: Bearer <your-firebase-id-token>\n```\n\n### User Roles\n\nDepending on the user role, the API will provide different access permissions.\n\n- **Not logged in**: No valid token provided\n- **User**: Default role for all authenticated users\n- **Admin**: Users with elevated privileges\n\n---\n\n## User Management\n\n### 1. getUserInfo\n\n- **URL**: https://getuserinfo-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve user information\n- **Permissions**:\n  - Logged-in users: Can retrieve their own information\n  - Admin: Can retrieve their own information\n  - Not logged in: No access\n- **Request Method**: GET\n- **Authentication**: Required\n\nExample Request:\n\n```\nGET https://getuserinfo-s3vwdaiioq-ts.a.run.app/?id={articleId}\n```\n\n### 2. updateUserInfo\n\n- **URL**: https://updateuserinfo-s3vwdaiioq-ts.a.run.app\n- **Description**: Update user information\n- **Permissions**:\n  - Logged-in users: Can update their own information\n  - Admin: Can update their own information\n  - Not logged in: No access\n- **Request Method**: POST\n- **Authentication**: Required\n\nExample Request Body:\n\n```json\n{\n  \"username\": \"newUsername\",\n  \"gender\": \"Female\",\n  \"birthday\": \"1990-01-01\",\n  \"address\": {\n    \"streetAddress\": \"123 Main St\",\n    \"city\": \"Anytown\",\n    \"state\": \"CA\",\n    \"postalCode\": \"12345\"\n  },\n  \"subscribeToNewsletter\": true\n}\n```\n\n### 3. getAllUsers\n\n- **URL**: https://getallusers-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve all users' information\n- **Permissions**:\n  - Admin only\n- **Request Method**: GET\n- **Authentication**: Required (Admin token)\n\nExample Request:\n\n```\nGET https://getallusers-s3vwdaiioq-ts.a.run.app\n```\n\n---\n\n## Article Management\n\n### 4. manageArticle\n\n- **URL**: https://managearticle-s3vwdaiioq-ts.a.run.app\n- **Description**: Manage articles (add, update, delete)\n- **Permissions**:\n  - Admin only\n- **Request Method**: POST\n- **Authentication**: Required (Admin token)\n\nExample Request Body (Add/Update):\n\n```json\n{\n  \"action\": \"add\",  // or \"update\" or \"delete\"\n  \"articleId\": \"123\",  // required for update and delete\n  \"articleData\": {\n    \"title\": \"New Article Title\",\n    \"body\": \"Article content goes here...\",\n    \"category\": [\"Technology\", \"AI\"],\n    \"isVisible\": true,\n    \"requireAuth\": false\n  }\n}\n```\n\n### 5. getArticles\n\n- **URL**: https://getarticles-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve article list\n- **Permissions**:\n  - All users: Can view visible articles\n  - Admin: Can view all articles\n- **Request Method**: GET\n- **Authentication**: Optional\n\nExample Request:\n\n```\nGET https://getarticles-s3vwdaiioq-ts.a.run.app?limit=10&offset=0&category=nutrition&category=food\n```\n\n### 6. getArticleById\n\n- **URL**: https://getarticlebyid-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve a specific article by ID\n- **Permissions**:\n  - All users: Can view public articles\n  - Logged-in users: Can view articles requiring authentication\n  - Admin: Can view all articles\n- **Request Method**: GET\n- **Authentication**: Optional\n\nExample Request:\n\n```\nGET https://getarticlebyid-s3vwdaiioq-ts.a.run.app?id=103\n```\n\n### 7. publishArticleRating\n\n- **URL**: https://publisharticlerating-s3vwdaiioq-ts.a.run.app\n- **Description**: Publish article rating and comment\n- **Permissions**:\n  - Logged-in users: Can rate visible articles\n  - Admin: Can rate all articles\n  - Not logged in: No access\n- **Request Method**: POST\n- **Authentication**: Required\n\nExample Request Body:\n\n```json\nCopy{\n  \"articleId\": \"123\",\n  \"rating\": 4,\n  \"comment\": \"Great article! Very informative.\"\n}\n```\n\n### 8. getArticleRatings\n\n- **URL**: https://getarticleratings-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve ratings for an article\n- **Permissions**:\n  - All users: Can view ratings for public articles\n  - Admin: Can view ratings for all articles\n- **Request Method**: GET\n- **Authentication**: Optional\n\nExample Request:\n\n```\nGET https://getarticleratings-s3vwdaiioq-ts.a.run.app?id=103&limit=10&offset=0\n```\n\n---\n\n## Event Management\n\n### 9. manageEvent\n\n- **URL**: https://manageevent-s3vwdaiioq-ts.a.run.app\n- **Description**: Manage events (add, update, delete)\n- **Permissions**:\n  - Admin only\n- **Request Method**: POST\n- **Authentication**: Required (Admin token)\n\nExample Request Body (Add/Update):\n\n```json\n{\n    \"action\": \"add\", // or \"update\" or \"delete\"\n    \"eventId\": \"456\", // required for update and delete\n    \"organizerName\": \"SilverHealth Team\",\n    \"title\": \"Test Group Meetup From Postman\",\n    \"description\": \"Event description in\\n\\nmarkdown format.\",\n    \"category\": [\n        \"community\",\n        \"support\"\n    ],\n    \"address\": {\n        \"placeName\": \"SilverHealth St Kilda Service Centre\",\n        \"addressString\": \"15 Acland St, St Kilda VIC 3182\",\n        \"latitude\": -37.86759,\n        \"longitude\": 144.97871\n    },\n    \"startTime\": 1730604600000,\n    \"endTime\": 1730613600000,\n    \"totalCapacity\": 40,\n    \"remainingCapacity\": 15,\n    \"registrationStartTime\": 1728853200000,\n    \"registrationEndTime\": 1730286000000,\n    \"isVisible\": true\n}\n```\n\n### 10. getEvents\n\n- **URL**: https://getevents-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve event list\n- **Permissions**:\n  - All users: Can view visible events\n  - Admin: Can view all events\n- **Request Method**: GET\n- **Authentication**: Optional\n\nExample Request:\n\n```\nGET https://getevents-s3vwdaiioq-ts.a.run.app?limit=10&offset=0&category=wellness\n```\n\n### 11. getEventById\n\n- **URL**: https://geteventbyid-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve a specific event by ID\n- **Permissions**:\n  - All users: Can view public events\n  - Admin: Can view all events\n- **Request Method**: GET\n- **Authentication**: Optional\n\nExample Request:\n\n```\nGET https://geteventbyid-s3vwdaiioq-ts.a.run.app?id=D5lZyPbtE3kz9djkQkS0\n```\n\n### 12. manageEventBooking\n\n- **URL**: https://manageeventbooking-s3vwdaiioq-ts.a.run.app\n- **Description**: Manage event bookings (book or cancel)\n- **Permissions**:\n  - Logged-in users: Can book/cancel their own bookings\n  - Not logged in: No access\n- **Request Method**: POST\n- **Authentication**: Required\n\nExample Request Body:\n\n```json\n{\n  \"eventId\": \"D5lZyPbtE3kz9djkQkS0\",\n  \"action\": \"book\"  // or \"cancel\"\n}\n```\n\n### 13. getUserEventBookings\n\n- **URL**: https://getusereventbookings-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve all event bookings for the current user\n- **Permissions**:\n  - Logged-in users: Can view their own bookings\n  - Not logged in: No access\n- **Request Method**: GET\n- **Authentication**: Required\n\nExample Request:\n\n```\nGET https://getusereventbookings-s3vwdaiioq-ts.a.run.app\n```\n\n### 14. getEventBookings\n\n- **URL**: https://geteventbookings-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve all bookings for a specific event\n- **Permissions**:\n  - Admin only\n- **Request Method**: GET\n- **Authentication**: Required (Admin token)\n\nExample Request:\n\n```\nGET https://geteventbookings-s3vwdaiioq-ts.a.run.app?eventId=D5lZyPbtE3kz9djkQkS0\n```\n\n---\n\n## Miscellaneous\n\n### 15. sendBulkEmails\n\n- **URL**: https://sendbulkemails-s3vwdaiioq-ts.a.run.app\n- **Description**: Send bulk emails\n- **Permissions**:\n  - Admin only\n- **Request Method**: POST\n- **Authentication**: Required (Admin token)\n\nExample Request Body:\n\n```json\n{\n    \"emails\": [\n        \"user1@example.com\",\n        \"user2@example.com\"\n    ],\n    \"subject\": \"Important Announcement\",\n    \"content\": \"<h1>Hello!</h1><p>This is an important message.</p>\",\n    \"attachments\": [\n        {\n            \"content\": \"base64EncodedContent...\",\n            \"filename\": \"attachment01.pdf\",\n            \"type\": \"application/pdf\"\n        },\n        {\n            \"content\": \"base64EncodedContent...\",\n            \"filename\": \"attachment02.jpg\",\n            \"type\": \"image/jpeg\"\n        }\n    ]\n}\n```\n\n### 16. getWebsiteStatistics\n\n- **URL**: https://getwebsitestatistics-s3vwdaiioq-ts.a.run.app\n- **Description**: Retrieve website statistics\n- **Permissions**:\n  - Likely admin only (not specified in the provided information)\n- **Request Method**: GET\n- **Authentication**: Required (Admin token)\n\nExample Request:\n\n```\nGET https://getwebsitestatistics-s3vwdaiioq-ts.a.run.app\n```",
+    "requireAuth": true,
+    "isVisible": false,
     "showInList": false,
     "showMetadata": false,
     "showCategory": false,
@@ -122,7 +122,7 @@
   {
     "articleId": 10,
     "author": "SilverHealth Team",
-    "publicationTime": 1716028600000,
+    "publicationTime": 1703984400000,
     "modificationTime": 1727704800000,
     "category": ["document", "first aid"],
     "title": "First Aid Guide",
