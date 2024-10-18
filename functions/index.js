@@ -52,12 +52,14 @@ const {
   getArticles,
   getArticleById,
   getArticleRatings,
-  publishArticleRating
+  publishArticleRating,
+  manageArticle
 } = require('./articleFunctions')
 exports.getArticles = getArticles
 exports.getArticleById = getArticleById
 exports.getArticleRatings = getArticleRatings
 exports.publishArticleRating = publishArticleRating
+exports.manageArticle = manageArticle
 
 // emailFunctions
 const { sendBulkEmails } = require('./emailFunctions')

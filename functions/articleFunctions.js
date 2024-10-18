@@ -4,7 +4,7 @@ const cors = require('cors')({ origin: true }) // Enable CORS with any origin
 
 const db = admin.firestore()
 
-const { sanitizeAllHtml } = require('./helpers') // Import validation and sanitization functions
+const { sanitizeAllHtml, sanitizeEmailHtml } = require('./helpers') // Import validation and sanitization functions
 
 const { checkUserRole } = require('./authFunctions')
 const { cloudFunctionsLocation: region } = require('./cloudFunctionsLocation')
@@ -422,6 +422,172 @@ exports.publishArticleRating = onRequest({ region: region }, (req, res) => {
     } catch (error) {
       console.error(`Error publishing rating for articleId ${articleId}:`, error)
       res.status(500).send('Error publishing rating')
+    }
+  })
+})
+
+/**
+ * Helper function to get the next available articleId (greater than or equal to 101)
+ * @returns {Promise<number>} The next available articleId
+ */
+const getNextAvailableArticleId = async () => {
+  const startId = 101
+  let nextId = startId
+
+  // eslint-disable-next-line no-constant-condition
+  for (let idFound = false; !idFound; ) {
+    const articlesRef = db.collection('articles')
+    const query = await articlesRef.where('articleId', '==', nextId).limit(1).get()
+
+    if (query.empty) {
+      // This ID is available
+      idFound = true
+    } else {
+      // ID is taken, try the next one
+      nextId++
+    }
+  }
+
+  return nextId
+}
+
+/**
+ * Helper function to find a document by articleId
+ * @param {number} articleId - The articleId to search for
+ * @returns {Promise<Object|null>} The document reference and data, or null if not found
+ */
+const findDocumentByArticleId = async (articleId) => {
+  const query = await db.collection('articles').where('articleId', '==', articleId).limit(1).get()
+  if (query.empty) {
+    return null
+  }
+  const doc = query.docs[0]
+  return { ref: doc.ref, data: doc.data() }
+}
+
+/**
+ * Helper function to validate required fields
+ * @param {Object} data - The data to validate
+ * @throws {Error} If required fields are missing
+ */
+const validateRequiredFields = (data) => {
+  const requiredFields = ['title', 'body', 'category']
+  requiredFields.forEach((field) => {
+    if (!data[field]) {
+      throw new Error(`${field} is required`)
+    }
+  })
+  if (!Array.isArray(data.category) || data.category.length === 0) {
+    throw new Error('category must be a non-empty array')
+  }
+}
+
+/**
+ * Cloud Function to manage articles (add, update, delete)
+ * This function is restricted to admin users only.
+ *
+ * @function
+ * @name manageArticle
+ * @param {Object} req - The request object from Firebase Functions
+ * @param {Object} req.body - The body of the request
+ * @param {number} [req.body.articleId] - The ID of the article (required for update and delete operations)
+ * @param {string} [req.body.action] - The action to perform ('delete' for deletion, otherwise add/update)
+ * @param {Object} req.body.articleData - The article data (for add and update operations)
+ * @param {Object} res - The response object from Firebase Functions
+ * @returns {Promise<void>} A promise that resolves when the operation is complete
+ */
+exports.manageArticle = onRequest({ region: region }, (req, res) => {
+  return cors(req, res, async () => {
+    if (req.method !== 'POST') {
+      return res.status(405).send('Method Not Allowed')
+    }
+
+    try {
+      const authCheck = await checkUserRole(req.headers, 'admin')
+      if (!authCheck.isAdmin) {
+        return res.status(403).send('Only admins can manage articles')
+      }
+
+      const { articleId, action, articleData } = req.body
+
+      console.log('Received request body:', JSON.stringify(req.body))
+
+      // Handle delete action
+      if (action === 'delete') {
+        if (!articleId) {
+          return res.status(400).send('Article ID is required for delete action')
+        }
+
+        const documentToDelete = await findDocumentByArticleId(articleId)
+        if (!documentToDelete) {
+          return res.status(404).send('Article not found')
+        }
+
+        await db.runTransaction(async (transaction) => {
+          // Delete the article
+          transaction.delete(documentToDelete.ref)
+
+          // Delete associated ratings
+          const ratingsRef = documentToDelete.ref.collection('ratings')
+          const ratingsSnapshot = await transaction.get(ratingsRef)
+          ratingsSnapshot.forEach((doc) => {
+            transaction.delete(doc.ref)
+          })
+        })
+
+        return res
+          .status(200)
+          .json({ message: 'Article and associated ratings deleted successfully', articleId })
+      }
+
+      // For add and update actions, proceed with validation and sanitization
+      const currentTime = Date.now()
+
+      // Validate required fields for add and update actions
+      validateRequiredFields(articleData)
+
+      // Prepare the article data
+      const validatedArticleData = {
+        title: sanitizeEmailHtml(articleData.title),
+        body: sanitizeEmailHtml(articleData.body),
+        category: articleData.category.map((cat) => sanitizeEmailHtml(cat)),
+        author: articleData.author ? sanitizeEmailHtml(articleData.author) : null,
+        isRatable: articleData.isRatable !== false,
+        isVisible: articleData.isVisible !== false,
+        requireAuth: articleData.requireAuth !== false,
+        showCategory: articleData.showCategory !== false,
+        showInList: articleData.showInList !== false,
+        showMetadata: articleData.showMetadata !== false,
+        publicationTime: articleData.publicationTime || currentTime,
+        modificationTime: articleData.modificationTime || -1
+      }
+
+      let result
+      if (articleId) {
+        // Update existing article
+        const existingDocument = await findDocumentByArticleId(articleId)
+        if (!existingDocument) {
+          return res.status(404).send('Article not found')
+        }
+        await existingDocument.ref.update(validatedArticleData)
+        result = { message: 'Article updated successfully', articleId }
+      } else {
+        // Add new article
+        const newArticleId = await getNextAvailableArticleId()
+        validatedArticleData.articleId = newArticleId
+        await db.collection('articles').add(validatedArticleData)
+        result = { message: 'Article added successfully', articleId: newArticleId }
+      }
+
+      console.log(`Article ${articleId ? 'updated' : 'added'}: ${result.articleId}`)
+      res.status(200).json(result)
+    } catch (error) {
+      console.error(`Error in manageArticle: ${error}`)
+      if (error.message.includes('is required')) {
+        res.status(400).send(`Error managing article: ${error.message}`)
+      } else {
+        res.status(500).send(`Error managing article: ${error.message}`)
+      }
     }
   })
 })
