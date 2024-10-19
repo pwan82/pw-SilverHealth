@@ -237,6 +237,19 @@ const cards = computed(() => {
   margin-bottom: 0;
 }
 
+.stats {
+  margin-top: 0.5rem;
+}
+
+.stats strong {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.stats small {
+  font-size: 0.9rem;
+}
+
 .bg-blue {
   background: linear-gradient(135deg, #3498db, #2980b9);
   color: white;
