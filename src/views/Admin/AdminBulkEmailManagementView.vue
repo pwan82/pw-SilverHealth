@@ -2,6 +2,17 @@
   <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col-md-12">
+        <!-- Go back button -->
+        <div class="mb-2">
+          <button
+            @click="router.push({ name: 'AdminDashboard' })"
+            class="btn btn-outline-primary custom-button"
+          >
+            <i class="bi bi-arrow-left mr-2"></i>
+            <div class="button-text">Back to Admin Dashboard</div>
+          </button>
+        </div>
+
         <h1 class="text-center">Admin Bulk Email Management</h1>
         <p class="text-center">Select the users you want to send bulk emails to.</p>
 
@@ -45,6 +56,9 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/init'
 import UserList from '@/components/Admin/UserList.vue'
 import EmailEditorDialog from '@/components/Admin/EmailEditorDialog.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 // Component state
 const users = ref([])

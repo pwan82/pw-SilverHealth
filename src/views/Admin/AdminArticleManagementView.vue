@@ -2,6 +2,17 @@
   <div class="container mt-5 mb-5">
     <div class="row">
       <div class="col-md-12">
+        <!-- Go back button -->
+        <div class="mb-2">
+          <button
+            @click="router.push({ name: 'AdminDashboard' })"
+            class="btn btn-outline-primary custom-button"
+          >
+            <i class="bi bi-arrow-left mr-2"></i>
+            <div class="button-text">Back to Admin Dashboard</div>
+          </button>
+        </div>
+
         <h1 class="text-center">Admin Article Management</h1>
         <p class="text-center">
           Add or edit articles.
@@ -224,6 +235,9 @@ import { auth } from '@/firebase/init'
 import axios from 'axios'
 import { useToast } from 'primevue/usetoast'
 import { Modal } from 'bootstrap'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 import EditArticleModal from '@/components/Admin/EditArticleModal.vue'
 
