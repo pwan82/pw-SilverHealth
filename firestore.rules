@@ -4,7 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 		// Rule for Users collection
     match /users/{userId} {
-      // Allow the logged-in user to read and update their own document
+      // Allow the logged-in user to read their own profile
       allow read: if request.auth.uid == userId;
       allow write: if false;
     }
@@ -15,10 +15,16 @@ service cloud.firestore {
       allow read, write: if false;
     }
     
-    match /articles {
-      allow read: if false; // Only available through APIs
-      allow write: if request.auth != null && request.auth.token.role == 'admin';
+    match /serviceLocations/{docId} {
+      // Deny all write access for client-side users
+      allow read: if true;
+      allow write: if false;
     }
+    
+    // match /articles {
+    //   allow read: if false; // Only available through APIs
+    //   allow write: if request.auth != null && request.auth.token.role == 'admin';
+    // }
 
     // This rule allows anyone with your Firestore database reference to view, edit,
     // and delete all data in your Firestore database. It is useful for getting
@@ -30,7 +36,7 @@ service cloud.firestore {
     // all client requests to your Firestore database will be denied until you Update
     // your rules
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2024, 12, 31);
+      allow read, write: if request.time < timestamp.date(2024, 10, 18);
     }
   }
 }
