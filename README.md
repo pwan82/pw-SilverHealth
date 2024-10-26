@@ -1,6 +1,6 @@
 # SilverHealth
 
-This template should help get you started developing with Vue 3 in Vite.
+A modern web application designed for a health charity focusing on the elderly population. Built with **Vue 3** and **Firebase**.
 
 ## Recommended IDE Setup
 
@@ -11,6 +11,14 @@ This template should help get you started developing with Vue 3 in Vite.
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
+
+### Install pnpm
+
+```sh
+npm install -g pnpm
+```
+
+### Install Dependencies
 
 ```sh
 pnpm install
